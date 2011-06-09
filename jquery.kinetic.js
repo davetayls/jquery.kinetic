@@ -1,7 +1,6 @@
 /*!
     jQuery.kinetic
 
-
     */
 /*global */
 /*jslint onevar:false */
@@ -13,16 +12,11 @@
     };
 
     $.kinetic = {};
-    /* start and end pixel coords to calculate from 
-     * eg: [x,y],[x2,y2]
-     * */
-    var getDistance = $.kinetic.getDistance = function(start, end) {
-        // 10,10 - 20,20
-        var xlen = start[0] > end[0] ? start[0] - end[0] : end[0] - start[0], // adj
-            ylen = start[1] > end[1] ? start[1] - end[1] : end[1] - start[1], // opp
-            h    = Math.sqrt(Math.pow(xlen, 2) + Math.pow(ylen, 2));
-        return Math.floor(h);
-    };
+
+    // add touch checker to jQuery.support
+    $.extend($.support, {
+        touch: "ontouchend" in document
+    });
 
     $.fn.kinetic = function(options) {
 
@@ -32,15 +26,18 @@
         this.each(function(){
             
             var $this = $(this),
-                drag, 
-                oldDrag = false,
+                xpos, 
+                prevXPos = false,
                 mouseDown = false,
                 mouseDownTimeout = null,
                 velocity = 0;
 
-            if ($.browser.msie) {
-                $this.bind("selectstart", function () { return false; });
-            }
+            if ($.browser.msie) {$this.bind("selectstart", function () { return false; });}
+            $(document).mouseup(function () {
+                xpos = false;
+                mouseDown = false;
+            });
+
             var moveRight = function ($container) {
                 $this[0].scrollLeft = $this[0].scrollLeft + velocity;
                 if (mouseDown) {
@@ -49,10 +46,8 @@
                     velocity -= settings.slowdown;
                     mouseDownTimeout = window.setTimeout(moveRight, 10);
                 } else {
-                    // updateNavigatorHighlight();
                 }
             };
-            
             var moveLeft = function () {
                 $this[0].scrollLeft = $this[0].scrollLeft - velocity;
                 if (mouseDown) {
@@ -64,15 +59,15 @@
                     // updateNavigatorHighlight();
                 }
             };
-
-            var mousedown = function(e) {
-                velocity = oldDrag = 0;
-                drag = e.clientX;
+            var start = function(clientX) {
+                mouseDown = true;
+                velocity = prevXPos = 0;
+                xpos = clientX;
             };
-            var mouseup = function(e) {
-                if (drag && oldDrag && velocity === 0) {
-                    velocity = oldDrag - drag;
-                    drag = oldDrag = mouseDown = false;
+            var end = function() {
+                if (xpos && prevXPos && velocity === 0) {
+                    velocity = prevXPos - xpos;
+                    xpos = prevXPos = mouseDown = false;
                     if (velocity > 0) {
                         if (velocity > settings.maxvelocity) {
                             velocity = settings.maxvelocity;
@@ -87,24 +82,38 @@
                     }
                 }
             };
-            var mousemove = function(e) {
-                if (drag) {
+            var move = function(clientX) {
+                if (mouseDown && xpos) {
                     velocity = 0;
-                    $this[0].scrollLeft = $this[0].scrollLeft - (e.clientX - drag);
-                    oldDrag = drag;
-                    drag = e.clientX;
+                    $this[0].scrollLeft = $this[0].scrollLeft - (clientX - xpos);
+                    prevXPos = xpos;
+                    xpos = clientX;
                 }
             };
-
-            $this
-                .mousedown(mousedown)
-                .mouseup(mouseup)
-                .mousemove(mousemove)
-                .css("cursor", "move");
             
-            $(document).mouseup(function () {
-                drag = false;
-            });
+            if ($.support.touch) {
+                this.addEventListener('touchstart', function(e){
+                    start(e.touches[0].clientX);
+                }, false);
+                this.addEventListener('touchend', function(e){
+                    end();
+                }, false);
+                this.addEventListener('touchmove', function(e){
+                    move(e.touches[0].clientX);
+                }, false);
+            }else{
+                $this
+                    .mousedown(function(e){
+                        start(e.clientX);
+                    })
+                    .mouseup(function(){
+                        end();
+                    })
+                    .mousemove(function(e){
+                        move(e.clientX);
+                    })
+                    .css("cursor", "move");
+            }
 	
         });
     };
