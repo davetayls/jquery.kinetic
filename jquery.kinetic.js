@@ -1,5 +1,5 @@
 /*!
-    jQuery.kinetic
+    jQuery.kinetic v1a
 
     Options
     =======
@@ -103,10 +103,11 @@
             // prevent selection when dragging
             if ($.browser.msie) {$this.bind("selectstart", function () { return false; });}
             // make sure we reset everything when mouse up
-            $(document).mouseup(function () {
+            var resetMouse = function() {
                 xpos = false;
                 mouseDown = false;
-            });
+            };
+            $(document).mouseup(resetMouse).click(resetMouse);
 
             var start = function(clientX) {
                 mouseDown = true;
@@ -152,9 +153,11 @@
                     start(e.touches[0].clientX);
                 }, false);
                 this.addEventListener('touchend', function(e){
+                    if (e.preventDefault) {e.preventDefault();}
                     end();
                 }, false);
                 this.addEventListener('touchmove', function(e){
+                    if (e.preventDefault) {e.preventDefault();}
                     inputmove(e.touches[0].clientX);
                 }, false);
             }else{
@@ -170,6 +173,12 @@
                     })
                     .css("cursor", "move");
             }
+            $this.click(function(e){
+                if (Math.abs(settings.velocity) > 0) {
+                    e.preventDefault();
+                    return false;
+                }
+            });
             $this.data(SETTINGS_KEY, settings);
         });
     };
