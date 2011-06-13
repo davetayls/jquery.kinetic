@@ -1,96 +1,152 @@
 /*!
     jQuery.kinetic
 
+    Options
+    =======
+    slowdown    {number}    default: 0.8    This option affects the speed at which the scroll slows
+    maxvelocity {number}    default: 30     This option puts a cap on speed at which the container
+                                            can scroll
+
+    Listeners:  All listeners are called with:
+                - this = jQuery object holding the scroll container
+                - a single argument state: { }
+
+    started     {function(state)}           A function which is called when scrolling starts
+    moved       {function(state)}           A function which is called on every move
+    released    {function(state)}           A function which is called on mouse up or touchend
+    ended       {function(state)}           A function which is called when scrolling ends
+
+
     */
 /*global */
 /*jslint onevar:false */
 (function($){
 
-    var DEFAULT_SETTINGS = {
-        slowdown: 0.8,
-        maxvelocity: 30
+    var DEFAULT_SETTINGS    = { decelerate: true, slowdown: 0.8, maxvelocity: 40 },
+        SETTINGS_KEY        = 'kinetic-settings';
+
+
+    var isDirectionRight = function(velocity) {
+        return velocity > 0;
     };
-
-    $.kinetic = {};
-
+    // do the actual kinetic movement
+    var move = function($scroller, settings) {
+        $scroller[0].scrollLeft = scrollLeft = $scroller[0].scrollLeft + settings.velocity;
+        if (Math.abs(settings.velocity) > 0) {
+            // if we are decelerating
+            if (settings.decelerate) {
+                settings.velocity = settings.slowdown > Math.abs(settings.velocity) ? 0 // is slowdown bigger than the velocity?
+                         : isDirectionRight(settings.velocity) ? settings.velocity -= settings.slowdown : settings.velocity += settings.slowdown; // reduce slowdown
+            }
+            
+            // tick for next movement
+            mouseDownTimeout = window.setTimeout(function(){
+                move($scroller, settings);
+            }, 13);
+        }
+        // trigger listener
+        if (typeof settings.moved === 'function') {
+            settings.moved.call($scroller, { 
+                scrollLeft: scrollLeft,
+                velocity: settings.velocity,
+                settings: settings
+            });
+        }
+    };
+    
     // add touch checker to jQuery.support
     $.extend($.support, {
         touch: "ontouchend" in document
     });
 
-    $.fn.kinetic = function(options) {
 
+    var callOption = function(method, options) {
+        if (method && method === 'start') {
+            this.each(function(){
+                var $this = $(this),
+                    settings = $.extend($this.data(SETTINGS_KEY), options);
+                if (settings) {
+                    settings.decelerate = false;
+                    move($this, settings);
+                }
+            });
+        }
+        if (method && method === 'end') {
+            this.each(function(){
+                var $this = $(this),
+                    settings = $this.data(SETTINGS_KEY);
+                if (settings) {
+                    settings.decelerate = true;
+                }
+            });
+        }
+    };
+
+    var initElements = function(options) {
         var settings = $.extend({}, DEFAULT_SETTINGS, options);
 
+
         // add to each area
-        this.each(function(){
+        this
+        .addClass('kinetic-active')
+        .each(function(){
             
             var $this = $(this),
                 xpos, 
                 prevXPos = false,
                 mouseDown = false,
                 mouseDownTimeout = null,
-                velocity = 0;
+                scrollLeft;
 
+            settings.velocity = 0;
+
+            // prevent selection when dragging
             if ($.browser.msie) {$this.bind("selectstart", function () { return false; });}
+            // make sure we reset everything when mouse up
             $(document).mouseup(function () {
                 xpos = false;
                 mouseDown = false;
             });
 
-            var moveRight = function ($container) {
-                $this[0].scrollLeft = $this[0].scrollLeft + velocity;
-                if (mouseDown) {
-                    mouseDownTimeout = window.setTimeout(moveRight, 10);
-                } else if (velocity > 0) {
-                    velocity -= settings.slowdown;
-                    mouseDownTimeout = window.setTimeout(moveRight, 10);
-                } else {
-                }
-            };
-            var moveLeft = function () {
-                $this[0].scrollLeft = $this[0].scrollLeft - velocity;
-                if (mouseDown) {
-                    mouseDownTimeout = window.setTimeout(moveLeft, 10);
-                } else if (velocity > 0) {
-                    velocity -= settings.slowdown;
-                    mouseDownTimeout = window.setTimeout(moveLeft, 10);
-                } else {
-                    // updateNavigatorHighlight();
-                }
-            };
             var start = function(clientX) {
                 mouseDown = true;
-                velocity = prevXPos = 0;
+                settings.velocity = prevXPos = 0;
                 xpos = clientX;
             };
             var end = function() {
-                if (xpos && prevXPos && velocity === 0) {
-                    velocity = prevXPos - xpos;
+                if (xpos && prevXPos && settings.velocity === 0) {
+                    settings.velocity = prevXPos - xpos;
                     xpos = prevXPos = mouseDown = false;
-                    if (velocity > 0) {
-                        if (velocity > settings.maxvelocity) {
-                            velocity = settings.maxvelocity;
+                    if (settings.velocity > 0) {
+                        if (settings.velocity > settings.maxvelocity) {
+                            settings.velocity = settings.maxvelocity;
                         }
-                        moveRight();
                     } else {
-                        velocity = Math.abs(velocity);
-                        if (velocity > settings.maxvelocity) {
-                            velocity = settings.maxvelocity;
+                        if (settings.velocity < (0 - settings.maxvelocity)) {
+                            settings.velocity = (0 - settings.maxvelocity);
                         }
-                        moveLeft();
+                    }
+                    move($this, settings);
+                }
+            };
+            var inputmove = function(clientX) {
+                if (mouseDown && xpos) {
+                    settings.velocity = 0;
+                    $this[0].scrollLeft = scrollLeft = $this[0].scrollLeft - (clientX - xpos);
+                    prevXPos = xpos;
+                    xpos = clientX;
+
+                    if (typeof settings.moved === 'function') {
+                        settings.moved.call($this, { 
+                            scrollLeft: scrollLeft,
+                            velocity: settings.velocity,
+                            settings: settings
+                        });
                     }
                 }
             };
-            var move = function(clientX) {
-                if (mouseDown && xpos) {
-                    velocity = 0;
-                    $this[0].scrollLeft = $this[0].scrollLeft - (clientX - xpos);
-                    prevXPos = xpos;
-                    xpos = clientX;
-                }
-            };
             
+            // attach listeners
             if ($.support.touch) {
                 this.addEventListener('touchstart', function(e){
                     start(e.touches[0].clientX);
@@ -99,7 +155,7 @@
                     end();
                 }, false);
                 this.addEventListener('touchmove', function(e){
-                    move(e.touches[0].clientX);
+                    inputmove(e.touches[0].clientX);
                 }, false);
             }else{
                 $this
@@ -110,12 +166,20 @@
                         end();
                     })
                     .mousemove(function(e){
-                        move(e.clientX);
+                        inputmove(e.clientX);
                     })
                     .css("cursor", "move");
             }
-	
+            $this.data(SETTINGS_KEY, settings);
         });
+    };
+
+    $.fn.kinetic = function(options) {
+        if (typeof options === 'string') {
+            callOption.apply(this, arguments);
+        } else {
+            initElements.call(this, options);
+        }
     };
 
 })(jQuery);

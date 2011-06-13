@@ -11,13 +11,14 @@
             border: solid 1px #000;
             height: 200px;
             width: 500px;
-            overflow: hidden;
+            overflow: auto;
         }
         #inner {
             border: solid 1px red;
             height: 182px;
             width: 2000px;
         }
+        #left, #right { cursor: pointer; }
         </style>
     </head>
     <body>
@@ -28,8 +29,28 @@
                 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam laoreet mattis quam, hendrerit tristique metus blandit nec. Nulla erat arcu, iaculis in dapibus id, sollicitudin eget nibh.Quisque gravida  mi velit, sed adipiscing est. Donec eget nisl vitae mauris eleifend cursus. Suspendisse eget elit ac lectus feugiat placerat. Suspendisse</p>
             </div>
         </div>
+        <div>
+            <span id="left">&lt; left</span> |
+            <span id="right">right &gt;</span>
+        </div>
         <script type="text/javascript" charset="utf-8">
-            $('#wrapper').kinetic();
+            $('#wrapper').kinetic({
+                moved: function(state){
+                    console.log(state);
+                }
+            });
+            $('#left').mousedown(function(){
+                        $('#wrapper').kinetic('start', { velocity: -30 });
+                    });
+            $('#left').mouseup(function(){
+                        $('#wrapper').kinetic('end');
+                    });
+            $('#right').mousedown(function(){
+                        $('#wrapper').kinetic('start', { velocity: 30 });
+                    });
+            $('#right').mouseup(function(){
+                        $('#wrapper').kinetic('end');
+                    });
         </script>
     </body>
 </html>
