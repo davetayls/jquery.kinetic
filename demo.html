@@ -11,7 +11,7 @@
             border: solid 1px #000;
             height: 200px;
             width: 500px;
-            overflow: auto;
+            overflow: hidden;
         }
         #inner {
             border: solid 1px red;
@@ -23,6 +23,11 @@
     </head>
     <body>
         <h1>jQuery.kinetic demos</h1>
+        <p>
+            Drag a mouse or use touch gestures over the windows below to scroll 
+            the pane. If you let go with momentum the scrolling will slow
+            gradually.
+        </p>
         <div id="wrapper">
         	<div id="inner">
                 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam laoreet mattis quam, hendrerit tristique metus blandit nec. Nulla erat arcu, iaculis in dapibus id, sollicitudin eget nibh. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam laoreet mattis quam, hendrerit tristique metus blandit nec. Nulla erat arcu, iaculis in dapibus id, sollicitudin eget nibh.</p>
@@ -52,5 +57,36 @@
                         $('#wrapper').kinetic('end');
                     });
         </script>
+
+        <h2>Options</h2>
+        <pre><code>
+    slowdown    {number}    default: 0.8    This option affects the speed at which the scroll slows
+    maxvelocity {number}    default: 40     This option puts a cap on speed at which the container
+                                            can scroll
+
+    Listeners:  All listeners are called with:
+                - this = jQuery object holding the scroll container
+                - a single argument state: { }
+
+    moved       {function(state)}           A function which is called on every move
+
+    Methods:    You can call methods by running the kinetic plugin
+                on an element which has already been activated.
+
+                eg  $('#wrapper').kinetic(); // activate
+                    $('#wrapper').kinetic('methodname', arguments);
+
+    start       Start movement in the scroll container at a particular velocity.
+                This velocity will not slow until the end method is called.
+
+                The following line scrolls the container left.
+                $('#wrapper#).kinetic('start', { velocity: -30 });
+
+                The following line scrolls the container right.
+                $('#wrapper#).kinetic('start', { velocity: 30 });
+
+    end         Begin slowdown of any scrolling velocity in the container.
+                $('#wrapper#).kinetic('end');
+        </code></pre>
     </body>
 </html>

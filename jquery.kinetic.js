@@ -1,28 +1,47 @@
 /*!
-    jQuery.kinetic v1a
+    jQuery.kinetic v1a2
+    Dave Taylor http://the-taylors.org
 
+    The MIT License (MIT)
+    Copyright (c) <2011> <Dave Taylor http://the-taylors.org>
+*/
+/*
     Options
     =======
-    slowdown    {number}    default: 0.8    This option affects the speed at which the scroll slows
-    maxvelocity {number}    default: 30     This option puts a cap on speed at which the container
+    slowdown    {number}    default: 0.9    This option affects the speed at which the scroll slows
+    maxvelocity {number}    default: 40     This option puts a cap on speed at which the container
                                             can scroll
 
     Listeners:  All listeners are called with:
                 - this = jQuery object holding the scroll container
                 - a single argument state: { }
 
-    started     {function(state)}           A function which is called when scrolling starts
     moved       {function(state)}           A function which is called on every move
-    released    {function(state)}           A function which is called on mouse up or touchend
-    ended       {function(state)}           A function which is called when scrolling ends
 
+    Methods:    You can call methods by running the kinetic plugin
+                on an element which has already been activated.
+
+                eg  $('#wrapper').kinetic(); // activate
+                    $('#wrapper').kinetic('methodname', arguments);
+
+    start       Start movement in the scroll container at a particular velocity.
+                This velocity will not slow until the end method is called.
+
+                The following line scrolls the container left.
+                $('#wrapper#).kinetic('start', { velocity: -30 });
+
+                The following line scrolls the container right.
+                $('#wrapper#).kinetic('start', { velocity: 30 });
+
+    end         Begin slowdown of any scrolling velocity in the container.
+                $('#wrapper#).kinetic('end');
 
     */
 /*global */
 /*jslint onevar:false */
 (function($){
 
-    var DEFAULT_SETTINGS    = { decelerate: true, slowdown: 0.8, maxvelocity: 40 },
+    var DEFAULT_SETTINGS    = { decelerate: true, slowdown: 0.9, maxvelocity: 40 },
         SETTINGS_KEY        = 'kinetic-settings';
 
 
@@ -35,8 +54,8 @@
         if (Math.abs(settings.velocity) > 0) {
             // if we are decelerating
             if (settings.decelerate) {
-                settings.velocity = settings.slowdown > Math.abs(settings.velocity) ? 0 // is slowdown bigger than the velocity?
-                         : isDirectionRight(settings.velocity) ? settings.velocity -= settings.slowdown : settings.velocity += settings.slowdown; // reduce slowdown
+                settings.velocity = Math.floor(settings.velocity) === 0 ? 0 // is velocity less than 1?
+                         : settings.velocity * settings.slowdown; // reduce slowdown
             }
             
             // tick for next movement
