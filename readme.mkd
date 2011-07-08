@@ -6,6 +6,10 @@ The MIT License (MIT)
 jQuery.kinetic is a simple plugin which adds smooth drag scrolling with 
 gradual deceleration to containers.
 
+Demos
+-----
+Take a look at a demo on <http://the-taylors.org/jquery.kinetic>.
+
 Options
 -------
 
