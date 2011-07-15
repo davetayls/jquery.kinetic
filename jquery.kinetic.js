@@ -54,7 +54,7 @@
         if (Math.abs(settings.velocity) > 0) {
             // if we are decelerating
             if (settings.decelerate) {
-                settings.velocity = Math.floor(settings.velocity) === 0 ? 0 // is velocity less than 1?
+                settings.velocity = Math.floor(Math.abs(settings.velocity)) === 0 ? 0 // is velocity less than 1?
                          : settings.velocity * settings.slowdown; // reduce slowdown
             }
             
