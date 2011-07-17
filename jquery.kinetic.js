@@ -59,9 +59,9 @@
             }
             
             // tick for next movement
-            mouseDownTimeout = window.setTimeout(function(){
+            window.requestAnimationFrame(function(){
                 move($scroller, settings);
-            }, 13);
+            });
         }
         // trigger listener
         if (typeof settings.moved === 'function') {
@@ -73,6 +73,27 @@
         }
     };
     
+    /**
+     * Provides requestAnimationFrame in a cross browser way.
+     * http://paulirish.com/2011/requestanimationframe-for-smart-animating/
+     */
+
+    if ( !window.requestAnimationFrame ) {
+
+        window.requestAnimationFrame = ( function() {
+
+            return window.webkitRequestAnimationFrame ||
+            window.mozRequestAnimationFrame ||
+            window.oRequestAnimationFrame ||
+            window.msRequestAnimationFrame ||
+            function( /* function FrameRequestCallback */ callback, /* DOMElement Element */ element ) {
+                window.setTimeout( callback, 1000 / 60 );
+            };
+
+        } )();
+
+    }
+
     // add touch checker to jQuery.support
     $.extend($.support, {
         touch: "ontouchend" in document
@@ -114,7 +135,6 @@
                 xpos, 
                 prevXPos = false,
                 mouseDown = false,
-                mouseDownTimeout = null,
                 scrollLeft;
 
             settings.velocity = 0;
