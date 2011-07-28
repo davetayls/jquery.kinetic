@@ -38,6 +38,9 @@ Options
                 The following line scrolls the container right.
                 $('#wrapper#).kinetic('start', { velocity: 30 });
 
+                The following line scrolls the container diagonally.
+                $('#wrapper#).kinetic('start', { velocity: -30, velocityY: -10 });
+
     end         Begin slowdown of any scrolling velocity in the container.
                 $('#wrapper#).kinetic('end');
 

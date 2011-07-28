@@ -33,51 +33,25 @@
                 The following line scrolls the container right.
                 $('#wrapper#).kinetic('start', { velocity: 30 });
 
+                The following line scrolls the container diagonally.
+                $('#wrapper#).kinetic('start', { velocity: -30, velocityY: -10 });
+
     end         Begin slowdown of any scrolling velocity in the container.
                 $('#wrapper#).kinetic('end');
 
     */
-/*global */
-/*jslint onevar:false */
+/*jslint browser: true, vars: true, white: true, forin: true, indent: 4 */
+/*global define,require */
 (function($){
+	'use strict';
 
     var DEFAULT_SETTINGS    = { decelerate: true, slowdown: 0.9, maxvelocity: 40 },
         SETTINGS_KEY        = 'kinetic-settings';
 
-
-    var isDirectionRight = function(velocity) {
-        return velocity > 0;
-    };
-    // do the actual kinetic movement
-    var move = function($scroller, settings) {
-        $scroller[0].scrollLeft = scrollLeft = $scroller[0].scrollLeft + settings.velocity;
-        if (Math.abs(settings.velocity) > 0) {
-            // if we are decelerating
-            if (settings.decelerate) {
-                settings.velocity = Math.floor(Math.abs(settings.velocity)) === 0 ? 0 // is velocity less than 1?
-                         : settings.velocity * settings.slowdown; // reduce slowdown
-            }
-            
-            // tick for next movement
-            window.requestAnimationFrame(function(){
-                move($scroller, settings);
-            });
-        }
-        // trigger listener
-        if (typeof settings.moved === 'function') {
-            settings.moved.call($scroller, { 
-                scrollLeft: scrollLeft,
-                velocity: settings.velocity,
-                settings: settings
-            });
-        }
-    };
-    
     /**
      * Provides requestAnimationFrame in a cross browser way.
      * http://paulirish.com/2011/requestanimationframe-for-smart-animating/
      */
-
     if ( !window.requestAnimationFrame ) {
 
         window.requestAnimationFrame = ( function() {
@@ -90,7 +64,7 @@
                 window.setTimeout( callback, 1000 / 60 );
             };
 
-        } )();
+        }());
 
     }
 
@@ -98,6 +72,54 @@
     $.extend($.support, {
         touch: "ontouchend" in document
     });
+
+    var decelerateVelocity = function(velocity, slowdown) {
+        return Math.floor(Math.abs(velocity)) === 0 ? 0 // is velocity less than 1?
+               : velocity * slowdown; // reduce slowdown
+    };
+    var capVelocity = function(velocity, max) {
+        var newVelocity = velocity;
+        if (velocity > 0) {
+            if (velocity > max) {
+                newVelocity = max;
+            }
+        } else {
+            if (velocity < (0 - max)) {
+                newVelocity = (0 - max);
+            }
+        }
+        return newVelocity;
+    };
+    // do the actual kinetic movement
+    var move = function($scroller, settings) {
+        // set scrollLeft
+        $scroller[0].scrollLeft = settings.scrollLeft = $scroller[0].scrollLeft + settings.velocity;
+        if (Math.abs(settings.velocity) > 0) {
+            // if we are decelerating
+            settings.velocity = settings.decelerate ? decelerateVelocity(settings.velocity, settings.slowdown) : settings.velocity;
+        }
+        // set scrollTop
+        $scroller[0].scrollTop = settings.scrollTop = $scroller[0].scrollTop + settings.velocityY;
+        if (Math.abs(settings.velocityY) > 0) {
+            // if we are decelerating
+            settings.velocityY = settings.decelerate ? decelerateVelocity(settings.velocityY, settings.slowdown) : settings.velocityY;
+        }
+        if (Math.abs(settings.velocity) > 0 || Math.abs(settings.velocityY) > 0) {
+            // tick for next movement
+            window.requestAnimationFrame(function(){
+                move($scroller, settings);
+            });
+        }
+        // trigger listener
+        if (typeof settings.moved === 'function') {
+            settings.moved.call($scroller, { 
+                scrollLeft: settings.scrollLeft,
+                velocity: settings.velocity,
+                settings: settings
+            });
+        }
+    };
+    
 
 
     var callOption = function(method, options) {
@@ -123,58 +145,60 @@
     };
 
     var initElements = function(options) {
-        var settings = $.extend({}, DEFAULT_SETTINGS, options);
-
-
         // add to each area
         this
         .addClass('kinetic-active')
         .each(function(){
+
+            var settings = $.extend({}, DEFAULT_SETTINGS, options);
             
             var $this = $(this),
                 xpos, 
                 prevXPos = false,
+                ypos,
+                prevYPos = false,
                 mouseDown = false,
-                scrollLeft;
+                scrollLeft,
+                scrollTop;
 
             settings.velocity = 0;
+            settings.velocityY = 0;
 
             // prevent selection when dragging
             if ($.browser.msie) {$this.bind("selectstart", function () { return false; });}
             // make sure we reset everything when mouse up
             var resetMouse = function() {
                 xpos = false;
+                ypos = false;
                 mouseDown = false;
             };
             $(document).mouseup(resetMouse).click(resetMouse);
 
-            var start = function(clientX) {
+            var start = function(clientX, clientY) {
                 mouseDown = true;
                 settings.velocity = prevXPos = 0;
+                settings.velocityY = prevYPos = 0;
                 xpos = clientX;
+                ypos = clientY;
             };
             var end = function() {
                 if (xpos && prevXPos && settings.velocity === 0) {
-                    settings.velocity = prevXPos - xpos;
+                    settings.velocity    = capVelocity(prevXPos - xpos, settings.maxvelocity);
+                    settings.velocityY   = capVelocity(prevYPos - ypos, settings.maxvelocity);
                     xpos = prevXPos = mouseDown = false;
-                    if (settings.velocity > 0) {
-                        if (settings.velocity > settings.maxvelocity) {
-                            settings.velocity = settings.maxvelocity;
-                        }
-                    } else {
-                        if (settings.velocity < (0 - settings.maxvelocity)) {
-                            settings.velocity = (0 - settings.maxvelocity);
-                        }
-                    }
                     move($this, settings);
                 }
             };
-            var inputmove = function(clientX) {
-                if (mouseDown && xpos) {
+            var inputmove = function(clientX, clientY) {
+                if (mouseDown && (xpos || ypos)) {
                     settings.velocity = 0;
+                    settings.velocityY = 0;
                     $this[0].scrollLeft = scrollLeft = $this[0].scrollLeft - (clientX - xpos);
+                    $this[0].scrollTop = scrollTop = $this[0].scrollTop - (clientY - ypos);
                     prevXPos = xpos;
+                    prevYPos = ypos;
                     xpos = clientX;
+                    ypos = clientY;
 
                     if (typeof settings.moved === 'function') {
                         settings.moved.call($this, { 
@@ -189,7 +213,7 @@
             // attach listeners
             if ($.support.touch) {
                 this.addEventListener('touchstart', function(e){
-                    start(e.touches[0].clientX);
+                    start(e.touches[0].clientX, e.touches[0].clientY);
                 }, false);
                 this.addEventListener('touchend', function(e){
                     if (e.preventDefault) {e.preventDefault();}
@@ -197,18 +221,18 @@
                 }, false);
                 this.addEventListener('touchmove', function(e){
                     if (e.preventDefault) {e.preventDefault();}
-                    inputmove(e.touches[0].clientX);
+                    inputmove(e.touches[0].clientX, e.touches[0].clientY);
                 }, false);
             }else{
                 $this
                     .mousedown(function(e){
-                        start(e.clientX);
+                        start(e.clientX, e.clientY);
                     })
                     .mouseup(function(){
                         end();
                     })
                     .mousemove(function(e){
-                        inputmove(e.clientX);
+                        inputmove(e.clientX, e.clientY);
                     })
                     .css("cursor", "move");
             }
@@ -230,4 +254,4 @@
         }
     };
 
-})(jQuery);
+}(window.jQuery));
