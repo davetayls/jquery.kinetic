@@ -1,6 +1,6 @@
 /*!
-    jQuery.kinetic v1b1
-    Dave Taylor http://the-taylors.org
+    jQuery.kinetic v1
+    Dave Taylor http://the-taylors.org/jquery.kinetic
 
     The MIT License (MIT)
     Copyright (c) <2011> <Dave Taylor http://the-taylors.org>
@@ -16,7 +16,8 @@
 
     Listeners:  All listeners are called with:
                 - this = jQuery object holding the scroll container
-                - a single argument state: { }
+                - a single argument: 
+                  state = { scrollLeft, scrollTop, velocity, settings }
 
     moved       {function(state)}           A function which is called on every move
 
