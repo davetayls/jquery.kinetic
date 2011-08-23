@@ -1,5 +1,5 @@
 /*!
-    jQuery.kinetic v1a2
+    jQuery.kinetic v1b1
     Dave Taylor http://the-taylors.org
 
     The MIT License (MIT)
@@ -9,6 +9,8 @@
     Options
     =======
     slowdown    {number}    default: 0.9    This option affects the speed at which the scroll slows
+    x           {string}    default: true   Toggles movement along the x axis
+    y           {string}    default: true   Toggles movement along the y axis
     maxvelocity {number}    default: 40     This option puts a cap on speed at which the container
                                             can scroll
 
@@ -45,7 +47,13 @@
 (function($){
 	'use strict';
 
-    var DEFAULT_SETTINGS    = { decelerate: true, slowdown: 0.9, maxvelocity: 40 },
+    var DEFAULT_SETTINGS    = { 
+                                  decelerate: true, 
+                                  y: true,
+                                  x: true,
+                                  slowdown: 0.9, 
+                                  maxvelocity: 40 
+                              },
         SETTINGS_KEY        = 'kinetic-settings';
 
     /**
@@ -93,16 +101,20 @@
     // do the actual kinetic movement
     var move = function($scroller, settings) {
         // set scrollLeft
-        $scroller[0].scrollLeft = settings.scrollLeft = $scroller[0].scrollLeft + settings.velocity;
-        if (Math.abs(settings.velocity) > 0) {
-            // if we are decelerating
-            settings.velocity = settings.decelerate ? decelerateVelocity(settings.velocity, settings.slowdown) : settings.velocity;
+        if (settings.x){
+            $scroller[0].scrollLeft = settings.scrollLeft = $scroller[0].scrollLeft + settings.velocity;
+            if (Math.abs(settings.velocity) > 0) {
+                // if we are decelerating
+                settings.velocity = settings.decelerate ? decelerateVelocity(settings.velocity, settings.slowdown) : settings.velocity;
+            }
         }
         // set scrollTop
-        $scroller[0].scrollTop = settings.scrollTop = $scroller[0].scrollTop + settings.velocityY;
-        if (Math.abs(settings.velocityY) > 0) {
-            // if we are decelerating
-            settings.velocityY = settings.decelerate ? decelerateVelocity(settings.velocityY, settings.slowdown) : settings.velocityY;
+        if (settings.y){
+            $scroller[0].scrollTop = settings.scrollTop = $scroller[0].scrollTop + settings.velocityY;
+            if (Math.abs(settings.velocityY) > 0) {
+                // if we are decelerating
+                settings.velocityY = settings.decelerate ? decelerateVelocity(settings.velocityY, settings.slowdown) : settings.velocityY;
+            }
         }
         if (Math.abs(settings.velocity) > 0 || Math.abs(settings.velocityY) > 0) {
             // tick for next movement
@@ -114,6 +126,7 @@
         if (typeof settings.moved === 'function') {
             settings.moved.call($scroller, { 
                 scrollLeft: settings.scrollLeft,
+                scrollTop: settings.scrollTop,
                 velocity: settings.velocity,
                 settings: settings
             });
@@ -165,7 +178,7 @@
             settings.velocityY = 0;
 
             // prevent selection when dragging
-            if ($.browser.msie) {$this.bind("selectstart", function () { return false; });}
+            $this.bind("selectstart", function () { return false; });
             // make sure we reset everything when mouse up
             var resetMouse = function() {
                 xpos = false;
@@ -191,10 +204,10 @@
             };
             var inputmove = function(clientX, clientY) {
                 if (mouseDown && (xpos || ypos)) {
-                    settings.velocity = 0;
-                    settings.velocityY = 0;
-                    $this[0].scrollLeft = scrollLeft = $this[0].scrollLeft - (clientX - xpos);
-                    $this[0].scrollTop = scrollTop = $this[0].scrollTop - (clientY - ypos);
+                    settings.velocity   = 0;
+                    settings.velocityY  = 0;
+                    $this[0].scrollLeft = settings.scrollLeft = settings.x ? $this[0].scrollLeft - (clientX - xpos) : $this[0].scrollLeft;
+                    $this[0].scrollTop  = settings.scrollTop  = settings.y ? $this[0].scrollTop - (clientY - ypos)  : $this[0].scrollTop;
                     prevXPos = xpos;
                     prevYPos = ypos;
                     xpos = clientX;
@@ -202,7 +215,8 @@
 
                     if (typeof settings.moved === 'function') {
                         settings.moved.call($this, { 
-                            scrollLeft: scrollLeft,
+                            scrollLeft: settings.scrollLeft,
+                            scrollTop: settings.scrollTop,
                             velocity: settings.velocity,
                             settings: settings
                         });
@@ -227,6 +241,7 @@
                 $this
                     .mousedown(function(e){
                         start(e.clientX, e.clientY);
+                        e.preventDefault();
                     })
                     .mouseup(function(){
                         end();
