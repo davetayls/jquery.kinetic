@@ -12,16 +12,45 @@
             	width: 800px;
             }
         #wrapper {
-            border: solid 1px #000;
+            border: solid 5px #000;
             height: 400px;
             width: 100%;
             overflow: hidden;
         }
+
+        .kinetic-moving-up {
+        	border-top-color: green !important;
+        }
+        .kinetic-moving-down {
+        	border-bottom-color: green !important;
+        }
+        .kinetic-moving-left {
+        	border-left-color: green !important;
+        }
+        .kinetic-moving-right {
+        	border-right-color: green !important;
+        }
+
+        .kinetic-decelerating-up {
+        	border-top-color: red !important;
+        }
+        .kinetic-decelerating-down {
+        	border-bottom-color: red !important;
+        }
+        .kinetic-decelerating-left {
+        	border-left-color: red !important;
+        }
+        .kinetic-decelerating-right {
+        	border-right-color: red !important;
+        }
+
         #inner { }
             #inner img {
+            	display: block; 
             	width: 2000px;
             }
         #left, #right { cursor: pointer; }
+
         </style>
     </head>
     <body>
@@ -62,40 +91,54 @@
         </script>
 
         <h2>Options</h2>
-        <pre><code>
-    slowdown    {number}    default: 0.9    This option affects the speed at which the scroll slows
-    x           {string}    default: true   Toggles movement along the x axis
-    y           {string}    default: true   Toggles movement along the y axis
-    maxvelocity {number}    default: 40     This option puts a cap on speed at which the container
-                                            can scroll
+        <pre class="options"><code>
+slowdown    {number}    default: 0.9    This option affects the speed at which the scroll slows
+x           {string}    default: true   Toggles movement along the x axis
+y           {string}    default: true   Toggles movement along the y axis
+maxvelocity {number}    default: 40     This option puts a cap on speed at which the container
+                                        can scroll
+movingClass {object} 
+    up:     {string}    default: 'kinetic-moving-up'
+    down:   {string}    default: 'kinetic-moving-down'
+    left:   {string}    default: 'kinetic-moving-left'
+    right:  {string}    default: 'kinetic-moving-right'
 
-    Listeners:  All listeners are called with:
-                - this = jQuery object holding the scroll container
-                - a single argument: 
-                  state = { scrollLeft, scrollTop, velocity, settings }
+deceleratingClass {object} 
+    up:     {string}    default: 'kinetic-decelerating-up'
+    down:   {string}    default: 'kinetic-decelerating-down'
+    left:   {string}    default: 'kinetic-decelerating-left'
+    right:  {string}    default: 'kinetic-decelerating-right'
 
-    moved       {function(state)}           A function which is called on every move
 
-    Methods:    You can call methods by running the kinetic plugin
-                on an element which has already been activated.
+Listeners:  All listeners are called with:
+            - this = jQuery object holding the scroll container
+            - a single settings argument which are all the options and  
+                { scrollLeft, scrollTop, velocity, velocityY }
 
-                eg  $('#wrapper').kinetic(); // activate
-                    $('#wrapper').kinetic('methodname', arguments);
+moved       {function(settings)}           A function which is called on every move
+stopped     {function(settings)}           A function which is called once all 
+                                            movement has stopped
 
-    start       Start movement in the scroll container at a particular velocity.
-                This velocity will not slow until the end method is called.
+Methods:    You can call methods by running the kinetic plugin
+            on an element which has already been activated.
 
-                The following line scrolls the container left.
-                $('#wrapper#).kinetic('start', { velocity: -30 });
+            eg  $('#wrapper').kinetic(); // activate
+                $('#wrapper').kinetic('methodname', arguments);
 
-                The following line scrolls the container right.
-                $('#wrapper#).kinetic('start', { velocity: 30 });
+start       Start movement in the scroll container at a particular velocity.
+            This velocity will not slow until the end method is called.
 
-                The following line scrolls the container diagonally.
-                $('#wrapper#).kinetic('start', { velocity: -30, velocityY: -10 });
+            The following line scrolls the container left.
+            $('#wrapper#).kinetic('start', { velocity: -30 });
 
-    end         Begin slowdown of any scrolling velocity in the container.
-                $('#wrapper#).kinetic('end');
+            The following line scrolls the container right.
+            $('#wrapper#).kinetic('start', { velocity: 30 });
+
+            The following line scrolls the container diagonally.
+            $('#wrapper#).kinetic('start', { velocity: -30, velocityY: -10 });
+
+end         Begin slowdown of any scrolling velocity in the container.
+            $('#wrapper#).kinetic('end');
 
         </code></pre>
         </div>

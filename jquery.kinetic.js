@@ -13,13 +13,27 @@
     y           {string}    default: true   Toggles movement along the y axis
     maxvelocity {number}    default: 40     This option puts a cap on speed at which the container
                                             can scroll
+    movingClass {object} 
+        up:     {string}    default: 'kinetic-moving-up'
+        down:   {string}    default: 'kinetic-moving-down'
+        left:   {string}    default: 'kinetic-moving-left'
+        right:  {string}    default: 'kinetic-moving-right'
+    
+    deceleratingClass {object} 
+        up:     {string}    default: 'kinetic-decelerating-up'
+        down:   {string}    default: 'kinetic-decelerating-down'
+        left:   {string}    default: 'kinetic-decelerating-left'
+        right:  {string}    default: 'kinetic-decelerating-right'
+    
 
     Listeners:  All listeners are called with:
                 - this = jQuery object holding the scroll container
-                - a single argument: 
-                  state = { scrollLeft, scrollTop, velocity, settings }
+                - a single settings argument which are all the options and  
+                  { scrollLeft, scrollTop, velocity, velocityY }
 
-    moved       {function(state)}           A function which is called on every move
+    moved       {function(settings)}           A function which is called on every move
+    stopped     {function(settings)}           A function which is called once all 
+                                               movement has stopped
 
     Methods:    You can call methods by running the kinetic plugin
                 on an element which has already been activated.
@@ -48,12 +62,23 @@
 (function($){
 	'use strict';
 
-    var DEFAULT_SETTINGS    = { 
-                                  decelerate: true, 
-                                  y: true,
-                                  x: true,
-                                  slowdown: 0.9, 
-                                  maxvelocity: 40 
+    var DEFAULT_SETTINGS    = { decelerate: true
+                              , y: true
+                              , x: true
+                              , slowdown: 0.9
+                              , maxvelocity: 40 
+                              , movingClass: {
+                                  up:    'kinetic-moving-up'
+                                , down:  'kinetic-moving-down'
+                                , left:  'kinetic-moving-left'
+                                , right: 'kinetic-moving-right'
+                                }
+                              , deceleratingClass: {
+                                  up:    'kinetic-decelerating-up'
+                                , down:  'kinetic-decelerating-down'
+                                , left:  'kinetic-decelerating-left'
+                                , right: 'kinetic-decelerating-right'
+                                }
                               },
         SETTINGS_KEY        = 'kinetic-settings';
 
@@ -99,6 +124,35 @@
         }
         return newVelocity;
     };
+    var setMoveClasses = function(settings, classes) {
+        this.removeClass(settings.movingClass.up)
+            .removeClass(settings.movingClass.down)
+            .removeClass(settings.movingClass.left)
+            .removeClass(settings.movingClass.right)
+            .removeClass(settings.deceleratingClass.up)
+            .removeClass(settings.deceleratingClass.down)
+            .removeClass(settings.deceleratingClass.left)
+            .removeClass(settings.deceleratingClass.right);
+
+        if (settings.velocity > 0) {
+            this.addClass(classes.right);
+        }
+        if (settings.velocity < 0) {
+            this.addClass(classes.left);
+        }
+        if (settings.velocityY > 0) {
+            this.addClass(classes.down);
+        }
+        if (settings.velocityY < 0) {
+            this.addClass(classes.up);
+        }
+        
+    };
+    var stop = function($scroller, settings) {
+        if (typeof settings.stopped === 'function') {
+            settings.stopped.call($scroller, settings);
+        }
+    };
     // do the actual kinetic movement
     var move = function($scroller, settings) {
         // set scrollLeft
@@ -117,20 +171,17 @@
                 settings.velocityY = settings.decelerate ? decelerateVelocity(settings.velocityY, settings.slowdown) : settings.velocityY;
             }
         }
+        setMoveClasses.call($scroller, settings, settings.deceleratingClass);
+        
+        if (typeof settings.moved === 'function') {
+            settings.moved.call($scroller, settings);
+        }
+
         if (Math.abs(settings.velocity) > 0 || Math.abs(settings.velocityY) > 0) {
             // tick for next movement
-            window.requestAnimationFrame(function(){
-                move($scroller, settings);
-            });
-        }
-        // trigger listener
-        if (typeof settings.moved === 'function') {
-            settings.moved.call($scroller, { 
-                scrollLeft: settings.scrollLeft,
-                scrollTop: settings.scrollTop,
-                velocity: settings.velocity,
-                settings: settings
-            });
+            window.requestAnimationFrame(function(){ move($scroller, settings); });
+        } else {
+            stop($scroller, settings);
         }
     };
     
@@ -188,6 +239,10 @@
             };
             $(document).mouseup(resetMouse).click(resetMouse);
 
+            var calculateVelocities = function() {
+                settings.velocity    = capVelocity(prevXPos - xpos, settings.maxvelocity);
+                settings.velocityY   = capVelocity(prevYPos - ypos, settings.maxvelocity);
+            };
             var start = function(clientX, clientY) {
                 mouseDown = true;
                 settings.velocity = prevXPos = 0;
@@ -196,17 +251,17 @@
                 ypos = clientY;
             };
             var end = function() {
-                if (xpos && prevXPos && settings.velocity === 0) {
-                    settings.velocity    = capVelocity(prevXPos - xpos, settings.maxvelocity);
-                    settings.velocityY   = capVelocity(prevYPos - ypos, settings.maxvelocity);
+                if (xpos && prevXPos && settings.decelerate === false) {
+                    settings.decelerate = true;
+                    calculateVelocities();
                     xpos = prevXPos = mouseDown = false;
                     move($this, settings);
                 }
             };
             var inputmove = function(clientX, clientY) {
                 if (mouseDown && (xpos || ypos)) {
-                    settings.velocity   = 0;
-                    settings.velocityY  = 0;
+                    settings.decelerate = false;
+                    settings.velocity   = settings.velocityY  = 0;
                     $this[0].scrollLeft = settings.scrollLeft = settings.x ? $this[0].scrollLeft - (clientX - xpos) : $this[0].scrollLeft;
                     $this[0].scrollTop  = settings.scrollTop  = settings.y ? $this[0].scrollTop - (clientY - ypos)  : $this[0].scrollTop;
                     prevXPos = xpos;
@@ -214,13 +269,11 @@
                     xpos = clientX;
                     ypos = clientY;
 
+                    calculateVelocities();
+                    setMoveClasses.call($this, settings, settings.movingClass);
+
                     if (typeof settings.moved === 'function') {
-                        settings.moved.call($this, { 
-                            scrollLeft: settings.scrollLeft,
-                            scrollTop: settings.scrollTop,
-                            velocity: settings.velocity,
-                            settings: settings
-                        });
+                        settings.moved.call($this, settings);
                     }
                 }
             };
