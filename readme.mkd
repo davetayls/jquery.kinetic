@@ -18,13 +18,27 @@ Options
     y           {string}    default: true   Toggles movement along the y axis
     maxvelocity {number}    default: 40     This option puts a cap on speed at which the container
                                             can scroll
+    movingClass {object} 
+        up:     {string}    default: 'kinetic-moving-up'
+        down:   {string}    default: 'kinetic-moving-down'
+        left:   {string}    default: 'kinetic-moving-left'
+        right:  {string}    default: 'kinetic-moving-right'
+
+    deceleratingClass {object} 
+        up:     {string}    default: 'kinetic-decelerating-up'
+        down:   {string}    default: 'kinetic-decelerating-down'
+        left:   {string}    default: 'kinetic-decelerating-left'
+        right:  {string}    default: 'kinetic-decelerating-right'
+
 
     Listeners:  All listeners are called with:
                 - this = jQuery object holding the scroll container
-                - a single argument: 
-                    state = { scrollLeft, scrollTop, velocity, settings }
+                - a single settings argument which are all the options and  
+                    { scrollLeft, scrollTop, velocity, velocityY }
 
-    moved       {function(state)}           A function which is called on every move
+    moved       {function(settings)}           A function which is called on every move
+    stopped     {function(settings)}           A function which is called once all 
+                                                movement has stopped
 
     Methods:    You can call methods by running the kinetic plugin
                 on an element which has already been activated.
