@@ -1,5 +1,5 @@
 /*!
-    jQuery.kinetic v1
+    jQuery.kinetic v1.1
     Dave Taylor http://the-taylors.org/jquery.kinetic
 
     The MIT License (MIT)
@@ -13,6 +13,8 @@
     y           {string}    default: true   Toggles movement along the y axis
     maxvelocity {number}    default: 40     This option puts a cap on speed at which the container
                                             can scroll
+    throttleFPS {number}    default: 60     This adds throttling to the mouse move events to boost
+                                            performance when scrolling
     movingClass {object} 
         up:     {string}    default: 'kinetic-moving-up'
         down:   {string}    default: 'kinetic-moving-down'
@@ -67,6 +69,7 @@
                               , x: true
                               , slowdown: 0.9
                               , maxvelocity: 40 
+                              , throttleFPS: 60
                               , movingClass: {
                                   up:    'kinetic-moving-up'
                                 , down:  'kinetic-moving-down'
@@ -217,14 +220,17 @@
 
             var settings = $.extend({}, DEFAULT_SETTINGS, options);
             
-            var $this = $(this),
-                xpos, 
-                prevXPos = false,
-                ypos,
-                prevYPos = false,
-                mouseDown = false,
-                scrollLeft,
-                scrollTop;
+            var $this = $(this)
+            ,   xpos
+            ,   prevXPos = false
+            ,   ypos
+            ,   prevYPos = false
+            ,   mouseDown = false
+            ,   scrollLeft
+            ,   scrollTop
+            ,   throttleTimeout = 1000 / settings.throttleFPS
+            ,   lastMove
+            ;
 
             settings.velocity = 0;
             settings.velocityY = 0;
@@ -301,7 +307,10 @@
                         end();
                     })
                     .mousemove(function(e){
-                        inputmove(e.clientX, e.clientY);
+                        if (!lastMove || new Date() > new Date(lastMove.getTime() + throttleTimeout)) {
+                            lastMove = new Date();
+                            inputmove(e.clientX, e.clientY);
+                        }
                     })
                     .css("cursor", "move");
             }
