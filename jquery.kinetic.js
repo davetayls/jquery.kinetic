@@ -1,5 +1,5 @@
 /*!
-    jQuery.kinetic v1.1
+    jQuery.kinetic v1.2
     Dave Taylor http://the-taylors.org/jquery.kinetic
 
     The MIT License (MIT)
