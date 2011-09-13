@@ -106,6 +106,7 @@
     }
 
     // add touch checker to jQuery.support
+    $.support = $.support || {};
     $.extend($.support, {
         touch: "ontouchend" in document
     });
@@ -216,6 +217,7 @@
         // add to each area
         this
         .addClass('kinetic-active')
+        .attr('tabindex', '0')       // enable the window to receive focus
         .each(function(){
 
             var settings = $.extend({}, DEFAULT_SETTINGS, options);
@@ -230,6 +232,7 @@
             ,   scrollTop
             ,   throttleTimeout = 1000 / settings.throttleFPS
             ,   lastMove
+            ,   elementFocused
             ;
 
             settings.velocity = 0;
@@ -265,21 +268,30 @@
                 }
             };
             var inputmove = function(clientX, clientY) {
-                if (mouseDown && (xpos || ypos)) {
-                    settings.decelerate = false;
-                    settings.velocity   = settings.velocityY  = 0;
-                    $this[0].scrollLeft = settings.scrollLeft = settings.x ? $this[0].scrollLeft - (clientX - xpos) : $this[0].scrollLeft;
-                    $this[0].scrollTop  = settings.scrollTop  = settings.y ? $this[0].scrollTop - (clientY - ypos)  : $this[0].scrollTop;
-                    prevXPos = xpos;
-                    prevYPos = ypos;
-                    xpos = clientX;
-                    ypos = clientY;
+                if (!lastMove || new Date() > new Date(lastMove.getTime() + throttleTimeout)) {
+                    lastMove = new Date();
 
-                    calculateVelocities();
-                    setMoveClasses.call($this, settings, settings.movingClass);
+                    if (mouseDown && (xpos || ypos)) {
+                        if (elementFocused) {
+                            $(elementFocused).blur();
+                            elementFocused = null;
+                            $this.focus();
+                        }
+                        settings.decelerate = false;
+                        settings.velocity   = settings.velocityY  = 0;
+                        $this[0].scrollLeft = settings.scrollLeft = settings.x ? $this[0].scrollLeft - (clientX - xpos) : $this[0].scrollLeft;
+                        $this[0].scrollTop  = settings.scrollTop  = settings.y ? $this[0].scrollTop - (clientY - ypos)  : $this[0].scrollTop;
+                        prevXPos = xpos;
+                        prevYPos = ypos;
+                        xpos = clientX;
+                        ypos = clientY;
 
-                    if (typeof settings.moved === 'function') {
-                        settings.moved.call($this, settings);
+                        calculateVelocities();
+                        setMoveClasses.call($this, settings, settings.movingClass);
+
+                        if (typeof settings.moved === 'function') {
+                            settings.moved.call($this, settings);
+                        }
                     }
                 }
             };
@@ -301,16 +313,17 @@
                 $this
                     .mousedown(function(e){
                         start(e.clientX, e.clientY);
-                        e.preventDefault();
+                        elementFocused = e.target;
+                        if (e.target.nodeName === 'IMG'){
+                            e.preventDefault();
+                        }
                     })
                     .mouseup(function(){
                         end();
+                        elementFocused = null;
                     })
                     .mousemove(function(e){
-                        if (!lastMove || new Date() > new Date(lastMove.getTime() + throttleTimeout)) {
-                            lastMove = new Date();
-                            inputmove(e.clientX, e.clientY);
-                        }
+                        inputmove(e.clientX, e.clientY);
                     })
                     .css("cursor", "move");
             }
@@ -332,4 +345,4 @@
         }
     };
 
-}(window.jQuery));
+}(window.jQuery || window.Zepto));
