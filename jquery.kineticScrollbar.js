@@ -1,5 +1,5 @@
 /*!
-    jQuery.kineticScrollbar v0.1
+    jQuery.kineticScrollbar a0.1
     Dave Taylor http://the-taylors.org/jquery.kinetic
 
     This plugin depends on two other plugins
@@ -65,12 +65,6 @@
 
     };
 
-    var setBar = function($bar, height, left, top) {
-        $bar.height(height - 30)
-            .css('top', (top + 15) + 'px')
-            .css('left', left + 'px');
-    };
-
     $.fn.kineticScrollbar = function(options) {
         var settings = $.extend({}, DEFAULT_SETTINGS, options);
         return this.each(function(){
@@ -86,8 +80,8 @@
             ;
             $wrapper
                 .wrap($outer)
-                .after($bar);
-            // setBar($bar, properties.height, properties.left, properties.top);
+                .after($bar)
+                .addClass('kineticScrollbar-active');
 
             var moved = function(settings) {
                 properties = getProperties($wrapper);
@@ -95,11 +89,6 @@
                 if (!isHandle) {
                     $bar.slider('value', properties.stepTop);
                 }
-                // setBar($bar
-                // ,      properties.height
-                // ,      properties.left
-                // ,      properties.top);
-
                 if (oldMoved) {
                     oldMoved.apply(this, arguments);
                 }
