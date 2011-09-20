@@ -159,20 +159,21 @@
     };
     // do the actual kinetic movement
     var move = function($scroller, settings) {
+        var scroller = $scroller[0];
         // set scrollLeft
-        if (settings.x){
-            $scroller[0].scrollLeft = settings.scrollLeft = $scroller[0].scrollLeft + settings.velocity;
+        if (settings.x && scroller.scrollWidth > 0){
+            scroller.scrollLeft = settings.scrollLeft = scroller.scrollLeft + settings.velocity;
             if (Math.abs(settings.velocity) > 0) {
-                // if we are decelerating
-                settings.velocity = settings.decelerate ? decelerateVelocity(settings.velocity, settings.slowdown) : settings.velocity;
+                settings.velocity = settings.decelerate ? 
+                    decelerateVelocity(settings.velocity, settings.slowdown) : settings.velocity;
             }
         }
         // set scrollTop
-        if (settings.y){
-            $scroller[0].scrollTop = settings.scrollTop = $scroller[0].scrollTop + settings.velocityY;
+        if (settings.y && scroller.scrollHeight > 0){
+            scroller.scrollTop = settings.scrollTop = scroller.scrollTop + settings.velocityY;
             if (Math.abs(settings.velocityY) > 0) {
-                // if we are decelerating
-                settings.velocityY = settings.decelerate ? decelerateVelocity(settings.velocityY, settings.slowdown) : settings.velocityY;
+                settings.velocityY = settings.decelerate ? 
+                    decelerateVelocity(settings.velocityY, settings.slowdown) : settings.velocityY;
             }
         }
         setMoveClasses.call($scroller, settings, settings.deceleratingClass);
@@ -192,23 +193,14 @@
 
 
     var callOption = function(method, options) {
-        if (method && method === 'start') {
+        var methodFn = $.kinetic.callMethods[method]
+        , args = Array.prototype.slice.call(arguments)
+        ;
+        if (methodFn) {
             this.each(function(){
-                var $this = $(this),
-                    settings = $.extend($this.data(SETTINGS_KEY), options);
-                if (settings) {
-                    settings.decelerate = false;
-                    move($this, settings);
-                }
-            });
-        }
-        if (method && method === 'end') {
-            this.each(function(){
-                var $this = $(this),
-                    settings = $this.data(SETTINGS_KEY);
-                if (settings) {
-                    settings.decelerate = true;
-                }
+                var opts = args.slice(1), settings = $(this).data(SETTINGS_KEY);
+                opts.unshift(settings);
+                methodFn.apply(this, opts);
             });
         }
     };
@@ -337,12 +329,32 @@
         });
     };
 
+    $.kinetic = {
+        settingsKey: SETTINGS_KEY
+    ,   callMethods: {
+            start: function(settings, options){
+                var $this = $(this);
+                    settings = $.extend(settings, options);
+                if (settings) {
+                    settings.decelerate = false;
+                    move($this, settings);
+                }
+            }
+        ,   end: function(settings, options){
+                var $this = $(this);
+                if (settings) {
+                    settings.decelerate = true;
+                }
+            }
+        }
+    };
     $.fn.kinetic = function(options) {
         if (typeof options === 'string') {
             callOption.apply(this, arguments);
         } else {
             initElements.call(this, options);
         }
+        return this;
     };
 
 }(window.jQuery || window.Zepto));

@@ -16,6 +16,7 @@ This plugin works with [jQuery](http://jquery.com) and
 - firefox: 3.6,4,5
 - chrome: 13
 - safari: 5
+- iOS Safari: 4
 
 Demos
 -----
