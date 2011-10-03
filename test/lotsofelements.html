@@ -1,0 +1,150 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <title>jQuery.kinetic lots of elements</title>
+        
+        <script src="../lib/jquery-1.5.1.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../jquery.kinetic.js" type="text/javascript" charset="utf-8"></script>
+        <style type="text/css">
+            #container {
+            	margin: 0 auto;
+            	width: 800px;
+            }
+        .wrapper {
+            border: solid 5px #000;
+            height: 400px;
+            width: 550px;
+            overflow: hidden;
+            -webkit-transform: translate3d(0,0,0);
+        }
+        .inner {
+        	height: 5000px;
+        	width: 5000px;
+        }
+            .inner img {
+                float: left;
+            }
+
+        #left, #right { cursor: pointer; }
+
+
+        .kinetic-moving-up {
+        	border-top-color: green !important;
+        }
+        .kinetic-moving-down {
+        	border-bottom-color: green !important;
+        }
+        .kinetic-moving-left {
+        	border-left-color: green !important;
+        }
+        .kinetic-moving-right {
+        	border-right-color: green !important;
+        }
+
+        .kinetic-decelerating-up {
+        	border-top-color: red !important;
+        }
+        .kinetic-decelerating-down {
+        	border-bottom-color: red !important;
+        }
+        .kinetic-decelerating-left {
+        	border-left-color: red !important;
+        }
+        .kinetic-decelerating-right {
+        	border-right-color: red !important;
+        }
+
+        </style>
+    </head>
+    <body>
+        <div id="container">
+            <h1>testing lots of elements</h1>
+
+            <h2>Test for tab index</h2>
+            <form action="test.html" method="GET">
+                <input type="text" />
+            </form>
+
+            <h2>Single image</h2>
+            <div id="wrapper" class="wrapper">
+                <div class="inner">
+                    <img src="../lib/wembley.jpg" alt="wembley stadium" />
+                    <img src="../lib/wembley.jpg" alt="wembley stadium" />
+                    <img src="../lib/wembley.jpg" alt="wembley stadium" />
+                    <img src="../lib/wembley.jpg" alt="wembley stadium" />
+                    <img src="../lib/wembley.jpg" alt="wembley stadium" />
+                    <img src="../lib/wembley.jpg" alt="wembley stadium" />
+                    <img src="../lib/wembley.jpg" alt="wembley stadium" />
+                    <img src="../lib/wembley.jpg" alt="wembley stadium" />
+                    <img src="../lib/wembley.jpg" alt="wembley stadium" />
+                    <img src="../lib/wembley.jpg" alt="wembley stadium" />
+                    <img src="../lib/wembley.jpg" alt="wembley stadium" />
+                    <img src="../lib/wembley.jpg" alt="wembley stadium" />
+                    <img src="../lib/wembley.jpg" alt="wembley stadium" />
+                    <img src="../lib/wembley.jpg" alt="wembley stadium" />
+                    <img src="../lib/wembley.jpg" alt="wembley stadium" />
+                    <img src="../lib/wembley.jpg" alt="wembley stadium" />
+                    <img src="../lib/wembley.jpg" alt="wembley stadium" />
+                    <img src="../lib/wembley.jpg" alt="wembley stadium" />
+                    <img src="../lib/wembley.jpg" alt="wembley stadium" />
+                    <img src="../lib/wembley.jpg" alt="wembley stadium" />
+                    <img src="../lib/wembley.jpg" alt="wembley stadium" />
+                    <img src="../lib/wembley.jpg" alt="wembley stadium" />
+                    <img src="../lib/wembley.jpg" alt="wembley stadium" />
+                    <img src="../lib/wembley.jpg" alt="wembley stadium" />
+                    <img src="../lib/wembley.jpg" alt="wembley stadium" />
+                    <img src="../lib/wembley.jpg" alt="wembley stadium" />
+                    <img src="../lib/wembley.jpg" alt="wembley stadium" />
+                    <img src="../lib/wembley.jpg" alt="wembley stadium" />
+                    <img src="../lib/wembley.jpg" alt="wembley stadium" />
+                    <img src="../lib/wembley.jpg" alt="wembley stadium" />
+                    <img src="../lib/wembley.jpg" alt="wembley stadium" />
+                    <img src="../lib/wembley.jpg" alt="wembley stadium" />
+                    <img src="../lib/wembley.jpg" alt="wembley stadium" />
+                    <img src="../lib/wembley.jpg" alt="wembley stadium" />
+                    <img src="../lib/wembley.jpg" alt="wembley stadium" />
+                    <img src="../lib/wembley.jpg" alt="wembley stadium" />
+                    <img src="../lib/wembley.jpg" alt="wembley stadium" />
+                    <img src="../lib/wembley.jpg" alt="wembley stadium" />
+                    <img src="../lib/wembley.jpg" alt="wembley stadium" />
+                    <img src="../lib/wembley.jpg" alt="wembley stadium" />
+                    <img src="../lib/wembley.jpg" alt="wembley stadium" />
+                    <img src="../lib/wembley.jpg" alt="wembley stadium" />
+                    <img src="../lib/wembley.jpg" alt="wembley stadium" />
+                    <img src="../lib/wembley.jpg" alt="wembley stadium" />
+                    <img src="../lib/wembley.jpg" alt="wembley stadium" />
+                    <img src="../lib/wembley.jpg" alt="wembley stadium" />
+                    <img src="../lib/wembley.jpg" alt="wembley stadium" />
+                    <img src="../lib/wembley.jpg" alt="wembley stadium" />
+                    <img src="../lib/wembley.jpg" alt="wembley stadium" />
+                    <img src="../lib/wembley.jpg" alt="wembley stadium" />
+                    <img src="../lib/wembley.jpg" alt="wembley stadium" />
+                </div>
+            </div>
+            <div>
+                <span id="left">&lt; left</span> |
+                <span id="right">right &gt;</span>
+            </div>
+            <script type="text/javascript" charset="utf-8">
+                $('#wrapper').kinetic({
+moved: function(state){
+console.log(state);
+}
+});
+$('#left').mousedown(function(){
+        $('#wrapper').kinetic('start', { velocity: -30 });
+        });
+$('#left').mouseup(function(){
+        $('#wrapper').kinetic('end');
+        });
+$('#right').mousedown(function(){
+        $('#wrapper').kinetic('start', { velocity: 30 });
+        });
+$('#right').mouseup(function(){
+        $('#wrapper').kinetic('end');
+        });
+            </script>
+
+        </div>
+    </body>
+</html>
