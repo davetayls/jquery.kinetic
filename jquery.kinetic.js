@@ -157,9 +157,10 @@
             settings.stopped.call($scroller, settings);
         }
     };
-    // do the actual kinetic movement
+    /** do the actual kinetic movement */
     var move = function($scroller, settings) {
         var scroller = $scroller[0];
+
         // set scrollLeft
         if (settings.x && scroller.scrollWidth > 0){
             scroller.scrollLeft = settings.scrollLeft = scroller.scrollLeft + settings.velocity;
@@ -167,7 +168,10 @@
                 settings.velocity = settings.decelerate ? 
                     decelerateVelocity(settings.velocity, settings.slowdown) : settings.velocity;
             }
+        } else {
+            settings.velocity = 0;
         }
+
         // set scrollTop
         if (settings.y && scroller.scrollHeight > 0){
             scroller.scrollTop = settings.scrollTop = scroller.scrollTop + settings.velocityY;
@@ -175,7 +179,10 @@
                 settings.velocityY = settings.decelerate ? 
                     decelerateVelocity(settings.velocityY, settings.slowdown) : settings.velocityY;
             }
+        } else {
+            settings.velocityY = 0;
         }
+
         setMoveClasses.call($scroller, settings, settings.deceleratingClass);
         
         if (typeof settings.moved === 'function') {
