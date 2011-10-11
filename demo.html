@@ -71,11 +71,7 @@
             <span id="right">right &gt;</span>
         </div>
         <script type="text/javascript" charset="utf-8">
-            $('#wrapper').kinetic({
-                moved: function(state){
-                    console.log(state);
-                }
-            });
+            $('#wrapper').kinetic();
             $('#left').mousedown(function(){
                 $('#wrapper').kinetic('start', { velocity: -30 });
             });

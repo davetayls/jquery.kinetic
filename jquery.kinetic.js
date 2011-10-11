@@ -239,6 +239,10 @@
 
             // prevent selection when dragging
             $this.bind("selectstart", function () { return false; });
+            // prevent drag and drop images in ie
+            document.ondragstart = function(e) {
+                return !!elementFocused;
+            };
             // make sure we reset everything when mouse up
             var resetMouse = function() {
                 xpos = false;
