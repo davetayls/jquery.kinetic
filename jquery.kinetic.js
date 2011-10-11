@@ -41,7 +41,7 @@
                 on an element which has already been activated.
 
                 eg  $('#wrapper').kinetic(); // activate
-                    $('#wrapper').kinetic('methodname', arguments);
+                    $('#wrapper').kinetic('methodname', options);
 
     start       Start movement in the scroll container at a particular velocity.
                 This velocity will not slow until the end method is called.
@@ -57,6 +57,17 @@
 
     end         Begin slowdown of any scrolling velocity in the container.
                 $('#wrapper#).kinetic('end');
+
+    stop        Stop the scrolling immediately
+
+    Add your own method:
+                // add the method
+                $.kinetic.callMethods.do = function(settings, options){
+                    // method functionality
+                };
+
+                // use the method
+                $('#elem').kinetic('do', { ... });
 
     */
 /*jslint browser: true, vars: true, white: true, forin: true, indent: 4 */

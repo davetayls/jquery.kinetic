@@ -25,8 +25,26 @@ Take a look at a demo on <http://the-taylors.org/jquery.kinetic>.
 Changes
 ------- 
 
+### 1.3
+- IE bug fixes when dragging images
+- Adding extensibility for methods by attaching functions to jQuery.
+
+    // add the method
+    $.kinetic.callMethods.do = function(settings, options){
+    	// method functionality
+    };
+
+    // use the method
+    $('#elem').kinetic('do', { ... });
+
+- Added stop method
+- Fix bug with ignored axis triggering animation frames
+
+
+
 Notes
 -----
+The scrollbar plugin is still very much an alpha version.
 
 
 Options
