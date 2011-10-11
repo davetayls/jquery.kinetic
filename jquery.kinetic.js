@@ -341,8 +341,8 @@
     };
 
     $.kinetic = {
-        settingsKey: SETTINGS_KEY
-    ,   callMethods: {
+        settingsKey: SETTINGS_KEY,
+        callMethods: {
             start: function(settings, options){
                 var $this = $(this);
                     settings = $.extend(settings, options);
@@ -350,13 +350,18 @@
                     settings.decelerate = false;
                     move($this, settings);
                 }
-            }
-        ,   end: function(settings, options){
+            },
+            end: function(settings, options){
                 var $this = $(this);
                 if (settings) {
                     settings.decelerate = true;
                 }
-            }
+            },
+            stop: function(settings, options){
+                settings.velocity = 0;
+                settings.velocityY = 0;
+                settings.decelerate = true;
+            }            
         }
     };
     $.fn.kinetic = function(options) {
