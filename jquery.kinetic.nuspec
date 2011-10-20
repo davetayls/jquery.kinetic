@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+    <metadata>
+        <id>jquery.kinetic</id>
+        <version>1.3</version>
+        <authors>davetayls</authors>
+        <owners>davetayls</owners>
+        <licenseUrl>https://github.com/davetayls/jquery.kinetic/raw/master/LICENSE</licenseUrl>
+        <projectUrl>http://the-taylors.org/jquery.kinetic</projectUrl>
+        <iconUrl>http://the-taylors.org/favicon.ico</iconUrl>    
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <description>Adds kinetic scrolling to a div container</description>
+        <tags>jQuery JavaScript kinetic scrolling touch iPad iPhone mobile</tags>
+        <dependencies>
+            <dependency id="jQuery" version="(1.5,)" />
+        </dependencies>    
+    </metadata>
+    <files>
+        <file src="jquery.kinetic.js"   target="content\scripts\jquery.kinetic" />
+        <file src="LICENSE"   target="content\scripts\jquery.kinetic" />
+        <file src="readme.mkd"   target="content\scripts\jquery.kinetic" />
+    </files>
+</package>
