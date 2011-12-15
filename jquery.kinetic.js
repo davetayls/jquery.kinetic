@@ -326,6 +326,7 @@
             }else{
                 $this
                     .mousedown(function(e){
+                        e.stopPropagation()
                         start(e.clientX, e.clientY);
                         elementFocused = e.target;
                         if (e.target.nodeName === 'IMG'){
