@@ -1,0 +1,80 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <title>jQuery.kinetic demos</title>
+        <meta name="viewport" content="width=550" />
+        
+        <script src="../lib/jquery-1.5.1.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../jquery.kinetic.js" type="text/javascript" charset="utf-8"></script>
+        <style type="text/css">
+            body {
+            	font-family: arial, sans-serif;
+            }
+            pre code {
+            	background: #ddd;
+            	display: block;
+            	padding: 10px;
+            	-webkit-border-radius: 5px;
+            	-moz-border-radius: 5px;
+            	-o-border-radius: 5px;
+            	border-radius: 5px;
+            }
+            #container {
+            	margin: 0 auto;
+            	width: 800px;
+            }
+            #outerScroller {
+                border: solid 5px #000;
+                height: 400px;
+                width: 100%;
+                overflow: hidden;
+                position: relative;
+            }
+
+            #outerContent { }
+                #outerContent img {
+                    display: block; 
+                    width: 2000px;
+                }
+
+            #innerScroller {
+              position: absolute;
+              overflow: hidden;
+              top: 50px;
+              left: 50px;
+              width: 300px;
+              height: 150px;
+            }
+
+            #innerContent {}
+              #innerContent img {
+                display block;
+                width: 1024px;
+              }
+
+        </style>
+    </head>
+    <body>
+        <div id="container">
+        <h1>jQuery.kinetic demo with nested scrollers</h1>
+        <p>
+            Demo of jQuery kinetic with nested scrollers
+        </p>
+        <div id="outerScroller">
+            <div id="outerContent">
+                <img src="../lib/wembley.jpg" alt="wembley stadium" />
+            </div>
+            <div id="innerScroller">
+              <div id="innerContent">
+                <img src="../lib/stade_de_france.jpg" alt="stade de france"/>
+              </div>
+            </div>
+        </div>
+
+        <script type="text/javascript" charset="utf-8">
+            $('#outerScroller').kinetic();
+            $('#innerScroller').kinetic();
+        </script>
+        </div>
+    </body>
+</html>
