@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html>
     <head>
-        <title>jQuery.kinetic demos</title>
+        <title>jQuery.kinetic test nested elements</title>
         <meta name="viewport" content="width=550" />
         
         <script src="../lib/jquery-1.5.1.min.js" type="text/javascript" charset="utf-8"></script>
@@ -51,6 +51,11 @@
                 display block;
                 width: 1024px;
               }
+              #innerContent a {
+              	  position: absolute;
+              	  top: 10px;
+              	  left: 10px;
+              }
 
         </style>
     </head>
@@ -67,6 +72,7 @@
             <div id="innerScroller">
               <div id="innerContent">
                 <img src="../lib/stade_de_france.jpg" alt="stade de france"/>
+                <a href="http://the-taylors.org/jquery.kinetic">inner link</a>
               </div>
             </div>
         </div>

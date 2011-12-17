@@ -314,24 +314,25 @@
             if ($.support.touch) {
                 this.addEventListener('touchstart', function(e){
                     start(e.touches[0].clientX, e.touches[0].clientY);
+                    e.stopPropagation();
                 }, false);
                 this.addEventListener('touchend', function(e){
-                    if (e.preventDefault) {e.preventDefault();}
                     end();
+                    if (e.preventDefault) {e.preventDefault();}
                 }, false);
                 this.addEventListener('touchmove', function(e){
-                    if (e.preventDefault) {e.preventDefault();}
                     inputmove(e.touches[0].clientX, e.touches[0].clientY);
+                    if (e.preventDefault) {e.preventDefault();}
                 }, false);
             }else{
                 $this
                     .mousedown(function(e){
-                        e.stopPropagation()
                         start(e.clientX, e.clientY);
                         elementFocused = e.target;
                         if (e.target.nodeName === 'IMG'){
                             e.preventDefault();
                         }
+                        e.stopPropagation();
                     })
                     .mouseup(function(){
                         end();
