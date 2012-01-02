@@ -126,6 +126,7 @@
         return Math.floor(Math.abs(velocity)) === 0 ? 0 // is velocity less than 1?
                : velocity * slowdown; // reduce slowdown
     };
+
     var capVelocity = function(velocity, max) {
         var newVelocity = velocity;
         if (velocity > 0) {
@@ -139,6 +140,7 @@
         }
         return newVelocity;
     };
+
     var setMoveClasses = function(settings, classes) {
         this.removeClass(settings.movingClass.up)
             .removeClass(settings.movingClass.down)
@@ -163,11 +165,13 @@
         }
         
     };
+
     var stop = function($scroller, settings) {
         if (typeof settings.stopped === 'function') {
             settings.stopped.call($scroller, settings);
         }
     };
+
     /** do the actual kinetic movement */
     var move = function($scroller, settings) {
         var scroller = $scroller[0];
@@ -207,8 +211,6 @@
             stop($scroller, settings);
         }
     };
-    
-
 
     var callOption = function(method, options) {
         var methodFn = $.kinetic.callMethods[method]
@@ -223,6 +225,21 @@
         }
     };
 
+    var attachListeners = function($this, settings) {
+        var element = $this[0];
+        if ($.support.touch) {
+            element.addEventListener('touchstart', settings.events.touchStart, false);
+            element.addEventListener('touchend', settings.events.inputEnd, false);
+            element.addEventListener('touchmove', settings.events.touchMove,false);
+        } else {
+            $this
+            .mousedown(settings.events.inputDown)
+            .mouseup(settings.events.inputEnd)
+            .mousemove(settings.events.inputMove);
+        }
+        $this.click(settings.events.inputClick);
+    };
+
     var initElements = function(options) {
         // add to each area
         this
@@ -232,7 +249,8 @@
 
             var settings = $.extend({}, DEFAULT_SETTINGS, options);
             
-            var $this = $(this)
+            var self = this
+            ,   $this = $(this)
             ,   xpos
             ,   prevXPos = false
             ,   ypos
@@ -309,47 +327,44 @@
                     }
                 }
             };
-            
-            // attach listeners
-            if ($.support.touch) {
-                this.addEventListener('touchstart', function(e){
+
+            // Events
+            settings.events = {
+                touchStart: function(e){
                     start(e.touches[0].clientX, e.touches[0].clientY);
                     e.stopPropagation();
-                }, false);
-                this.addEventListener('touchend', function(e){
-                    end();
-                    if (e.preventDefault) {e.preventDefault();}
-                }, false);
-                this.addEventListener('touchmove', function(e){
+                },
+                touchMove: function(e){
                     inputmove(e.touches[0].clientX, e.touches[0].clientY);
                     if (e.preventDefault) {e.preventDefault();}
-                }, false);
-            }else{
-                $this
-                    .mousedown(function(e){
-                        start(e.clientX, e.clientY);
-                        elementFocused = e.target;
-                        if (e.target.nodeName === 'IMG'){
-                            e.preventDefault();
-                        }
-                        e.stopPropagation();
-                    })
-                    .mouseup(function(){
-                        end();
-                        elementFocused = null;
-                    })
-                    .mousemove(function(e){
-                        inputmove(e.clientX, e.clientY);
-                    })
-                    .css("cursor", "move");
-            }
-            $this.click(function(e){
-                if (Math.abs(settings.velocity) > 0) {
-                    e.preventDefault();
-                    return false;
+                },
+                inputDown: function(e){
+                    start(e.clientX, e.clientY);
+                    elementFocused = e.target;
+                    if (e.target.nodeName === 'IMG'){
+                        e.preventDefault();
+                    }
+                    e.stopPropagation();
+                },
+                inputEnd: function(e){
+                    end();
+                    elementFocused = null;
+                    if (e.preventDefault) {e.preventDefault();}
+                },
+                inputMove: function(e) {
+                    inputmove(e.clientX, e.clientY);
+                    if (e.preventDefault) {e.preventDefault();}
+                },
+                inputClick: function(e){
+                    if (Math.abs(settings.velocity) > 0) {
+                        e.preventDefault();
+                        return false;
+                    }
                 }
-            });
-            $this.data(SETTINGS_KEY, settings);
+            };
+            
+            attachListeners($this, settings);
+            $this.data(SETTINGS_KEY, settings).css("cursor", "move");
         });
     };
 
