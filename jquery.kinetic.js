@@ -76,6 +76,7 @@
 	'use strict';
 
     var DEFAULT_SETTINGS    = { decelerate: true
+                              , triggerHardware: false
                               , y: true
                               , x: true
                               , slowdown: 0.9
@@ -379,6 +380,10 @@
             
             attachListeners($this, settings);
             $this.data(SETTINGS_KEY, settings).css("cursor", "move");
+
+            if (settings.triggerHardware) {
+                $this.css('-webkit-transform', 'translate3d(0,0,0)');
+            }
         });
     };
 
