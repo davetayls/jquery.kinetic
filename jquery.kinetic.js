@@ -239,6 +239,20 @@
         }
         $this.click(settings.events.inputClick);
     };
+    var detachListeners = function($this, settings) {
+        var element = $this[0];
+        if ($.support.touch) {
+            element.removeEventListener('touchstart', settings.events.touchStart, false);
+            element.removeEventListener('touchend', settings.events.inputEnd, false);
+            element.removeEventListener('touchmove', settings.events.touchMove,false);
+        } else {
+            $this
+            .unbind(settings.events.inputDown)
+            .unbind(settings.events.inputEnd)
+            .unbind(settings.events.inputMove);
+        }
+        $this.unbind(settings.events.inputClick);
+    };
 
     var initElements = function(options) {
         // add to each area
