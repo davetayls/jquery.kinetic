@@ -92,6 +92,9 @@
             
             &nbsp;&nbsp; -- &nbsp;&nbsp;
             <span id="stop">stop (stop immediately)</span>
+
+            &nbsp;&nbsp; -- &nbsp;&nbsp;
+            <span id="detach">detach</span>
         </div>
         <script type="text/javascript" charset="utf-8">
             $('#wrapper').kinetic();
@@ -106,6 +109,9 @@
             });
             $('#stop').click(function(){
                 $('#wrapper').kinetic('stop');
+            });
+            $('#detach').click(function(){
+                $('#wrapper').kinetic('detach');
             });
         </script>
 

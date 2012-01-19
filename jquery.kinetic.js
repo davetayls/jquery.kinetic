@@ -95,7 +95,8 @@
                                 , right: 'kinetic-decelerating-right'
                                 }
                               },
-        SETTINGS_KEY        = 'kinetic-settings';
+        SETTINGS_KEY        = 'kinetic-settings',
+        ACTIVE_CLASS        = 'kinetic-active';
 
     /**
      * Provides requestAnimationFrame in a cross browser way.
@@ -176,7 +177,6 @@
     /** do the actual kinetic movement */
     var move = function($scroller, settings) {
         var scroller = $scroller[0];
-
         // set scrollLeft
         if (settings.x && scroller.scrollWidth > 0){
             scroller.scrollLeft = settings.scrollLeft = scroller.scrollLeft + settings.velocity;
@@ -215,7 +215,7 @@
 
     var callOption = function(method, options) {
         var methodFn = $.kinetic.callMethods[method]
-        , args = Array.prototype.slice.call(arguments)
+        ,   args = Array.prototype.slice.call(arguments)
         ;
         if (methodFn) {
             this.each(function(){
@@ -248,18 +248,16 @@
             element.removeEventListener('touchmove', settings.events.touchMove,false);
         } else {
             $this
-            .unbind(settings.events.inputDown)
-            .unbind(settings.events.inputEnd)
-            .unbind(settings.events.inputMove);
+            .unbind('mousedown', settings.events.inputDown)
+            .unbind('mouseup', settings.events.inputEnd)
+            .unbind('mousemove', settings.events.inputMove);
         }
         $this.unbind(settings.events.inputClick);
     };
 
     var initElements = function(options) {
-        // add to each area
         this
-        .addClass('kinetic-active')
-        .attr('tabindex', '0')       // enable the window to receive focus
+        .addClass(ACTIVE_CLASS)
         .each(function(){
 
             var settings = $.extend({}, DEFAULT_SETTINGS, options);
@@ -408,7 +406,14 @@
                 settings.velocity = 0;
                 settings.velocityY = 0;
                 settings.decelerate = true;
-            }            
+            },
+            detach: function(settings, options) {
+                var $this = $(this);
+                detachListeners($this, settings);
+                $this
+                .removeClass(ACTIVE_CLASS)
+                .css("cursor", "");
+            }
         }
     };
     $.fn.kinetic = function(options) {
