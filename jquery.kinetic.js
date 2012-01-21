@@ -5,71 +5,6 @@
     The MIT License (MIT)
     Copyright (c) <2011> <Dave Taylor http://the-taylors.org>
 */
-/*
-    Options
-    =======
-    slowdown    {number}    default: 0.9    This option affects the speed at which the scroll slows
-    x           {string}    default: true   Toggles movement along the x axis
-    y           {string}    default: true   Toggles movement along the y axis
-    maxvelocity {number}    default: 40     This option puts a cap on speed at which the container
-                                            can scroll
-    throttleFPS {number}    default: 60     This adds throttling to the mouse move events to boost
-                                            performance when scrolling
-    movingClass {object} 
-        up:     {string}    default: 'kinetic-moving-up'
-        down:   {string}    default: 'kinetic-moving-down'
-        left:   {string}    default: 'kinetic-moving-left'
-        right:  {string}    default: 'kinetic-moving-right'
-    
-    deceleratingClass {object} 
-        up:     {string}    default: 'kinetic-decelerating-up'
-        down:   {string}    default: 'kinetic-decelerating-down'
-        left:   {string}    default: 'kinetic-decelerating-left'
-        right:  {string}    default: 'kinetic-decelerating-right'
-    
-
-    Listeners:  All listeners are called with:
-                - this = jQuery object holding the scroll container
-                - a single settings argument which are all the options and  
-                  { scrollLeft, scrollTop, velocity, velocityY }
-
-    moved       {function(settings)}           A function which is called on every move
-    stopped     {function(settings)}           A function which is called once all 
-                                               movement has stopped
-
-    Methods:    You can call methods by running the kinetic plugin
-                on an element which has already been activated.
-
-                eg  $('#wrapper').kinetic(); // activate
-                    $('#wrapper').kinetic('methodname', options);
-
-    start       Start movement in the scroll container at a particular velocity.
-                This velocity will not slow until the end method is called.
-
-                The following line scrolls the container left.
-                $('#wrapper#).kinetic('start', { velocity: -30 });
-
-                The following line scrolls the container right.
-                $('#wrapper#).kinetic('start', { velocity: 30 });
-
-                The following line scrolls the container diagonally.
-                $('#wrapper#).kinetic('start', { velocity: -30, velocityY: -10 });
-
-    end         Begin slowdown of any scrolling velocity in the container.
-                $('#wrapper#).kinetic('end');
-
-    stop        Stop the scrolling immediately
-
-    Add your own method:
-                // add the method
-                $.kinetic.callMethods.do = function(settings, options){
-                    // method functionality
-                };
-
-                // use the method
-                $('#elem').kinetic('do', { ... });
-
-    */
 /*global define,require */
 (function($){
 	'use strict';
@@ -122,6 +57,7 @@
     $.extend($.support, {
         touch: "ontouchend" in document
     });
+    var selectStart = function() { return false; };
 
     var decelerateVelocity = function(velocity, slowdown) {
         return Math.floor(Math.abs(velocity)) === 0 ? 0 // is velocity less than 1?
@@ -237,7 +173,8 @@
             .mouseup(settings.events.inputEnd)
             .mousemove(settings.events.inputMove);
         }
-        $this.click(settings.events.inputClick);
+        $this.click(settings.events.inputClick)
+        .bind("selectstart", selectStart); // prevent selection when dragging
     };
     var detachListeners = function($this, settings) {
         var element = $this[0];
@@ -251,7 +188,8 @@
             .unbind('mouseup', settings.events.inputEnd)
             .unbind('mousemove', settings.events.inputMove);
         }
-        $this.unbind(settings.events.inputClick);
+        $this.unbind('click', settings.events.inputClick)
+        .unbind("selectstart", selectStart); // prevent selection when dragging
     };
 
     var initElements = function(options) {
@@ -278,8 +216,6 @@
             settings.velocity = 0;
             settings.velocityY = 0;
 
-            // prevent selection when dragging
-            $this.bind("selectstart", function () { return false; });
             // prevent drag and drop images in ie
             $(document).bind('dragstart', function(e) {
                 return !!elementFocused;
@@ -412,6 +348,13 @@
                 $this
                 .removeClass(ACTIVE_CLASS)
                 .css("cursor", "");
+            },
+            attach: function(settings, options) {
+                var $this = $(this);
+                attachListeners($this, settings);
+                $this
+                .addClass(ACTIVE_CLASS)
+                .css("cursor", "move");
             }
         }
     };

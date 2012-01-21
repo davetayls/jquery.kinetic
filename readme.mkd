@@ -104,6 +104,11 @@ Options
 
     stop        Stop the scrolling immediately
 
+    detach      Detach listeners and functionality from the wrapper
+
+    attach      Re-attach listeners and functionality previously detached using
+                the detach method
+
     Add your own method:
                 // add the method
                 $.kinetic.callMethods.do = function(settings, options){

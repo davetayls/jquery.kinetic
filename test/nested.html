@@ -76,10 +76,45 @@
               </div>
             </div>
         </div>
+        <div id="controls">
+            <span id="left">&lt; left</span> |
+            <span id="right">right &gt;</span>
+            &nbsp;&nbsp; -- &nbsp;&nbsp;
+            <span id="end">end (decelerates)</span>
+            
+            &nbsp;&nbsp; -- &nbsp;&nbsp;
+            <span id="stop">stop (stop immediately)</span>
+
+            &nbsp;&nbsp; -- &nbsp;&nbsp;
+            <span id="detach">detach</span>
+
+            &nbsp;&nbsp; -- &nbsp;&nbsp;
+            <span id="attach">attach</span>
+        </div>
 
         <script type="text/javascript" charset="utf-8">
             $('#outerScroller').kinetic();
             $('#innerScroller').kinetic();
+        </script>
+        <script type="text/javascript" charset="utf-8">
+            $('#left').click(function(){
+                $('#innerScroller').kinetic('start', { velocity: -3 });
+            });
+            $('#right').click(function(){
+                $('#innerScroller').kinetic('start', { velocity: 3 });
+            });
+            $('#end').click(function(){
+                $('#innerScroller').kinetic('end');
+            });
+            $('#stop').click(function(){
+                $('#innerScroller').kinetic('stop');
+            });
+            $('#detach').click(function(){
+                $('#innerScroller').kinetic('detach');
+            });
+            $('#attach').click(function(){
+                $('#innerScroller').kinetic('attach');
+            });
         </script>
         </div>
     </body>
