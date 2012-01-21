@@ -27,6 +27,8 @@ Changes
 
 ### 1.4
 - added ability to nest containers thanks @cc-lam
+- added detach/attach methods
+- added triggerHardware option
 
 ### 1.3
 - IE bug fixes when dragging images
