@@ -60,6 +60,8 @@ Options
                                             can scroll
     throttleFPS {number}    default: 60     This adds throttling to the mouse move events to boost
                                             performance when scrolling
+    triggerHardware {boolean} false         This adds css to the wrapper which
+                                            will trigger iOS to use hardware acceleration
     movingClass {object} 
         up:     {string}    default: 'kinetic-moving-up'
         down:   {string}    default: 'kinetic-moving-down'
