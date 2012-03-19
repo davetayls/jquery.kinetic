@@ -27,6 +27,7 @@ Changes
 
 ### 1.5
 - added ability to prevent capturing scroll depending on the target
+- fix for using alongside jQuery UI draggable #14 - thanks @sidoh, @NilsHolmstrom
 
 ### 1.4
 - added ability to nest containers thanks @cc-lam
