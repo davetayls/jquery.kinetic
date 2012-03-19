@@ -25,6 +25,8 @@ Take a look at a demo on <http://the-taylors.org/jquery.kinetic>.
 Changes
 ------- 
 
+- added ability to prevent capturing scroll depending on the target
+
 ### 1.4
 - added ability to nest containers thanks @cc-lam
 - added detach/attach methods
