@@ -230,6 +230,12 @@
                 settings.velocity    = capVelocity(prevXPos - xpos, settings.maxvelocity);
                 settings.velocityY   = capVelocity(prevYPos - ypos, settings.maxvelocity);
             };
+            var useTarget = function(target) {
+                if ($.isFunction(settings.filterTarget)) {
+                    return settings.filterTarget.call(self, target) !== false;
+                }
+                return true;
+            };
             var start = function(clientX, clientY) {
                 mouseDown = true;
                 settings.velocity = prevXPos = 0;
@@ -277,20 +283,24 @@
             // Events
             settings.events = {
                 touchStart: function(e){
-                    start(e.touches[0].clientX, e.touches[0].clientY);
-                    e.stopPropagation();
+                    if (useTarget(e.target)) {
+                        start(e.touches[0].clientX, e.touches[0].clientY);
+                        e.stopPropagation();
+                    }
                 },
                 touchMove: function(e){
                     inputmove(e.touches[0].clientX, e.touches[0].clientY);
                     if (e.preventDefault) {e.preventDefault();}
                 },
                 inputDown: function(e){
-                    start(e.clientX, e.clientY);
-                    elementFocused = e.target;
-                    if (e.target.nodeName === 'IMG'){
-                        e.preventDefault();
+                    if (useTarget(e.target)) {
+                        start(e.clientX, e.clientY);
+                        elementFocused = e.target;
+                        if (e.target.nodeName === 'IMG'){
+                            e.preventDefault();
+                        }
+                        e.stopPropagation();
                     }
-                    e.stopPropagation();
                 },
                 inputEnd: function(e){
                     end();
@@ -298,8 +308,10 @@
                     if (e.preventDefault) {e.preventDefault();}
                 },
                 inputMove: function(e) {
-                    inputmove(e.clientX, e.clientY);
-                    if (e.preventDefault) {e.preventDefault();}
+                    if (mouseDown){
+                        inputmove(e.clientX, e.clientY);
+                        if (e.preventDefault) {e.preventDefault();}
+                    }
                 },
                 inputClick: function(e){
                     if (Math.abs(settings.velocity) > 0) {
@@ -309,7 +321,9 @@
                 },
                 // prevent drag and drop images in ie
                 dragStart: function(e) {
-                  return !!elementFocused;
+                    if (elementFocused) {
+                        return false;
+                    }
                 }
             };
             
