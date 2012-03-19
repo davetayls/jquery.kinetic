@@ -289,8 +289,10 @@
                     }
                 },
                 touchMove: function(e){
-                    inputmove(e.touches[0].clientX, e.touches[0].clientY);
-                    if (e.preventDefault) {e.preventDefault();}
+                    if (mouseDown) {
+                        inputmove(e.touches[0].clientX, e.touches[0].clientY);
+                        if (e.preventDefault) {e.preventDefault();}
+                    }
                 },
                 inputDown: function(e){
                     if (useTarget(e.target)) {
