@@ -25,6 +25,7 @@ Take a look at a demo on <http://the-taylors.org/jquery.kinetic>.
 Changes
 ------- 
 
+### 1.5
 - added ability to prevent capturing scroll depending on the target
 
 ### 1.4
