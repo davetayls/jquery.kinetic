@@ -4,8 +4,9 @@
         <title>jQuery.kinetic demos</title>
         <meta name="viewport" content="width=550" />
         
-        <script src="lib/jquery-1.5.1.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="jquery.kinetic.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../lib/jquery-1.5.1.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../jquery.kinetic.js" type="text/javascript" charset="utf-8"></script>
+        <script src="kinetic.farRight.js" type="text/javascript"></script>
 
         <style type="text/css">
             body {
@@ -82,7 +83,7 @@
         </p>
         <div id="wrapper">
             <div id="inner">
-                <img src="lib/wembley.jpg" alt="wembley stadium" />
+                <img src="../../lib/wembley.jpg" alt="wembley stadium" />
             </div>
         </div>
         <div id="controls">
@@ -102,6 +103,7 @@
         </div>
         <script type="text/javascript" charset="utf-8">
             $('#wrapper').kinetic();
+            $('#wrapper').kinetic('farRight');
 
             $('#left').click(function(){
                 $('#wrapper').kinetic('start', { velocity: -10 });
@@ -123,71 +125,5 @@
             });
         </script>
 
-        <h2>Options</h2>
-        <pre class="options"><code>
-slowdown    {number}    default: 0.9    This option affects the speed at which the scroll slows
-x           {string}    default: true   Toggles movement along the x axis
-y           {string}    default: true   Toggles movement along the y axis
-maxvelocity {number}    default: 40     This option puts a cap on speed at which the container
-                                        can scroll
-throttleFPS {number}    default: 60     This adds throttling to the mouse move events to boost
-                                        performance when scrolling
-movingClass {object} 
-    up:     {string}    default: 'kinetic-moving-up'
-    down:   {string}    default: 'kinetic-moving-down'
-    left:   {string}    default: 'kinetic-moving-left'
-    right:  {string}    default: 'kinetic-moving-right'
-
-deceleratingClass {object} 
-    up:     {string}    default: 'kinetic-decelerating-up'
-    down:   {string}    default: 'kinetic-decelerating-down'
-    left:   {string}    default: 'kinetic-decelerating-left'
-    right:  {string}    default: 'kinetic-decelerating-right'
-
-
-Listeners:  All listeners are called with:
-            - this = jQuery object holding the scroll container
-            - a single settings argument which are all the options and  
-                { scrollLeft, scrollTop, velocity, velocityY }
-
-moved       {function(settings)}           A function which is called on every move
-stopped     {function(settings)}           A function which is called once all 
-                                            movement has stopped
-
-Methods:    You can call methods by running the kinetic plugin
-            on an element which has already been activated.
-
-            eg  $('#wrapper').kinetic(); // activate
-                $('#wrapper').kinetic('methodname', options);
-
-start       Start movement in the scroll container at a particular velocity.
-            This velocity will not slow until the end method is called.
-
-            The following line scrolls the container left.
-            $('#wrapper#).kinetic('start', { velocity: -30 });
-
-            The following line scrolls the container right.
-            $('#wrapper#).kinetic('start', { velocity: 30 });
-
-            The following line scrolls the container diagonally.
-            $('#wrapper#).kinetic('start', { velocity: -30, velocityY: -10 });
-
-end         Begin slowdown of any scrolling velocity in the container.
-            $('#wrapper#).kinetic('end');
-
-stop        Stop the scrolling immediately
-
-Add your own method:
-            // add the method
-            $.kinetic.callMethods.do = function(settings, options){
-                // method functionality
-            };
-
-            // use the method
-            $('#elem').kinetic('do', { ... });
-
-
-        </code></pre>
-        </div>
     </body>
 </html>
