@@ -1,5 +1,5 @@
 /*!
-    jQuery.kinetic v1.5
+    jQuery.kinetic v1.6
     Dave Taylor http://the-taylors.org/jquery.kinetic
 
     The MIT License (MIT)
@@ -9,29 +9,29 @@
 (function($){
 	'use strict';
 
-    var DEFAULT_SETTINGS    = { decelerate: true
-                              , triggerHardware: false
-                              , y: true
-                              , x: true
-                              , slowdown: 0.9
-                              , maxvelocity: 40 
-                              , throttleFPS: 60
-                              , movingClass: {
-                                  up:    'kinetic-moving-up'
-                                , down:  'kinetic-moving-down'
-                                , left:  'kinetic-moving-left'
-                                , right: 'kinetic-moving-right'
-                                }
-                              , deceleratingClass: {
-                                  up:    'kinetic-decelerating-up'
-                                , down:  'kinetic-decelerating-down'
-                                , left:  'kinetic-decelerating-left'
-                                , right: 'kinetic-decelerating-right'
-                                }
-                              },
-        SETTINGS_KEY        = 'kinetic-settings',
-        ACTIVE_CLASS        = 'kinetic-active';
-
+    var DEFAULT_SETTINGS = {
+            decelerate: true,
+            triggerHardware: false,
+            y: true,
+            x: true,
+            slowdown: 0.9,
+            maxvelocity: 40,
+            throttleFPS: 60,
+            movingClass: {
+                up: 'kinetic-moving-up',
+                down: 'kinetic-moving-down',
+                left: 'kinetic-moving-left',
+                right: 'kinetic-moving-right'
+            },
+            deceleratingClass: {
+                up: 'kinetic-decelerating-up',
+                down: 'kinetic-decelerating-down',
+                left: 'kinetic-decelerating-left',
+                right: 'kinetic-decelerating-right'
+            }
+        },
+        SETTINGS_KEY = 'kinetic-settings',
+        ACTIVE_CLASS = 'kinetic-active';
     /**
      * Provides requestAnimationFrame in a cross browser way.
      * http://paulirish.com/2011/requestanimationframe-for-smart-animating/
@@ -100,7 +100,7 @@
         if (settings.velocityY < 0) {
             this.addClass(classes.up);
         }
-        
+
     };
 
     var stop = function($scroller, settings) {
@@ -116,7 +116,7 @@
         if (settings.x && scroller.scrollWidth > 0){
             scroller.scrollLeft = settings.scrollLeft = scroller.scrollLeft + settings.velocity;
             if (Math.abs(settings.velocity) > 0) {
-                settings.velocity = settings.decelerate ? 
+                settings.velocity = settings.decelerate ?
                     decelerateVelocity(settings.velocity, settings.slowdown) : settings.velocity;
             }
         } else {
@@ -127,7 +127,7 @@
         if (settings.y && scroller.scrollHeight > 0){
             scroller.scrollTop = settings.scrollTop = scroller.scrollTop + settings.velocityY;
             if (Math.abs(settings.velocityY) > 0) {
-                settings.velocityY = settings.decelerate ? 
+                settings.velocityY = settings.decelerate ?
                     decelerateVelocity(settings.velocityY, settings.slowdown) : settings.velocityY;
             }
         } else {
@@ -135,7 +135,7 @@
         }
 
         setMoveClasses.call($scroller, settings, settings.deceleratingClass);
-        
+
         if (typeof settings.moved === 'function') {
             settings.moved.call($scroller, settings);
         }
@@ -164,9 +164,9 @@
     var attachListeners = function($this, settings) {
         var element = $this[0];
         if ($.support.touch) {
-            element.addEventListener('touchstart', settings.events.touchStart, false);
-            element.addEventListener('touchend', settings.events.inputEnd, false);
-            element.addEventListener('touchmove', settings.events.touchMove,false);
+            $this.bind('touchstart', settings.events.touchStart)
+                .bind('touchend', settings.events.inputEnd)
+                .bind('touchmove', settings.events.touchMove);
         } else {
             $this
             .mousedown(settings.events.inputDown)
@@ -200,19 +200,19 @@
         .each(function(){
 
             var settings = $.extend({}, DEFAULT_SETTINGS, options);
-            
-            var self = this
-            ,   $this = $(this)
-            ,   xpos
-            ,   prevXPos = false
-            ,   ypos
-            ,   prevYPos = false
-            ,   mouseDown = false
-            ,   scrollLeft
-            ,   scrollTop
-            ,   throttleTimeout = 1000 / settings.throttleFPS
-            ,   lastMove
-            ,   elementFocused
+
+            var self = this,
+                $this = $(this),
+                xpos,
+                prevXPos = false,
+                ypos,
+                prevYPos = false,
+                mouseDown = false,
+                scrollLeft,
+                scrollTop,
+                throttleTimeout = 1000 / settings.throttleFPS,
+                lastMove,
+                elementFocused
             ;
 
             settings.velocity = 0;
@@ -283,14 +283,18 @@
             // Events
             settings.events = {
                 touchStart: function(e){
+                    var touch;
                     if (useTarget(e.target)) {
-                        start(e.touches[0].clientX, e.touches[0].clientY);
+                        touch = e.originalEvent.touches[0];
+                        start(touch.clientX, touch.clientY);
                         e.stopPropagation();
                     }
                 },
                 touchMove: function(e){
+                    var touch;
                     if (mouseDown) {
-                        inputmove(e.touches[0].clientX, e.touches[0].clientY);
+                        touch = e.originalEvent.touches[0];
+                        inputmove(touch.clientX, touch.clientY);
                         if (e.preventDefault) {e.preventDefault();}
                     }
                 },
@@ -328,7 +332,7 @@
                     }
                 }
             };
-            
+
             attachListeners($this, settings);
             $this.data(SETTINGS_KEY, settings).css("cursor", "move");
 
