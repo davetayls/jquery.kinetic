@@ -30,7 +30,7 @@
                 right: 'kinetic-decelerating-right'
             },
 			initialOffset: [0, 0],
-			initialCursor: "pointer"
+			initialCursor: "move"
         },
         SETTINGS_KEY = 'kinetic-settings',
         ACTIVE_CLASS = 'kinetic-active';
