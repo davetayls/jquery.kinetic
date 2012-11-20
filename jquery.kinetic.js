@@ -29,7 +29,7 @@
                 left: 'kinetic-decelerating-left',
                 right: 'kinetic-decelerating-right'
             },
-			initialOffset: [100, 0],
+			initialOffset: [0, 0],
 			initialCursor: "pointer"
         },
         SETTINGS_KEY = 'kinetic-settings',
