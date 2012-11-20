@@ -28,7 +28,9 @@
                 down: 'kinetic-decelerating-down',
                 left: 'kinetic-decelerating-left',
                 right: 'kinetic-decelerating-right'
-            }
+            },
+			initialOffset: [100, 0],
+			initialCursor: "pointer"
         },
         SETTINGS_KEY = 'kinetic-settings',
         ACTIVE_CLASS = 'kinetic-active';
@@ -334,7 +336,14 @@
             };
 
             attachListeners($this, settings);
-            $this.data(SETTINGS_KEY, settings).css("cursor", "move");
+            $this.data(SETTINGS_KEY, settings);
+			
+			if(settings.initialCursor != null) {
+				$this.css("cursor", settings.initialCursor);
+			}
+			
+			// set up initial position
+			$this.scrollLeft(settings.initialOffset[0], settings.initialOffset[1]);
 
             if (settings.triggerHardware) {
                 $this.css('-webkit-transform', 'translate3d(0,0,0)');
@@ -375,8 +384,11 @@
                 var $this = $(this);
                 attachListeners($this, settings);
                 $this
-                .addClass(ACTIVE_CLASS)
-                .css("cursor", "move");
+                .addClass(ACTIVE_CLASS);
+				
+				if(settings.initialCursor != null) {
+					$this.css("cursor", settings.initialCursor); 
+				}
             }
         }
     };
