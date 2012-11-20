@@ -30,7 +30,7 @@
                 right: 'kinetic-decelerating-right'
             },
 			initialOffset: [0, 0],
-			initialCursor: "move"
+			cursor: "move"
         },
         SETTINGS_KEY = 'kinetic-settings',
         ACTIVE_CLASS = 'kinetic-active';
@@ -338,8 +338,8 @@
             attachListeners($this, settings);
             $this.data(SETTINGS_KEY, settings);
 			
-			if(settings.initialCursor != null) {
-				$this.css("cursor", settings.initialCursor);
+			if(settings.cursor != null) {
+				$this.css("cursor", settings.cursor);
 			}
 			
 			// set up initial position
@@ -386,8 +386,8 @@
                 $this
                 .addClass(ACTIVE_CLASS);
 				
-				if(settings.initialCursor != null) {
-					$this.css("cursor", settings.initialCursor); 
+				if(settings.cursor != null) {
+					$this.css("cursor", settings.cursor); 
 				}
             }
         }
