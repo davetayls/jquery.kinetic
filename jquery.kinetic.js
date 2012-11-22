@@ -149,8 +149,8 @@
     };
 
     var callOption = function(method, options) {
-        var methodFn = $.kinetic.callMethods[method]
-        ,   args = Array.prototype.slice.call(arguments)
+        var methodFn = $.kinetic.callMethods[method],
+            args = Array.prototype.slice.call(arguments)
         ;
         if (methodFn) {
             this.each(function(){
