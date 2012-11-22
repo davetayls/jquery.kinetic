@@ -1,0 +1,15 @@
+{
+    "name": "jquery.kinetic",
+    "version": "1.6.1",
+    "description": "adds smooth drag scrolling with gradual deceleration to containers",
+    "homepage": "http://the-taylors.org/jquery.kinetic",
+    "author": {
+    	"name": "Dave Taylor"
+    },
+    "license": "MIT",
+    "devDependencies": {
+    	"mocha-cloud": "0.x.x"
+    },
+    "scripts": {
+    }
+}
