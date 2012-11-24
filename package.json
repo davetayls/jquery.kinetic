@@ -11,7 +11,7 @@
         "wd": "0.x.x",
         "vows": "0.7.x",
         "underscore": "1.4.x",
-        "nopt": "2.0.x"
+        "grunt-vows": "0.2.x"
     },
     "scripts": {
     }

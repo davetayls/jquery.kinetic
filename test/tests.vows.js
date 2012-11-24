@@ -4,11 +4,7 @@
  */
 var vows = require('vows'),
   _ = require('underscore')._,
-  RawTests = require('./selenium.vows'),
-  nopt = require('nopt');
-
-// load command line options
-var args = nopt(null, null, process.argv, 2);
+  RawTests = require('./selenium.vows');
 
 // define different service configurations
 var allConfs = {
@@ -39,14 +35,6 @@ var allConfs = {
     ]
   }
 };
-
-// load configurations we're using from command line option
-var confs = {};
-_.each(args, function(val, arg) {
-  if (typeof allConfs[arg] !== 'undefined') {
-    confs[arg] = allConfs[arg];
-  }
-});
 
 // makeSuite takes a configuration and makes a batch of tests, splitting
 // up tests according to 'conf.processes'
@@ -106,12 +94,18 @@ var makeSuite = function(conf) {
       }
     });
     _.each(batches, function(batch, index) {
-      vows.describe(conf.serviceName + ": Batch " + index ).addBatch(batch).export(module);
+      vows.describe(conf.serviceName + ": Batch " + index )
+        .addBatch(batch)
+        .export(module);
     });
   }
 };
 
-// Register batches with vows for every conf we are using
+// load configurations we're using
+var confs = {
+  local: allConfs.local
+};
 _.each(confs, function(conf) {
   makeSuite(conf);
 });
+

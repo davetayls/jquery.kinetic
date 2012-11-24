@@ -45,10 +45,23 @@ module.exports = function(grunt) {
         jQuery: true
       }
     },
-    uglify: {}
+    uglify: {},
+    vows: {
+        all: {
+            // String or array of strings
+            // determining which files to include
+            files: ["test/tests.vows.js"],
+            // String {spec|json|dot-matrix|xunit|tap}
+            // defaults to "dot-matrix"
+            reporter: "spec"
+        }
+    }
   });
 
+  // Load tasks
+  grunt.loadNpmTasks('grunt-vows');
+
   // Default task.
-  grunt.registerTask('default', 'lint min');
+  grunt.registerTask('default', 'lint vows min');
 
 };
