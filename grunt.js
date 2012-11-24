@@ -47,10 +47,14 @@ module.exports = function(grunt) {
     },
     uglify: {},
     vows: {
-        all: {
-            // String or array of strings
-            // determining which files to include
-            files: ["test/tests.vows.js"],
+        local: {
+            files: ["test/local.vows.js"],
+            // String {spec|json|dot-matrix|xunit|tap}
+            // defaults to "dot-matrix"
+            reporter: "spec"
+        },
+        sauce: {
+            files: ["test/sauce.vows.js"],
             // String {spec|json|dot-matrix|xunit|tap}
             // defaults to "dot-matrix"
             reporter: "spec"
@@ -77,7 +81,8 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-string-replace');
 
   // Default task.
-  grunt.registerTask('default', 'lint vows');
+  grunt.registerTask('default', 'lint vows:local');
+  grunt.registerTask('sauce', 'vows:sauce');
   grunt.registerTask('minor', 'bump:minor');
   grunt.registerTask('patch', 'bump');
   grunt.registerTask('release', 'default string-replace:version min');

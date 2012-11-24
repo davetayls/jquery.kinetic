@@ -1,44 +1,10 @@
-/*
-  Selenium Vows testing taken from
-  https://github.com/jlipps/sauce-node-demo
- */
 var vows = require('vows'),
   _ = require('underscore')._,
   RawTests = require('./selenium.vows');
 
-// define different service configurations
-var allConfs = {
-  'local': {
-    processes: 4,
-    maxTests: false,
-    serviceName: 'local',
-    caps: [
-      // {browserName: "chrome", version: '', platform: "MAC", proxy: {proxyType: 'direct'}},
-      {browserName: "firefox", version: '', platform: "MAC", proxy: {proxyType: 'direct'}}
-    ]
-  },
-  'sauce': {
-    host: "ondemand.saucelabs.com",
-    port: 80,
-    username: process.env.SAUCE_USERNAME,
-    accessKey: process.env.SAUCE_ACCESS_KEY,
-    processes: 1,
-    maxTests: false,
-    serviceName: 'sauce',
-    caps: [
-      // {browserName: "internet explorer", version: '8', platform: "XP", proxy: {proxyType: 'direct'}, 'selenium-version': '2.21.0'},
-      // {browserName: "chrome", version: '', platform: "VISTA", proxy: {proxyType: 'direct'}},
-      {browserName: "firefox", version: '14', platform: "Windows 2003", proxy: {proxyType: 'direct'}}
-      // pre-prep mobile stuff
-      // {browserName: "ipad", version: '', platform: "Mac 10.6", deviceOrientation: "landscape", proxy: {proxyType: 'direct'}}
-      // {browserName: "android", version: '4', platform: "linux", deviceType: "tablet", proxy: {proxyType: 'direct'}}
-    ]
-  }
-};
-
 // makeSuite takes a configuration and makes a batch of tests, splitting
 // up tests according to 'conf.processes'
-var makeSuite = function(conf) {
+exports.makeSuite = function(conf) {
 
   var getCapText = function(conf, cap) {
     return " (" + cap.browserName+"_"+cap.version+"_"+cap.platform+"_"+conf.serviceName+")";
@@ -93,19 +59,7 @@ var makeSuite = function(conf) {
         total++;
       }
     });
-    _.each(batches, function(batch, index) {
-      vows.describe(conf.serviceName + ": Batch " + index )
-        .addBatch(batch)
-        .export(module);
-    });
+    return batches;
   }
 };
-
-// load configurations we're using
-var confs = {
-  local: allConfs.local
-};
-_.each(confs, function(conf) {
-  makeSuite(conf);
-});
 
