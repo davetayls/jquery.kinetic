@@ -60,8 +60,10 @@ module.exports = function(grunt) {
 
   // Load tasks
   grunt.loadNpmTasks('grunt-vows');
+  grunt.loadNpmTasks('grunt-bump');
 
   // Default task.
-  grunt.registerTask('default', 'lint vows min');
+  grunt.registerTask('default', 'lint vows');
+  grunt.registerTask('release', 'default bump min');
 
 };
