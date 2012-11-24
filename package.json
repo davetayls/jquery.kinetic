@@ -1,19 +1,19 @@
 {
-    "name": "jquery.kinetic",
-    "version": "1.6.1",
-    "description": "adds smooth drag scrolling with gradual deceleration to containers",
-    "homepage": "http://the-taylors.org/jquery.kinetic",
-    "author": {
-    	"name": "Dave Taylor"
-    },
-    "license": "MIT",
-    "devDependencies": {
-        "wd": "0.x.x",
-        "vows": "0.7.x",
-        "underscore": "1.4.x",
-        "grunt-vows": "0.2.x",
-        "grunt-bump": "0.0.1"
-    },
-    "scripts": {
-    }
+  "name": "jquery.kinetic",
+  "version": "1.6.1",
+  "description": "adds smooth drag scrolling with gradual deceleration to containers",
+  "homepage": "http://the-taylors.org/jquery.kinetic",
+  "author": {
+    "name": "Dave Taylor"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "wd": "0.x.x",
+    "vows": "0.7.x",
+    "underscore": "1.4.x",
+    "grunt-vows": "0.2.x",
+    "grunt-bump": "0.0.x",
+    "grunt-string-replace": "0.1.x"
+  },
+  "scripts": {}
 }

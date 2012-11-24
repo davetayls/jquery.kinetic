@@ -55,15 +55,31 @@ module.exports = function(grunt) {
             // defaults to "dot-matrix"
             reporter: "spec"
         }
+    },
+    "string-replace": {
+      version: {
+        files: {
+          "jquery.kinetic.js": "jquery.kinetic.js"
+        },
+        options: {
+          replacements: [{
+            pattern: /jQuery\.kinetic v\d\.\d\.\d/g,
+            replacement: "jQuery.kinetic v<%= pkg.version %>"
+          }]
+        }
+      }
     }
   });
 
   // Load tasks
   grunt.loadNpmTasks('grunt-vows');
   grunt.loadNpmTasks('grunt-bump');
+  grunt.loadNpmTasks('grunt-string-replace');
 
   // Default task.
   grunt.registerTask('default', 'lint vows');
-  grunt.registerTask('release', 'default bump min');
+  grunt.registerTask('minor', 'bump:minor');
+  grunt.registerTask('patch', 'bump');
+  grunt.registerTask('release', 'default string-replace:version min');
 
 };
