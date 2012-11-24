@@ -22,6 +22,17 @@ Demos
 -----
 Take a look at a demo on <http://the-taylors.org/jquery.kinetic>.
 
+Testing
+-------
+To run the test suite you need
+- grunt `npm install -g grunt`
+- selenium running
+- install devDependencies `npm install` from the root of the source
+
+Then run from the root of the source
+
+    $ grunt
+
 Changes
 -------
 
