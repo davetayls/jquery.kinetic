@@ -25,6 +25,9 @@ Take a look at a demo on <http://the-taylors.org/jquery.kinetic>.
 Changes
 -------
 
+### 1.6.1
+- bug fix release for unbinding touch events
+
 ### 1.6
 - use bind for touch events to fix issues on android
 

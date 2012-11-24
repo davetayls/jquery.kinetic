@@ -3,7 +3,7 @@
     <head>
         <title>jQuery.kinetic demos</title>
         <meta name="viewport" content="width=550" />
-        
+
         <script src="lib/jquery-1.5.1.min.js" type="text/javascript" charset="utf-8"></script>
         <script src="jquery.kinetic.js" type="text/javascript" charset="utf-8"></script>
 
@@ -65,7 +65,7 @@
 
             #inner { width: 2000px; height: 100px; }
                 #inner img {
-                    display: block; 
+                    display: block;
                     width: 2000px;
                 }
             #left, #right { cursor: pointer; }
@@ -74,120 +74,61 @@
     </head>
     <body>
         <div id="container">
-        <h1>jQuery.kinetic demos</h1>
-        <p>
-            Drag a mouse or use touch gestures over the windows below to scroll 
-            the pane. If you let go with momentum the scrolling will slow
-            gradually.
-        </p>
-        <div id="wrapper">
-            <div id="inner">
-                <img src="lib/wembley.jpg" alt="wembley stadium" />
+            <h1>jQuery.kinetic demos</h1>
+            <p>
+                Drag a mouse or use touch gestures over the windows below to scroll
+                the pane. If you let go with momentum the scrolling will slow
+                gradually.
+            </p>
+            <div id="wrapper">
+                <div id="inner">
+                    <img src="lib/wembley.jpg" alt="wembley stadium" />
+                </div>
             </div>
-        </div>
-        <div id="controls">
-            <span id="left">&lt; left</span> |
-            <span id="right">right &gt;</span>
-            &nbsp;&nbsp; -- &nbsp;&nbsp;
-            <span id="end">end (decelerates)</span>
-            
-            &nbsp;&nbsp; -- &nbsp;&nbsp;
-            <span id="stop">stop (stop immediately)</span>
+            <div id="controls">
+                <span id="left">&lt; left</span> |
+                <span id="right">right &gt;</span>
+                &nbsp;&nbsp; -- &nbsp;&nbsp;
+                <span id="end">end (decelerates)</span>
 
-            &nbsp;&nbsp; -- &nbsp;&nbsp;
-            <span id="detach">detach</span>
+                &nbsp;&nbsp; -- &nbsp;&nbsp;
+                <span id="stop">stop (stop immediately)</span>
 
-            &nbsp;&nbsp; -- &nbsp;&nbsp;
-            <span id="attach">attach</span>
-        </div>
-        <script type="text/javascript" charset="utf-8">
-            $('#wrapper').kinetic();
+                &nbsp;&nbsp; -- &nbsp;&nbsp;
+                <span id="detach">detach</span>
 
-            $('#left').click(function(){
-                $('#wrapper').kinetic('start', { velocity: -10 });
-            });
-            $('#right').click(function(){
-                $('#wrapper').kinetic('start', { velocity: 10 });
-            });
-            $('#end').click(function(){
-                $('#wrapper').kinetic('end');
-            });
-            $('#stop').click(function(){
-                $('#wrapper').kinetic('stop');
-            });
-            $('#detach').click(function(){
-                $('#wrapper').kinetic('detach');
-            });
-            $('#attach').click(function(){
-                $('#wrapper').kinetic('attach');
-            });
-        </script>
+                &nbsp;&nbsp; -- &nbsp;&nbsp;
+                <span id="attach">attach</span>
+            </div>
+            <script type="text/javascript" charset="utf-8">
+                $('#wrapper').kinetic();
 
-        <h2>Options</h2>
-        <pre class="options"><code>
-slowdown    {number}    default: 0.9    This option affects the speed at which the scroll slows
-x           {string}    default: true   Toggles movement along the x axis
-y           {string}    default: true   Toggles movement along the y axis
-maxvelocity {number}    default: 40     This option puts a cap on speed at which the container
-                                        can scroll
-throttleFPS {number}    default: 60     This adds throttling to the mouse move events to boost
-                                        performance when scrolling
-movingClass {object} 
-    up:     {string}    default: 'kinetic-moving-up'
-    down:   {string}    default: 'kinetic-moving-down'
-    left:   {string}    default: 'kinetic-moving-left'
-    right:  {string}    default: 'kinetic-moving-right'
+                $('#left').click(function(){
+                    $('#wrapper').kinetic('start', { velocity: -10 });
+                });
+                $('#right').click(function(){
+                    $('#wrapper').kinetic('start', { velocity: 10 });
+                });
+                $('#end').click(function(){
+                    $('#wrapper').kinetic('end');
+                });
+                $('#stop').click(function(){
+                    $('#wrapper').kinetic('stop');
+                });
+                $('#detach').click(function(){
+                    $('#wrapper').kinetic('detach');
+                });
+                $('#attach').click(function(){
+                    $('#wrapper').kinetic('attach');
+                });
+            </script>
 
-deceleratingClass {object} 
-    up:     {string}    default: 'kinetic-decelerating-up'
-    down:   {string}    default: 'kinetic-decelerating-down'
-    left:   {string}    default: 'kinetic-decelerating-left'
-    right:  {string}    default: 'kinetic-decelerating-right'
+            <h2>Options</h2>
+            <p>
+                <a href="https://github.com/davetayls/jquery.kinetic/blob/master/readme.mkd">View Readme file</a>
+            </p>
 
 
-Listeners:  All listeners are called with:
-            - this = jQuery object holding the scroll container
-            - a single settings argument which are all the options and  
-                { scrollLeft, scrollTop, velocity, velocityY }
-
-moved       {function(settings)}           A function which is called on every move
-stopped     {function(settings)}           A function which is called once all 
-                                            movement has stopped
-
-Methods:    You can call methods by running the kinetic plugin
-            on an element which has already been activated.
-
-            eg  $('#wrapper').kinetic(); // activate
-                $('#wrapper').kinetic('methodname', options);
-
-start       Start movement in the scroll container at a particular velocity.
-            This velocity will not slow until the end method is called.
-
-            The following line scrolls the container left.
-            $('#wrapper#).kinetic('start', { velocity: -30 });
-
-            The following line scrolls the container right.
-            $('#wrapper#).kinetic('start', { velocity: 30 });
-
-            The following line scrolls the container diagonally.
-            $('#wrapper#).kinetic('start', { velocity: -30, velocityY: -10 });
-
-end         Begin slowdown of any scrolling velocity in the container.
-            $('#wrapper#).kinetic('end');
-
-stop        Stop the scrolling immediately
-
-Add your own method:
-            // add the method
-            $.kinetic.callMethods.do = function(settings, options){
-                // method functionality
-            };
-
-            // use the method
-            $('#elem').kinetic('do', { ... });
-
-
-        </code></pre>
         </div>
     </body>
 </html>

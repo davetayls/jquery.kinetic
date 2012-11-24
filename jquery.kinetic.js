@@ -1,5 +1,5 @@
 /*!
-    jQuery.kinetic v1.6
+    jQuery.kinetic v1.6.1
     Dave Taylor http://the-taylors.org/jquery.kinetic
 
     The MIT License (MIT)
@@ -180,9 +180,9 @@
     var detachListeners = function($this, settings) {
         var element = $this[0];
         if ($.support.touch) {
-            element.removeEventListener('touchstart', settings.events.touchStart, false);
-            element.removeEventListener('touchend', settings.events.inputEnd, false);
-            element.removeEventListener('touchmove', settings.events.touchMove,false);
+            $this.unbind('touchstart', settings.events.touchStart)
+                .unbind('touchend', settings.events.inputEnd)
+                .unbind('touchmove', settings.events.touchMove);
         } else {
             $this
             .unbind('mousedown', settings.events.inputDown)
