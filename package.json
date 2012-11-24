@@ -8,7 +8,10 @@
     },
     "license": "MIT",
     "devDependencies": {
-    	"mocha-cloud": "0.x.x"
+        "wd": "0.x.x",
+        "vows": "0.7.x",
+        "underscore": "1.4.x",
+        "nopt": "2.0.x"
     },
     "scripts": {
     }
