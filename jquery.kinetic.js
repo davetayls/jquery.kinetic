@@ -104,6 +104,9 @@
     };
 
     var stop = function($scroller, settings) {
+        settings.velocity = 0;
+        settings.velocityY = 0;
+        settings.decelerate = true;
         if (typeof settings.stopped === 'function') {
             settings.stopped.call($scroller, settings);
         }
@@ -360,9 +363,8 @@
                 }
             },
             stop: function(settings, options){
-                settings.velocity = 0;
-                settings.velocityY = 0;
-                settings.decelerate = true;
+                var $this = $(this);
+                stop($this, settings);
             },
             detach: function(settings, options) {
                 var $this = $(this);

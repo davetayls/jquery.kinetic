@@ -50,7 +50,7 @@
         var $fixture = $('#qunit-fixture'),
             html = $('#tmpl').text();
 
-        module('With a simple wrapper', {
+        module('simple image', {
             setup: function(){
                 $fixture.append(html);
             }
@@ -88,7 +88,28 @@
             dragOver($wrapper, img, [100,100], [10,10]);
             ok($wrapper.data('kinetic-settings').velocity, 'there is velocity');
         });
+        test('we can prevent drag with filterTarget', function(){
+            var $wrapper = $('#wrapper').kinetic({
+                    filterTarget: function(){ return false; }
+                }),
+                img = $wrapper.find('img')[0];
 
+            dragOver($wrapper, img, [100,100], [10,10]);
+            equal($wrapper.data('kinetic-settings').velocity, 0, 'there should be no velocity');
+        });
+        test('we can listen for events', function(){
+            var $wrapper = $('#wrapper').kinetic({
+                    moved: function(){ moved = true; },
+                    stopped: function(){ stopped = true; }
+                }),
+                img = $wrapper.find('img')[0],
+                moved, stopped;
+
+            dragOver($wrapper, img, [100,100], [10,10]);
+            $wrapper.kinetic('stop');
+            ok(moved, 'moved event has fired')
+            ok(stopped, 'stopped event has fired')
+        });
 
 
 
