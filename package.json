@@ -8,6 +8,7 @@
   },
   "license": "MIT",
   "devDependencies": {
+    "grunt": "0.3.x",
     "wd": "0.x.x",
     "vows": "0.7.x",
     "underscore": "1.4.x",
@@ -15,5 +16,7 @@
     "grunt-bump": "0.0.x",
     "grunt-string-replace": "0.1.x"
   },
-  "scripts": {}
+  "scripts": {
+    "test": "grunt --verbose"
+  }
 }
