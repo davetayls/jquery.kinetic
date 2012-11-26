@@ -40,6 +40,10 @@ Then run from the root of the source
 
 There are manual tests as html files within the `/test` folder.
 
+### Selenium suite
+
+The selenium tests are not functioning at the moment and are a work in progress.
+
 Changes
 -------
 
