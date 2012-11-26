@@ -1,6 +1,7 @@
 <!DOCTYPE HTML>
 <html>
     <head>
+        <meta charset="utf-8">
         <title>jQuery.kinetic demos</title>
         <meta name="viewport" content="width=550" />
         <link rel="stylesheet" href="../qunit.css">
@@ -58,13 +59,13 @@
             var $wrapper = $('#wrapper').kinetic();
             ok($wrapper.hasClass('kinetic-active'), 'has active class');
         });
-        test('then drag the contents and see velocity', function(){
+        test('drag the contents and see velocity', function(){
             var $wrapper = $('#wrapper').kinetic(),
                 img = $wrapper.find('img')[0];
             dragOver($wrapper, img, [100,100], [10,10]);
             ok($wrapper.data('kinetic-settings').velocity, 'there is velocity');
         });
-        test('then detach kinetic', function(){
+        test('we can detach kinetic', function(){
             var $wrapper = $('#wrapper').kinetic();
             var settings = $wrapper.data('kinetic-settings');
             $wrapper.kinetic('detach');
@@ -76,6 +77,16 @@
             equal(hasEventAttached($wrapper, settings.events.dragStart), false, 'dragStart not attached');
             equal(hasEventAttached($wrapper, settings.events.touchStart), false, 'touchStart not attached');
             equal(hasEventAttached($wrapper, settings.events.touchMove), false, 'touchMove not attached');
+        });
+        test('we can trigger hardware acceleration', function(){
+            var $wrapper = $('#wrapper').kinetic({
+                    triggerHardware: true
+                }),
+                img = $wrapper.find('img')[0];
+
+            ok($wrapper.css('-webkit-transform'), 'includes transform');
+            dragOver($wrapper, img, [100,100], [10,10]);
+            ok($wrapper.data('kinetic-settings').velocity, 'there is velocity');
         });
 
 
