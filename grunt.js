@@ -15,7 +15,7 @@ module.exports = function(grunt) {
       files: ['grunt.js', 'jquery.kinetic.js']
     },
     qunit: {
-      files: ['test/**/*.html']
+      files: ['test/specs/**/*.html']
     },
     min: {
       dist: {
@@ -81,7 +81,8 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-string-replace');
 
   // Default task.
-  grunt.registerTask('default', 'lint vows:local');
+  grunt.registerTask('default', 'lint qunit');
+  grunt.registerTask('selenium', 'vows:local');
   grunt.registerTask('sauce', 'vows:sauce');
   grunt.registerTask('minor', 'bump:minor');
   grunt.registerTask('patch', 'bump');
