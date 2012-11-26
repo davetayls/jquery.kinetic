@@ -22,16 +22,23 @@ Demos
 -----
 Take a look at a demo on <http://the-taylors.org/jquery.kinetic>.
 
-Testing
+Running the tests
 -------
-To run the test suite you need
+
+The test suite uses grunt's server and qunit functionality. The tests are being built up
+but currently cover the core functionality. This runs all qUnit Html specs in the
+`/test/specs` folder.
+
 - grunt `npm install -g grunt`
-- selenium running
 - install devDependencies `npm install` from the root of the source
 
 Then run from the root of the source
 
     $ grunt
+
+### Manual tests
+
+There are manual tests as html files within the `/test` folder.
 
 Changes
 -------
