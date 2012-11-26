@@ -1,3 +1,0 @@
-[submodule "test/lib/syn"]
-	path = test/lib/syn
-	url = https://github.com/bitovi/syn.git
