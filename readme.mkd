@@ -87,6 +87,8 @@ The scrollbar plugin is still very much an alpha version.
 Options
 -------
 
+	cursor			{string}	default: "move"	This option offers the ability to disable the default "move" cursor, or over-ride it. Set to null to disable
+	initialOffset	{array}		default: [0,0]	This option allows you to specify the initial offset position of the item you are scrolling within the container
     slowdown        {number}    default: 0.9    This option affects the speed at which the scroll slows
     x               {string}    default: true   Toggles movement along the x axis
     y               {string}    default: true   Toggles movement along the y axis
