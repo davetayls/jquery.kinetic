@@ -3,6 +3,8 @@ jQuery.kinetic
 Dave Taylor <http://the-taylors.org>
 The MIT License (MIT)
 
+[![Build Status](https://secure.travis-ci.org/davetayls/jquery.kinetic.png)](http://travis-ci.org/davetayls/jquery.kinetic)
+
 jQuery.kinetic is a simple plugin which adds smooth drag scrolling with
 gradual deceleration to containers.
 
