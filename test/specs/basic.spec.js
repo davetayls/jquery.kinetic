@@ -62,5 +62,25 @@ test('we can listen for events', function(){
     ok(moved, 'moved event has fired');
     ok(stopped, 'stopped event has fired');
 });
+test('we can customise the mouse cursor', function(){
+    var $wrapper = $('#wrapper').kinetic({
+            cursor: 'pointer'
+        });
+
+    equal($wrapper.css('cursor'), 'pointer');
+
+});
+test('we can limit the velocity with maxvelocity', function(){
+    var $wrapper = $('#wrapper').kinetic({
+            maxvelocity: 10,
+            moved: function(settings){
+                maxVelocity = settings.velocity > maxVelocity ? settings.velocity : maxVelocity;
+            }
+        }),
+        img = $wrapper.find('img')[0],
+        maxVelocity = 0;
+    dragOver($wrapper, img, [200,200], [10,10]);
+    equal(maxVelocity, 10);
+});
 
 

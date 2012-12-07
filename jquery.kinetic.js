@@ -10,6 +10,7 @@
 	'use strict';
 
     var DEFAULT_SETTINGS = {
+            cursor: 'move',
             decelerate: true,
             triggerHardware: false,
             y: true,
@@ -337,7 +338,8 @@
             };
 
             attachListeners($this, settings);
-            $this.data(SETTINGS_KEY, settings).css("cursor", "move");
+            $this.data(SETTINGS_KEY, settings)
+                .css("cursor", settings.cursor);
 
             if (settings.triggerHardware) {
                 $this.css('-webkit-transform', 'translate3d(0,0,0)');

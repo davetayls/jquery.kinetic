@@ -89,6 +89,7 @@ The scrollbar plugin is still very much an alpha version.
 Options
 -------
 
+    cursor          {string}    default: move   Specify the cursor to use on the wrapper
     slowdown        {number}    default: 0.9    This option affects the speed at which the scroll slows
     x               {string}    default: true   Toggles movement along the x axis
     y               {string}    default: true   Toggles movement along the y axis
