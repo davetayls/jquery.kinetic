@@ -49,6 +49,9 @@ The selenium tests are not functioning at the moment and are a work in progress.
 Changes
 -------
 
+### 1.7
+- add cursor option to change the default `move` cursor
+
 ### 1.6.1
 - bug fix release for unbinding touch events
 
