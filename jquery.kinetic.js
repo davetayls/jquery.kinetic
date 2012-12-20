@@ -175,7 +175,8 @@
             $this
             .mousedown(settings.events.inputDown)
             .mouseup(settings.events.inputEnd)
-            .mousemove(settings.events.inputMove);
+            .mousemove(settings.events.inputMove)
+            .scroll(settings.events.inputScroll);
         }
         $this.click(settings.events.inputClick)
         .bind("selectstart", selectStart); // prevent selection when dragging
@@ -191,7 +192,8 @@
             $this
             .unbind('mousedown', settings.events.inputDown)
             .unbind('mouseup', settings.events.inputEnd)
-            .unbind('mousemove', settings.events.inputMove);
+            .unbind('mousemove', settings.events.inputMove)
+            .unbind('scroll', settings.events.inputScroll);
         }
         $this.unbind('click', settings.events.inputClick)
         .unbind("selectstart", selectStart); // prevent selection when dragging
@@ -322,6 +324,12 @@
                         inputmove(e.clientX, e.clientY);
                         if (e.preventDefault) {e.preventDefault();}
                     }
+                },
+                inputScroll: function(e) {
+                    if (typeof settings.moved === 'function') {
+                        settings.moved.call($this, settings);
+                    }
+                    if (e.preventDefault) {e.preventDefault();}
                 },
                 inputClick: function(e){
                     if (Math.abs(settings.velocity) > 0) {
