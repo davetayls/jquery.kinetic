@@ -15,7 +15,7 @@ module.exports = function(grunt) {
       files: ['grunt.js', 'jquery.kinetic.js']
     },
     server: {
-      port: 9999,
+      port: 8989,
       base: '.'
     },
     qunit: {
@@ -28,7 +28,10 @@ module.exports = function(grunt) {
       }
     },
     watch: {
-      files: '<config:lint.files>',
+      files: [
+        '<config:lint.files>',
+        'test/specs/*.js'
+      ],
       tasks: 'lint qunit'
     },
     jshint: {
