@@ -1,4 +1,4 @@
-/*global module,test,ok,equal,dragOver,hasEventAttached */
+/*global module,test,asyncTest,start,ok,equal,dragOver,hasEventAttached */
 var $fixture = $('#qunit-fixture'),
     html = $('#tmpl').text();
 
@@ -51,16 +51,33 @@ test('we can prevent drag with filterTarget', function(){
 });
 test('we can listen for events', function(){
     var $wrapper = $('#wrapper').kinetic({
-            moved: function(){ moved = true; },
-            stopped: function(){ stopped = true; }
+            moved: function(){ moved++; },
+            stopped: function(){ stopped++; }
         }),
         img = $wrapper.find('img')[0],
-        moved, stopped;
+        moved = 0,
+        stopped = 0;
 
     dragOver($wrapper, img, [100,100], [10,10]);
     $wrapper.kinetic('stop');
-    ok(moved, 'moved event has fired');
-    ok(stopped, 'stopped event has fired');
+    equal(moved, 2, 'moved event has fired');
+    equal(stopped, 1, 'stopped event has fired');
+});
+asyncTest('moved triggered on scroll', 1, function(){
+    var $wrapper = $('#wrapper').kinetic({
+            moved: function(){
+                moved++;
+            },
+            stopped: function(){ stopped++; }
+        }),
+        moved = 0,
+        stopped = 0;
+
+    $wrapper.animate({ scrollLeft: 100 }, 100, function(){
+        ok(moved, 'scroll triggered move event');
+        start();
+    });
+
 });
 test('we can customise the mouse cursor', function(){
     var $wrapper = $('#wrapper').kinetic({

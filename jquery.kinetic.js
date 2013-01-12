@@ -173,10 +173,11 @@
                 .bind('touchmove', settings.events.touchMove);
         } else {
             $this
-            .mousedown(settings.events.inputDown)
-            .mouseup(settings.events.inputEnd)
-            .mousemove(settings.events.inputMove)
-            .scroll(settings.events.inputScroll);
+                .mousedown(settings.events.inputDown)
+                .mouseup(settings.events.inputEnd)
+                .mousemove(settings.events.inputMove)
+                .scroll(settings.events.scroll)
+            ;
         }
         $this.click(settings.events.inputClick)
         .bind("selectstart", selectStart); // prevent selection when dragging
@@ -193,7 +194,7 @@
             .unbind('mousedown', settings.events.inputDown)
             .unbind('mouseup', settings.events.inputEnd)
             .unbind('mousemove', settings.events.inputMove)
-            .unbind('scroll', settings.events.inputScroll);
+            .unbind('scroll', settings.events.scroll);
         }
         $this.unbind('click', settings.events.inputClick)
         .unbind("selectstart", selectStart); // prevent selection when dragging
@@ -325,7 +326,7 @@
                         if (e.preventDefault) {e.preventDefault();}
                     }
                 },
-                inputScroll: function(e) {
+                scroll: function(e) {
                     if (typeof settings.moved === 'function') {
                         settings.moved.call($this, settings);
                     }
