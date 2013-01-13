@@ -63,7 +63,19 @@ test('we can listen for events', function(){
     equal(moved, 2, 'moved event has fired');
     equal(stopped, 1, 'stopped event has fired');
 });
-asyncTest('moved triggered on scroll', 1, function(){
+test('scroll event triggered on scroll', function(){
+    var $wrapper = $('#wrapper').scroll(function(){
+            moved++;
+        }),
+        moved = 0,
+        stopped = 0,
+        scrollEvent = $.Event('scroll');
+
+    $wrapper.trigger(scrollEvent);
+    ok(moved, 'scroll triggered move event');
+
+});
+test('moved triggered on scroll (touch)', function(){
     var $wrapper = $('#wrapper').kinetic({
             moved: function(){
                 moved++;
@@ -71,12 +83,11 @@ asyncTest('moved triggered on scroll', 1, function(){
             stopped: function(){ stopped++; }
         }),
         moved = 0,
-        stopped = 0;
+        stopped = 0,
+        scrollEvent = $.Event('scroll');
 
-    $wrapper.animate({ scrollLeft: 100 }, 100, function(){
-        ok(moved, 'scroll triggered move event');
-        start();
-    });
+    $wrapper.trigger(scrollEvent);
+    ok(moved, 'scroll triggered move event');
 
 });
 test('we can customise the mouse cursor', function(){
