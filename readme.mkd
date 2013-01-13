@@ -51,6 +51,9 @@ The selenium tests are not functioning at the moment and are a work in progress.
 Changes
 -------
 
+### 1.8
+- add scroll listener to trigger move events (@dennipahmah)
+
 ### 1.7
 - add cursor option to change the default `move` cursor
 
