@@ -353,7 +353,11 @@
                 .css("cursor", settings.cursor);
 
             if (settings.triggerHardware) {
-                $this.css('-webkit-transform', 'translate3d(0,0,0)');
+                $this.css({
+                	'-webkit-transform': 'translate3d(0,0,0)',
+                	'-webkit-perspective': '1000',
+                	'-webkit-backface-visibility': 'hidden'
+                });
             }
         });
     };
