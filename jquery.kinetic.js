@@ -354,9 +354,9 @@
 
             if (settings.triggerHardware) {
                 $this.css({
-                	'-webkit-transform': 'translate3d(0,0,0)',
-                	'-webkit-perspective': '1000',
-                	'-webkit-backface-visibility': 'hidden'
+                    '-webkit-transform': 'translate3d(0,0,0)',
+                    '-webkit-perspective': '1000',
+                    '-webkit-backface-visibility': 'hidden'
                 });
             }
         });
@@ -367,7 +367,7 @@
         callMethods: {
             start: function(settings, options){
                 var $this = $(this);
-                    settings = $.extend(settings, options);
+                settings = $.extend(settings, options);
                 if (settings) {
                     settings.decelerate = false;
                     move($this, settings);
