@@ -51,6 +51,10 @@ The selenium tests are not functioning at the moment and are a work in progress.
 Changes
 -------
 
+### 1.8.1
+- tweak to hardware trigger css
+- upgrade to Grunt 0.4
+
 ### 1.8
 - add scroll listener to trigger move events (@dennipahmah)
 

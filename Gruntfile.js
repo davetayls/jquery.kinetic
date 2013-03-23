@@ -3,14 +3,7 @@ module.exports = function(grunt) {
 
   // Project configuration.
   grunt.initConfig({
-    pkg: '<json:package.json>',
-    meta: {
-      banner: '/*! <%= pkg.name %> - v<%= pkg.version %> - ' +
-        '<%= grunt.template.today("yyyy-mm-dd") %>\n' +
-        '<%= pkg.homepage ? "* " + pkg.homepage + "\n" : "" %>' +
-        '* Copyright (c) <%= grunt.template.today("yyyy") %> <%= pkg.author.name %>;' +
-        ' Licensed <%= pkg.license %> */'
-    },
+    pkg: grunt.file.readJSON('package.json'),
     server: {
       port: 8989,
       base: '.'
@@ -21,13 +14,19 @@ module.exports = function(grunt) {
     uglify: {
       dist: {
         files: {
-          'jquery.kinetic.min.js': ['<banner:meta.banner>', 'jquery.kinetic.js']
+          'jquery.kinetic.min.js': ['jquery.kinetic.js']
+        },
+        options: {
+          banner: '/*! <%= pkg.name %> - v<%= pkg.version %> - ' +
+            '<%= grunt.template.today("yyyy-mm-dd") %> <%= pkg.homepage %> ' +
+            '\n * Copyright (c) <%= grunt.template.today("yyyy") %> <%= pkg.author.name %>;' +
+            ' Licensed <%= pkg.license %> */\n'
         }
       }
     },
     watch: {
       files: [
-        '<config:lint.files>',
+        '<%= lint.files %>',
         'test/specs/*.js'
       ],
       tasks: 'lint qunit'
