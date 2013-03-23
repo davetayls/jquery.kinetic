@@ -1,4 +1,4 @@
-/*global module,test,asyncTest,start,ok,equal,dragOver,hasEventAttached */
+/*global $,module,test,asyncTest,start,ok,equal,dragOver,hasEventAttached */
 var $fixture = $('#qunit-fixture'),
     html = $('#tmpl').text();
 
@@ -109,6 +109,24 @@ test('we can limit the velocity with maxvelocity', function(){
         maxVelocity = 0;
     dragOver($wrapper, img, [200,200], [10,10]);
     equal(maxVelocity, 10);
+});
+test('we can bind kinetic twice to the same element', function(){
+    var $wrapper = $('#wrapper').kinetic({
+            moved: function(settings){
+                count+=1;
+            }
+        }),
+        img = $wrapper.find('img')[0],
+        count = 0;
+
+    // bind again should be ignored
+    $wrapper.kinetic({
+        moved: function(){
+            count+=1;
+        }
+    });
+    dragOver($wrapper, img, [200,200], [10,10]);
+    equal(count, 2);
 });
 
 

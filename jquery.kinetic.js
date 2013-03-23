@@ -208,10 +208,14 @@
         .addClass(ACTIVE_CLASS)
         .each(function(){
 
-            var settings = $.extend({}, DEFAULT_SETTINGS, options);
-
             var self = this,
-                $this = $(this),
+                $this = $(this);
+
+            if ($this.data(SETTINGS_KEY)){
+                return;
+            }
+
+            var settings = $.extend({}, DEFAULT_SETTINGS, options),
                 xpos,
                 prevXPos = false,
                 ypos,

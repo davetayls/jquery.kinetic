@@ -51,8 +51,11 @@ The selenium tests are not functioning at the moment and are a work in progress.
 Changes
 -------
 
+### 1.8.2
+- fix #34, #28, now will discard any subsequent attempts to bind `.kinetic()`
+
 ### 1.8.1
-- tweak to hardware trigger css
+- tweak to hardware trigger css (@edmelly)
 - upgrade to Grunt 0.4
 
 ### 1.8
