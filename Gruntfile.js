@@ -11,20 +11,18 @@ module.exports = function(grunt) {
         '* Copyright (c) <%= grunt.template.today("yyyy") %> <%= pkg.author.name %>;' +
         ' Licensed <%= pkg.license %> */'
     },
-    lint: {
-      files: ['grunt.js', 'jquery.kinetic.js']
-    },
     server: {
       port: 8989,
       base: '.'
     },
     qunit: {
-      files: ['test/specs/**/*.html']
+      all: ['test/specs/**/*.html']
     },
-    min: {
+    uglify: {
       dist: {
-        src: ['<banner:meta.banner>', 'jquery.kinetic.js'],
-        dest: 'jquery.kinetic.min.js'
+        files: {
+          'jquery.kinetic.min.js': ['<banner:meta.banner>', 'jquery.kinetic.js']
+        }
       }
     },
     watch: {
@@ -35,24 +33,11 @@ module.exports = function(grunt) {
       tasks: 'lint qunit'
     },
     jshint: {
+      files: ['grunt.js', 'jquery.kinetic.js'],
       options: {
-        curly: true,
-        eqeqeq: true,
-        immed: true,
-        latedef: true,
-        newcap: true,
-        noarg: true,
-        sub: true,
-        undef: true,
-        boss: true,
-        eqnull: true,
-        browser: true
-      },
-      globals: {
-        jQuery: true
+        jshintrc: '.jshintrc'
       }
     },
-    uglify: {},
     vows: {
         local: {
             files: ["test/local.vows.js"],
@@ -83,16 +68,19 @@ module.exports = function(grunt) {
   });
 
   // Load tasks
+  grunt.loadNpmTasks('grunt-contrib-jshint');
+  grunt.loadNpmTasks('grunt-contrib-qunit');
+  grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-vows');
   grunt.loadNpmTasks('grunt-bump');
   grunt.loadNpmTasks('grunt-string-replace');
 
   // Default task.
-  grunt.registerTask('default', 'lint server qunit');
-  grunt.registerTask('selenium', 'vows:local');
-  grunt.registerTask('sauce', 'vows:sauce');
-  grunt.registerTask('minor', 'bump:minor');
-  grunt.registerTask('patch', 'bump');
-  grunt.registerTask('release', 'default string-replace:version min');
+  grunt.registerTask('default', ['jshint', 'qunit']);
+  grunt.registerTask('selenium', ['vows:local']);
+  grunt.registerTask('sauce', ['vows:sauce']);
+  grunt.registerTask('minor', ['bump:minor']);
+  grunt.registerTask('patch', ['bump']);
+  grunt.registerTask('release', ['default','string-replace:version','uglify']);
 
 };
