@@ -291,6 +291,12 @@
                         }
                     }
                 }
+		
+		if (!settings.y && settings.velocity < 5 && settings.velocityY > 5) {
+			return false;
+		}
+
+		return true;
             };
 
             // Events
@@ -307,8 +313,9 @@
                     var touch;
                     if (mouseDown) {
                         touch = e.originalEvent.touches[0];
-                        inputmove(touch.clientX, touch.clientY);
-                        if (e.preventDefault) {e.preventDefault();}
+                        if (inputmove(touch.clientX, touch.clientY)) {
+				if (e.preventDefault) { e.preventDefault(); }
+			}
                     }
                 },
                 inputDown: function(e){
@@ -328,8 +335,11 @@
                 },
                 inputMove: function(e) {
                     if (mouseDown){
-                        inputmove(e.clientX, e.clientY);
-                        if (e.preventDefault) {e.preventDefault();}
+                        if (inputmove(e.clientX, e.clientY)) {
+                            if (e.preventDefault) {
+                                e.preventDefault();
+                            }
+                        }
                     }
                 },
                 scroll: function(e) {
