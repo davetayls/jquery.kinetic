@@ -7,7 +7,7 @@
 */
 /*global define,require */
 (function($){
-	'use strict';
+    'use strict';
 
     var DEFAULT_SETTINGS = {
             cursor: 'move',
@@ -15,6 +15,7 @@
             triggerHardware: false,
             y: true,
             x: true,
+            axisTolerance: 7,
             slowdown: 0.9,
             maxvelocity: 40,
             throttleFPS: 60,
@@ -203,10 +204,14 @@
         $this.unbind('dragstart', settings.events.dragStart);
     };
 
+    /**
+     * Initialises all the elements bound to the jQuery
+     * object
+     * @param  {Object} options
+     * @return {jQueryInstance}
+     */
     var initElements = function(options) {
-        this
-        .addClass(ACTIVE_CLASS)
-        .each(function(){
+        this.each(function(){
 
             var self = this,
                 $this = $(this);
@@ -214,6 +219,8 @@
             if ($this.data(SETTINGS_KEY)){
                 return;
             }
+
+            $this.addClass(ACTIVE_CLASS);
 
             var settings = $.extend({}, DEFAULT_SETTINGS, options),
                 xpos,
@@ -225,6 +232,7 @@
                 scrollTop,
                 throttleTimeout = 1000 / settings.throttleFPS,
                 lastMove,
+                gesture,
                 elementFocused
             ;
 
@@ -236,6 +244,8 @@
                 xpos = false;
                 ypos = false;
                 mouseDown = false;
+                gesture = false;
+                elementFocused = null;
             };
             $(document).mouseup(resetMouse).click(resetMouse);
 
@@ -257,7 +267,7 @@
                 ypos = clientY;
             };
             var end = function() {
-                if (xpos && prevXPos && settings.decelerate === false) {
+                if (!gesture && xpos && prevXPos && settings.decelerate === false) {
                     settings.decelerate = true;
                     calculateVelocities();
                     xpos = prevXPos = mouseDown = false;
@@ -265,41 +275,55 @@
                 }
             };
             var inputmove = function(clientX, clientY) {
-                if (!lastMove || new Date() > new Date(lastMove.getTime() + throttleTimeout)) {
-                    lastMove = new Date();
+                if (gesture){
+                    return false;
+                } else {
+                    if (!lastMove || new Date() > new Date(lastMove.getTime() + throttleTimeout)) {
+                        lastMove = new Date();
 
-                    if (mouseDown && (xpos || ypos)) {
-                        if (elementFocused) {
-                            $(elementFocused).blur();
-                            elementFocused = null;
-                            $this.focus();
-                        }
-                        settings.decelerate = false;
-                        settings.velocity   = settings.velocityY  = 0;
-                        $this[0].scrollLeft = settings.scrollLeft = settings.x ? $this[0].scrollLeft - (clientX - xpos) : $this[0].scrollLeft;
-                        $this[0].scrollTop  = settings.scrollTop  = settings.y ? $this[0].scrollTop - (clientY - ypos)  : $this[0].scrollTop;
-                        prevXPos = xpos;
-                        prevYPos = ypos;
-                        xpos = clientX;
-                        ypos = clientY;
+                        if (mouseDown && (xpos || ypos)) {
+                            if (elementFocused) {
+                                $(elementFocused).blur();
+                                elementFocused = null;
+                                $this.focus();
+                            }
+                            settings.decelerate = false;
+                            settings.velocity   = settings.velocityY  = 0;
+                            $this[0].scrollLeft = settings.scrollLeft = settings.x ? $this[0].scrollLeft - (clientX - xpos) : $this[0].scrollLeft;
+                            $this[0].scrollTop  = settings.scrollTop  = settings.y ? $this[0].scrollTop - (clientY - ypos)  : $this[0].scrollTop;
+                            prevXPos = xpos;
+                            prevYPos = ypos;
+                            xpos = clientX;
+                            ypos = clientY;
 
-                        calculateVelocities();
-                        setMoveClasses.call($this, settings, settings.movingClass);
+                            calculateVelocities();
+                            setMoveClasses.call($this, settings, settings.movingClass);
 
-                        if (typeof settings.moved === 'function') {
-                            settings.moved.call($this, settings);
+                            if (typeof settings.moved === 'function') {
+                                settings.moved.call($this, settings);
+                            }
                         }
                     }
-                }
-		
-		if (!settings.y && settings.velocity < 5 && settings.velocityY > 5) {
-			return false;
-		}
 
-		return true;
+                    // if turned off y and x velocity < 5
+                    if (!settings.y && Math.abs(settings.velocityY) > settings.axisTolerance && Math.abs(settings.velocity) < settings.axisTolerance){
+                        gesture = true;
+                        return false;
+
+                    // if turned off x and y velocity < 5
+                    } else if (!settings.x && Math.abs(settings.velocity) > settings.axisTolerance && Math.abs(settings.velocityY) < settings.axisTolerance){
+                        gesture = true;
+                        return false;
+
+                    } else {
+                        return true;
+                    }
+                }
             };
 
-            // Events
+            /**
+             * Various events which get attached to the element
+             */
             settings.events = {
                 touchStart: function(e){
                     var touch;
@@ -314,8 +338,8 @@
                     if (mouseDown) {
                         touch = e.originalEvent.touches[0];
                         if (inputmove(touch.clientX, touch.clientY)) {
-				if (e.preventDefault) { e.preventDefault(); }
-			}
+                            if (e.preventDefault) { e.preventDefault(); }
+                        }
                     }
                 },
                 inputDown: function(e){
@@ -330,15 +354,13 @@
                 },
                 inputEnd: function(e){
                     end();
-                    elementFocused = null;
+                    resetMouse();
                     if (e.preventDefault) {e.preventDefault();}
                 },
                 inputMove: function(e) {
                     if (mouseDown){
                         if (inputmove(e.clientX, e.clientY)) {
-                            if (e.preventDefault) {
-                                e.preventDefault();
-                            }
+                            if (e.preventDefault) { e.preventDefault(); }
                         }
                     }
                 },
