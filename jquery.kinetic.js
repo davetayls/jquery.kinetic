@@ -80,14 +80,7 @@
     };
 
     var setMoveClasses = function(settings, classes) {
-        this.removeClass(settings.movingClass.up)
-            .removeClass(settings.movingClass.down)
-            .removeClass(settings.movingClass.left)
-            .removeClass(settings.movingClass.right)
-            .removeClass(settings.deceleratingClass.up)
-            .removeClass(settings.deceleratingClass.down)
-            .removeClass(settings.deceleratingClass.left)
-            .removeClass(settings.deceleratingClass.right);
+        this.attr("class", "");
 
         if (settings.velocity > 0) {
             this.addClass(classes.right);
