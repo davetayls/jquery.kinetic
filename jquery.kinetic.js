@@ -243,11 +243,12 @@
                 settings.velocity    = capVelocity(prevXPos - xpos, settings.maxvelocity);
                 settings.velocityY   = capVelocity(prevYPos - ypos, settings.maxvelocity);
             };
-            var useTarget = function(target) {
+            var useTarget = function(target, ev) {
                 if ($.isFunction(settings.filterTarget)) {
-                    return settings.filterTarget.call(self, target) !== false;
+                    return settings.filterTarget.call(self, target, ev) !== false;
+                } else {
+                  return ev.which === 1;
                 }
-                return true;
             };
             var start = function(clientX, clientY) {
                 mouseDown = true;
@@ -297,7 +298,7 @@
             settings.events = {
                 touchStart: function(e){
                     var touch;
-                    if (useTarget(e.target)) {
+                    if (useTarget(e.target, e)) {
                         touch = e.originalEvent.touches[0];
                         start(touch.clientX, touch.clientY);
                         e.stopPropagation();
@@ -312,7 +313,7 @@
                     }
                 },
                 inputDown: function(e){
-                    if (useTarget(e.target)) {
+                    if (useTarget(e.target, e)) {
                         start(e.clientX, e.clientY);
                         elementFocused = e.target;
                         if (e.target.nodeName === 'IMG'){
