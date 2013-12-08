@@ -38,7 +38,7 @@ Take a look at a demo on <http://the-taylors.org/jquery.kinetic>.
     triggerHardware {boolean} false             This adds css to the wrapper which
                                                 will trigger iOS to use hardware acceleration
 
-    filterTarget    {function(target)}          Return false from this function to
+    filterTarget    {function(target, ev)}     Return false from this function to
                                                 prevent capturing the scroll
 
     movingClass     {object}
@@ -123,6 +123,9 @@ The selenium tests are not functioning at the moment and are a work in progress.
 
 Changes
 -------
+
+### 1.8.3
+- fix #47, prevent drag on right mouse click
 
 ### 1.8.2
 - fix #34, #28, now will discard any subsequent attempts to bind `.kinetic()`

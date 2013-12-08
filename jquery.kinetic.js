@@ -1,5 +1,5 @@
 /*!
-    jQuery.kinetic v1.8.2
+    jQuery.kinetic v1.8.3
     Dave Taylor http://the-taylors.org/jquery.kinetic
 
     The MIT License (MIT)
@@ -247,7 +247,11 @@
                 if ($.isFunction(settings.filterTarget)) {
                     return settings.filterTarget.call(self, target, ev) !== false;
                 } else {
-                  return ev.which === 1;
+                  if (ev.which && ev.which > 1){
+                    return false;
+                  } else {
+                    return true;
+                  }
                 }
             };
             var start = function(clientX, clientY) {

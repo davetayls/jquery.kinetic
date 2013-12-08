@@ -34,11 +34,13 @@ function dragOver($el, target, from, to){
 		// mouse
 		$.extend(mdEvent, {
 			target: target,
+      which: 1,
 			clientX: from[0],
 			clientY: from[1]
 		});
 		$.extend(mmEvent, {
 			target: target,
+      which: 1,
 			clientX: to[0],
 			clientY: to[1]
 		});
