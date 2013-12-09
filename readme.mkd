@@ -10,6 +10,14 @@ All branches: [![Build Status](https://secure.travis-ci.org/davetayls/jquery.kin
 jQuery.kinetic is a simple plugin which adds smooth drag scrolling with
 gradual deceleration to containers.
 
+## Looking for Contributors
+
+This little plugin has been around for some time now. I originally created it for a little project and now it seems to be used by a fair number of you. I'm looking for a couple of people who actively use this plugin to help build on it there are a few fixes and enhancements I am working towards in a 2.0 version. The biggest being converting this to an OO plugin.
+
+Please get in touch if you're interested <http://twitter.com/davetayls>
+
+Thanks to those who have helped out so far.
+
 ## Compatibility
 
 This plugin works with [jQuery](http://jquery.com) and
