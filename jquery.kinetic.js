@@ -327,9 +327,11 @@
                     }
                 },
                 inputEnd: function(e){
-                    end();
-                    elementFocused = null;
-                    if (e.preventDefault) {e.preventDefault();}
+                    if (useTarget(e.target, e)) {
+                        end();
+                        elementFocused = null;
+                        if (e.preventDefault) {e.preventDefault();}
+                    }
                 },
                 inputMove: function(e) {
                     if (mouseDown){
