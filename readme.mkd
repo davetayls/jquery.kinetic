@@ -107,6 +107,17 @@ Take a look at a demo on <http://davetayls.me/jquery.kinetic>.
                 // use the method
                 $('#elem').kinetic('do', { ... });
 
+
+Contributors
+-------
+
+ - @cc-lam
+ - @dennipahmah
+ - @edmelly
+ - @peterhartree
+ - @sidoh
+ - @skovhus
+
 Running the tests
 -------
 
