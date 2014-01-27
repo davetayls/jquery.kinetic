@@ -394,7 +394,6 @@
             },
             detach: function(settings, options) {
                 var $this = $(this);
-
                 if (!$this.hasClass(ACTIVE_CLASS)) {
                     return;
                 }
@@ -410,12 +409,10 @@
                     return;
                 }
 
-                var cursor = options && 'cursor' in options ? options.cursor : DEFAULT_SETTINGS.cursor;
-
                 attachListeners($this, settings);
                 $this
                 .addClass(ACTIVE_CLASS)
-                .css("cursor", cursor);
+                .css("cursor", settings.cursor);
             }
         }
     };
