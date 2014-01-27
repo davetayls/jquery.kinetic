@@ -132,6 +132,10 @@ The selenium tests are not functioning at the moment and are a work in progress.
 Changes
 -------
 
+### 1.8.4
+- fix #50, Making attach function idempotent and cursor type configurable (@skovhus)
+- fix #51, Stop inputEnd from stealing mouse up events (@skovhus)
+
 ### 1.8.3
 - fix #47, prevent drag on right mouse click
 

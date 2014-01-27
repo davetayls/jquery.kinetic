@@ -1,9 +1,9 @@
 /*!
-    jQuery.kinetic v1.8.3
-    Dave Taylor http://the-taylors.org/jquery.kinetic
+    jQuery.kinetic v1.8.4
+    Dave Taylor http://davetayls.me/jquery.kinetic
 
     The MIT License (MIT)
-    Copyright (c) <2011> <Dave Taylor http://the-taylors.org>
+    Copyright (c) <2011> <Dave Taylor http://davetayls.me>
 */
 /*global define,require */
 (function($){
