@@ -1,6 +1,6 @@
 jQuery.kinetic
 ==============
-Dave Taylor <http://the-taylors.org>
+Dave Taylor <http://davetayls.me>
 The MIT License (MIT)
 
 Master: [![Build Status](https://secure.travis-ci.org/davetayls/jquery.kinetic.png?branch=master)](http://travis-ci.org/davetayls/jquery.kinetic)
@@ -31,7 +31,7 @@ This plugin works with [jQuery](http://jquery.com) and
 - iOS Safari: 4
 
 ## Demos
-Take a look at a demo on <http://the-taylors.org/jquery.kinetic>.
+Take a look at a demo on <http://davetayls.me/jquery.kinetic>.
 
 ## Options
 
