@@ -11,6 +11,8 @@
   "eqnull": true,
   "node": true,
   "browser": true,
+  "quotmark": "single",
+  "camelcase": true,
 
   "globals": {
     "jQuery": true
