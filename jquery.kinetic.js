@@ -34,7 +34,7 @@
   // add touch checker to jQuery.support
   $.support = $.support || {};
   $.extend($.support, {
-    touch: "ontouchend" in document
+    touch: 'ontouchend' in document
   });
   var selectStart = function (){
     return false;
@@ -48,7 +48,7 @@
         settings = $.extend(settings, options);
         if (settings){
           settings.decelerate = false;
-          move($this, settings);
+          this.move($this, settings);
         }
       },
       end: function (settings, options){
@@ -59,21 +59,24 @@
       },
       stop: function (settings, options){
         var $this = $(this);
-        stop($this, settings);
+        this.stop($this, settings);
       },
       detach: function (settings, options){
         var $this = $(this);
-        detachListeners($this, settings);
+        this.detachListeners($this, settings);
         $this
           .removeClass(ACTIVE_CLASS)
-          .css("cursor", "");
+          .css('cursor', '');
       },
       attach: function (settings, options){
         var $this = $(this);
-        attachListeners($this, settings);
+        if ($this.hasClass(ACTIVE_CLASS)) {
+          return;
+        }
+        this.attachListeners($this, settings);
         $this
           .addClass(ACTIVE_CLASS)
-          .css("cursor", "move");
+          .css('cursor', settings.cursor);
       }
     }
   };
@@ -135,42 +138,42 @@
         mouseDown = false,
         scrollLeft,
         scrollTop,
-        throttleTimeout = 1000 / settings.throttleFPS,
+        throttleTimeout = 1000 / self.settings.throttleFPS,
         lastMove,
         elementFocused
         ;
 
-      this.settings.velocity = 0;
-      this.settings.velocityY = 0;
+      self.settings.velocity = 0;
+      self.settings.velocityY = 0;
 
       // make sure we reset everything when mouse up
       $(document)
-        .mouseup($.proxy(this.resetMouse, this))
-        .click($.proxy(this.resetMouse, this));
+        .mouseup($.proxy(self.resetMouse, this))
+        .click($.proxy(self.resetMouse, this));
 
       var calculateVelocities = function (){
-        settings.velocity = capVelocity(prevXPos - xpos, settings.maxvelocity);
-        settings.velocityY = capVelocity(prevYPos - ypos, settings.maxvelocity);
+        self.settings.velocity = self.capVelocity(prevXPos - xpos, self.settings.maxvelocity);
+        self.settings.velocityY = self.capVelocity(prevYPos - ypos, self.settings.maxvelocity);
       };
       var useTarget = function (target){
-        if ($.isFunction(settings.filterTarget)){
-          return settings.filterTarget.call(self, target) !== false;
+        if ($.isFunction(self.settings.filterTarget)){
+          return self.settings.filterTarget.call(self, target) !== false;
         }
         return true;
       };
       var start = function (clientX, clientY){
         mouseDown = true;
-        settings.velocity = prevXPos = 0;
-        settings.velocityY = prevYPos = 0;
+        self.settings.velocity = prevXPos = 0;
+        self.settings.velocityY = prevYPos = 0;
         xpos = clientX;
         ypos = clientY;
       };
       var end = function (){
-        if (xpos && prevXPos && settings.decelerate === false){
-          settings.decelerate = true;
+        if (xpos && prevXPos && self.settings.decelerate === false){
+          self.settings.decelerate = true;
           calculateVelocities();
           xpos = prevXPos = mouseDown = false;
-          move($this, settings);
+          self.move($this, self.settings);
         }
       };
       var inputmove = function (clientX, clientY){
@@ -183,27 +186,27 @@
               elementFocused = null;
               $this.focus();
             }
-            settings.decelerate = false;
-            settings.velocity = settings.velocityY = 0;
-            $this[0].scrollLeft = settings.scrollLeft = settings.x ? $this[0].scrollLeft - (clientX - xpos) : $this[0].scrollLeft;
-            $this[0].scrollTop = settings.scrollTop = settings.y ? $this[0].scrollTop - (clientY - ypos) : $this[0].scrollTop;
+            self.settings.decelerate = false;
+            self.settings.velocity = self.settings.velocityY = 0;
+            $this[0].scrollLeft = self.settings.scrollLeft = self.settings.x ? $this[0].scrollLeft - (clientX - xpos) : $this[0].scrollLeft;
+            $this[0].scrollTop = self.settings.scrollTop = self.settings.y ? $this[0].scrollTop - (clientY - ypos) : $this[0].scrollTop;
             prevXPos = xpos;
             prevYPos = ypos;
             xpos = clientX;
             ypos = clientY;
 
             calculateVelocities();
-            setMoveClasses.call($this, settings, settings.movingClass);
+            self.setMoveClasses.call($this, self.settings, self.settings.movingClass);
 
-            if (typeof settings.moved === 'function'){
-              settings.moved.call($this, settings);
+            if ($.isFunction(self.settings.moved)){
+              self.settings.moved.call($this, self.settings);
             }
           }
         }
       };
 
       // Events
-      settings.events = {
+      self.settings.events = {
         touchStart: function (e){
           var touch;
           if (useTarget(e.target)){
@@ -233,10 +236,12 @@
           }
         },
         inputEnd: function (e){
-          end();
-          elementFocused = null;
-          if (e.preventDefault){
-            e.preventDefault();
+          if (useTarget(e.target)){
+            end();
+            elementFocused = null;
+            if (e.preventDefault){
+              e.preventDefault();
+            }
           }
         },
         inputMove: function (e){
@@ -248,15 +253,15 @@
           }
         },
         scroll: function (e){
-          if (typeof settings.moved === 'function'){
-            settings.moved.call($this, settings);
+          if ($.isFunction(self.settings.moved)){
+            self.settings.moved.call($this, self.settings);
           }
           if (e.preventDefault){
             e.preventDefault();
           }
         },
         inputClick: function (e){
-          if (Math.abs(settings.velocity) > 0){
+          if (Math.abs(self.settings.velocity) > 0){
             e.preventDefault();
             return false;
           }
@@ -269,11 +274,11 @@
         }
       };
 
-      attachListeners($this, settings);
-      $this.data(SETTINGS_KEY, settings)
-        .css("cursor", settings.cursor);
+      self.attachListeners($this, self.settings);
+      $this.data(SETTINGS_KEY, self.settings)
+        .css('cursor', self.settings.cursor);
 
-      if (settings.triggerHardware){
+      if (self.settings.triggerHardware){
         $this.css({
           '-webkit-transform': 'translate3d(0,0,0)',
           '-webkit-perspective': '1000',
@@ -304,6 +309,8 @@
       return newVelocity;
     },
     setMoveClasses: function (settings, classes){
+      // FIXME: consider if we want to apply PL #44, this should not remove
+      // classes we have not defined on the element!
       this.removeClass(settings.movingClass.up)
         .removeClass(settings.movingClass.down)
         .removeClass(settings.movingClass.left)
@@ -331,7 +338,7 @@
       settings.velocity = 0;
       settings.velocityY = 0;
       settings.decelerate = true;
-      if (typeof settings.stopped === 'function'){
+      if ($.isFunction(settings.stopped)){
         settings.stopped.call($scroller, settings);
       }
     },
@@ -339,12 +346,14 @@
     /** do the actual kinetic movement */
     move: function ($scroller, settings){
       var scroller = $scroller[0];
+      var self = this;
+
       // set scrollLeft
       if (settings.x && scroller.scrollWidth > 0){
         scroller.scrollLeft = settings.scrollLeft = scroller.scrollLeft + settings.velocity;
         if (Math.abs(settings.velocity) > 0){
           settings.velocity = settings.decelerate ?
-            decelerateVelocity(settings.velocity, settings.slowdown) : settings.velocity;
+            self.decelerateVelocity(settings.velocity, settings.slowdown) : settings.velocity;
         }
       } else {
         settings.velocity = 0;
@@ -355,25 +364,25 @@
         scroller.scrollTop = settings.scrollTop = scroller.scrollTop + settings.velocityY;
         if (Math.abs(settings.velocityY) > 0){
           settings.velocityY = settings.decelerate ?
-            decelerateVelocity(settings.velocityY, settings.slowdown) : settings.velocityY;
+            self.decelerateVelocity(settings.velocityY, settings.slowdown) : settings.velocityY;
         }
       } else {
         settings.velocityY = 0;
       }
 
-      setMoveClasses.call($scroller, settings, settings.deceleratingClass);
+      self.setMoveClasses.call($scroller, settings, settings.deceleratingClass);
 
-      if (typeof settings.moved === 'function'){
+      if ($.isFunction(settings.moved)){
         settings.moved.call($scroller, settings);
       }
 
       if (Math.abs(settings.velocity) > 0 || Math.abs(settings.velocityY) > 0){
         // tick for next movement
         window.requestAnimationFrame(function (){
-          move($scroller, settings);
+          self.move($scroller, settings);
         });
       } else {
-        stop($scroller, settings);
+        self.stop($scroller, settings);
       }
     },
     callOption: function (method, options){
@@ -405,7 +414,7 @@
       $this
         .click(settings.events.inputClick)
         .scroll(settings.events.scroll)
-        .bind("selectstart", selectStart) // prevent selection when dragging
+        .bind('selectstart', selectStart) // prevent selection when dragging
         .bind('dragstart', settings.events.dragStart);
     },
     detachListeners: function ($this, settings){
@@ -422,7 +431,7 @@
           .unbind('scroll', settings.events.scroll);
       }
       $this.unbind('click', settings.events.inputClick)
-        .unbind("selectstart", selectStart); // prevent selection when dragging
+        .unbind('selectstart', selectStart); // prevent selection when dragging
       $this.unbind('dragstart', settings.events.dragStart);
     }
 
@@ -430,7 +439,8 @@
 
   $.fn.kinetic = function (options){
     if (typeof options === 'string'){
-      callOption.apply(this, arguments);
+      // FIXME: this does not work
+      this.callOption.apply(this, arguments);
     } else {
       return this.each(function (){
         new $.kinetic.Kinetic(this, options);
