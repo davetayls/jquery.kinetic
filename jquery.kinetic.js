@@ -48,7 +48,7 @@
         settings = $.extend(settings, options);
         if (settings){
           settings.decelerate = false;
-          this.move($this, settings);
+          $.kinetic.Kinetic.prototype.move($this, settings);
         }
       },
       end: function (settings, options){
@@ -59,11 +59,11 @@
       },
       stop: function (settings, options){
         var $this = $(this);
-        this.stop($this, settings);
+        $.kinetic.Kinetic.prototype.stop($this, settings);
       },
       detach: function (settings, options){
         var $this = $(this);
-        this.detachListeners($this, settings);
+        $.kinetic.Kinetic.prototype.detachListeners($this, settings);
         $this
           .removeClass(ACTIVE_CLASS)
           .css('cursor', '');
@@ -73,7 +73,7 @@
         if ($this.hasClass(ACTIVE_CLASS)) {
           return;
         }
-        this.attachListeners($this, settings);
+        $.kinetic.Kinetic.prototype.attachListeners($this, settings);
         $this
           .addClass(ACTIVE_CLASS)
           .css('cursor', settings.cursor);
@@ -119,6 +119,18 @@
       this._initElements();
 
       return this;
+    },
+    callOption: function (method, options){
+      var methodFn = $.kinetic.callMethods[method];
+      var args = Array.prototype.slice.call(arguments);
+      if (methodFn){
+        this.each(function (){
+          var opts = args.slice(1);
+          var settings = $(this).data(SETTINGS_KEY);
+          opts.unshift(settings);
+          methodFn.apply(this, opts);
+        });
+      }
     },
     _initElements: function (){
       this.$el.addClass(ACTIVE_CLASS);
@@ -385,18 +397,6 @@
         self.stop($scroller, settings);
       }
     },
-    callOption: function (method, options){
-      var methodFn = $.kinetic.callMethods[method],
-        args = Array.prototype.slice.call(arguments)
-        ;
-      if (methodFn){
-        this.each(function (){
-          var opts = args.slice(1), settings = $(this).data(SETTINGS_KEY);
-          opts.unshift(settings);
-          methodFn.apply(this, opts);
-        });
-      }
-    },
     attachListeners: function ($this, settings){
       var element = $this[0];
       if ($.support.touch){
@@ -439,8 +439,7 @@
 
   $.fn.kinetic = function (options){
     if (typeof options === 'string'){
-      // FIXME: this does not work
-      this.callOption.apply(this, arguments);
+      $.kinetic.Kinetic.prototype.callOption.apply(this, arguments);
     } else {
       return this.each(function (){
         new $.kinetic.Kinetic(this, options);
