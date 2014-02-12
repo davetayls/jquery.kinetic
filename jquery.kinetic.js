@@ -143,69 +143,43 @@
         return;
       }
 
-      var xpos,
-        prevXPos = false,
-        ypos,
-        prevYPos = false,
-        mouseDown = false,
-        scrollLeft,
-        scrollTop,
-        throttleTimeout = 1000 / self.settings.throttleFPS,
-        lastMove,
-        elementFocused
-        ;
+      $.extend(this,{
+        xpos: null,
+        prevXPos: false,
+        ypos: null,
+        prevYPos: false,
+        mouseDown: false,
+        throttleTimeout: 1000 / self.settings.throttleFPS,
+        lastMove: null,
+        elementFocused: null
+      });
 
-      self.settings.velocity = 0;
-      self.settings.velocityY = 0;
+      this.settings.velocity = 0;
+      this.settings.velocityY = 0;
 
       // make sure we reset everything when mouse up
       $(document)
-        .mouseup($.proxy(self.resetMouse, this))
-        .click($.proxy(self.resetMouse, this));
+        .mouseup($.proxy(this.resetMouse, this))
+        .click($.proxy(this.resetMouse, this));
 
-      var calculateVelocities = function (){
-        self.settings.velocity = self.capVelocity(prevXPos - xpos, self.settings.maxvelocity);
-        self.settings.velocityY = self.capVelocity(prevYPos - ypos, self.settings.maxvelocity);
-      };
-      var useTarget = function (target){
-        if ($.isFunction(self.settings.filterTarget)){
-          return self.settings.filterTarget.call(self, target) !== false;
-        }
-        return true;
-      };
-      var start = function (clientX, clientY){
-        mouseDown = true;
-        self.settings.velocity = prevXPos = 0;
-        self.settings.velocityY = prevYPos = 0;
-        xpos = clientX;
-        ypos = clientY;
-      };
-      var end = function (){
-        if (xpos && prevXPos && self.settings.decelerate === false){
-          self.settings.decelerate = true;
-          calculateVelocities();
-          xpos = prevXPos = mouseDown = false;
-          self.move($this, self.settings);
-        }
-      };
       var inputmove = function (clientX, clientY){
-        if (!lastMove || new Date() > new Date(lastMove.getTime() + throttleTimeout)){
-          lastMove = new Date();
+        if (!this.lastMove || new Date() > new Date(this.lastMove.getTime() + this.throttleTimeout)){
+          this.lastMove = new Date();
 
-          if (mouseDown && (xpos || ypos)){
-            if (elementFocused){
-              $(elementFocused).blur();
-              elementFocused = null;
+          if (this.mouseDown && (this.xpos || this.ypos)){
+            if (this.elementFocused){
+              $(this.elementFocused).blur();
+              this.elementFocused = null;
               $this.focus();
             }
             self.settings.decelerate = false;
             self.settings.velocity = self.settings.velocityY = 0;
-            $this[0].scrollLeft = self.settings.scrollLeft = self.settings.x ? $this[0].scrollLeft - (clientX - xpos) : $this[0].scrollLeft;
-            $this[0].scrollTop = self.settings.scrollTop = self.settings.y ? $this[0].scrollTop - (clientY - ypos) : $this[0].scrollTop;
-            prevXPos = xpos;
-            prevYPos = ypos;
-            xpos = clientX;
-            ypos = clientY;
+            $this[0].scrollLeft = self.settings.scrollLeft = self.settings.x ? $this[0].scrollLeft - (clientX - this.xpos) : $this[0].scrollLeft;
+            $this[0].scrollTop = self.settings.scrollTop = self.settings.y ? $this[0].scrollTop - (clientY - this.ypos) : $this[0].scrollTop;
+            this.prevXPos = this.xpos;
+            this.prevYPos = this.ypos;
+            this.xpos = clientX;
+            this.ypos = clientY;
 
             calculateVelocities();
             self.setMoveClasses.call($this, self.settings, self.settings.movingClass);
@@ -217,76 +191,8 @@
         }
       };
 
-      // Events
-      self.settings.events = {
-        touchStart: function (e){
-          var touch;
-          if (useTarget(e.target)){
-            touch = e.originalEvent.touches[0];
-            start(touch.clientX, touch.clientY);
-            e.stopPropagation();
-          }
-        },
-        touchMove: function (e){
-          var touch;
-          if (mouseDown){
-            touch = e.originalEvent.touches[0];
-            inputmove(touch.clientX, touch.clientY);
-            if (e.preventDefault){
-              e.preventDefault();
-            }
-          }
-        },
-        inputDown: function (e){
-          if (useTarget(e.target)){
-            start(e.clientX, e.clientY);
-            elementFocused = e.target;
-            if (e.target.nodeName === 'IMG'){
-              e.preventDefault();
-            }
-            e.stopPropagation();
-          }
-        },
-        inputEnd: function (e){
-          if (useTarget(e.target)){
-            end();
-            elementFocused = null;
-            if (e.preventDefault){
-              e.preventDefault();
-            }
-          }
-        },
-        inputMove: function (e){
-          if (mouseDown){
-            inputmove(e.clientX, e.clientY);
-            if (e.preventDefault){
-              e.preventDefault();
-            }
-          }
-        },
-        scroll: function (e){
-          if ($.isFunction(self.settings.moved)){
-            self.settings.moved.call($this, self.settings);
-          }
-          if (e.preventDefault){
-            e.preventDefault();
-          }
-        },
-        inputClick: function (e){
-          if (Math.abs(self.settings.velocity) > 0){
-            e.preventDefault();
-            return false;
-          }
-        },
-        // prevent drag and drop images in ie
-        dragStart: function (e){
-          if (elementFocused){
-            return false;
-          }
-        }
-      };
+      this._initEvents();
 
-      self.attachListeners($this, self.settings);
       $this.data(SETTINGS_KEY, self.settings)
         .css('cursor', self.settings.cursor);
 
@@ -297,6 +203,103 @@
           '-webkit-backface-visibility': 'hidden'
         });
       }
+    },
+    _initEvents: function(){
+      this.settings.events = {
+        touchStart: function (e){
+          var touch;
+          if (this.useTarget(e.target)){
+            touch = e.originalEvent.touches[0];
+            this.start(touch.clientX, touch.clientY);
+            e.stopPropagation();
+          }
+        },
+        touchMove: function (e){
+          var touch;
+          if (this.mouseDown){
+            touch = e.originalEvent.touches[0];
+            inputmove(touch.clientX, touch.clientY);
+            if (e.preventDefault){
+              e.preventDefault();
+            }
+          }
+        },
+        inputDown: function (e){
+          if (this.useTarget(e.target)){
+            this.start(e.clientX, e.clientY);
+            this.elementFocused = e.target;
+            if (e.target.nodeName === 'IMG'){
+              e.preventDefault();
+            }
+            e.stopPropagation();
+          }
+        },
+        inputEnd: function (e){
+          if (this.useTarget(e.target)){
+            end();
+            this.elementFocused = null;
+            if (e.preventDefault){
+              e.preventDefault();
+            }
+          }
+        },
+        inputMove: function (e){
+          if (this.mouseDown){
+            inputmove(e.clientX, e.clientY);
+            if (e.preventDefault){
+              e.preventDefault();
+            }
+          }
+        },
+        scroll: function (e){
+          if ($.isFunction(this.settings.moved)){
+            this.settings.moved.call(this.$el, this.settings);
+          }
+          if (e.preventDefault){
+            e.preventDefault();
+          }
+        },
+        inputClick: function (e){
+          if (Math.abs(this.settings.velocity) > 0){
+            e.preventDefault();
+            return false;
+          }
+        },
+        // prevent drag and drop images in ie
+        dragStart: function (e){
+          if (this.elementFocused){
+            return false;
+          }
+        }
+      };
+
+      this.attachListeners(this.$el, this.settings);
+
+    },
+    calculateVelocities: function (){
+     this.settings.velocity = this.capVelocity(this.prevXPos - this.xpos, this.settings.maxvelocity);
+     this.settings.velocityY = this.capVelocity(this.prevYPos - this.ypos, this.settings.maxvelocity);
+    },
+    end: function (){
+      if (this.xpos && this.prevXPos && this.settings.decelerate === false){
+        this.settings.decelerate = true;
+        this.calculateVelocities();
+        this.xpos = this.prevXPos = this.mouseDown = false;
+        this.move(this.$el, this.settings);
+      }
+    },
+    useTarget: function (target){
+      if ($.isFunction(this.settings.filterTarget)){
+        return this.settings.filterTarget.call(this, target) !== false;
+      }
+      return true;
+    },
+    start: function (clientX, clientY){
+      this.mouseDown = true;
+      this.settings.velocity = this.prevXPos = 0;
+      this.settings.velocityY = this.prevYPos = 0;
+      this.xpos = clientX;
+      this.ypos = clientY;
     },
     resetMouse: function (){
       this.xpos = false;
