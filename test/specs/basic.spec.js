@@ -15,11 +15,12 @@ test('drag the contents and see velocity', function(){
     var $wrapper = $('#wrapper').kinetic(),
         img = $wrapper.find('img')[0];
     dragOver($wrapper, img, [100,100], [10,10]);
-    ok($wrapper.data('kinetic-settings').velocity, 'there is velocity');
+    ok($wrapper.data().kinetic.settings.velocity, 'there is velocity');
 });
 test('we can detach kinetic', function(){
     var $wrapper = $('#wrapper').kinetic();
-    var settings = $wrapper.data('kinetic-settings');
+    var settings = $wrapper.data().kinetic.settings;
+
     $wrapper.kinetic('detach');
     equal($wrapper.hasClass('kinetic-active'), false, 'no active class');
     equal(hasEventAttached($wrapper, settings.events.inputDown), false, 'inputDown not attached');
@@ -38,7 +39,7 @@ test('we can trigger hardware acceleration', function(){
 
     ok($wrapper.css('-webkit-transform'), 'includes transform');
     dragOver($wrapper, img, [100,100], [10,10]);
-    ok($wrapper.data('kinetic-settings').velocity, 'there is velocity');
+    ok($wrapper.data().kinetic.settings.velocity, 'there is velocity');
 });
 test('we can prevent drag with filterTarget', function(){
     var $wrapper = $('#wrapper').kinetic({
@@ -47,7 +48,7 @@ test('we can prevent drag with filterTarget', function(){
         img = $wrapper.find('img')[0];
 
     dragOver($wrapper, img, [100,100], [10,10]);
-    equal($wrapper.data('kinetic-settings').velocity, 0, 'there should be no velocity');
+    equal($wrapper.data().kinetic.settings.velocity, 0, 'there should be no velocity');
 });
 test('we can listen for events', function(){
     var $wrapper = $('#wrapper').kinetic({
