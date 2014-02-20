@@ -25,11 +25,13 @@ module.exports = function(grunt) {
       }
     },
     watch: {
-      files: [
-        '<%= lint.files %>',
-        'test/specs/*.js'
-      ],
-      tasks: 'lint qunit'
+      all: {
+        files: [
+          'jquery.kinetic.js',
+          'test/specs/*.js'
+        ],
+        tasks: ['jshint', 'qunit']
+      }
     },
     jshint: {
       files: ['grunt.js', 'jquery.kinetic.js'],
@@ -67,6 +69,7 @@ module.exports = function(grunt) {
   });
 
   // Load tasks
+  grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-qunit');
   grunt.loadNpmTasks('grunt-contrib-uglify');

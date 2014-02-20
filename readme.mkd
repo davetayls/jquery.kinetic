@@ -92,12 +92,14 @@ Take a look at a demo on <http://the-taylors.org/jquery.kinetic>.
 
     Add your own method:
                 // add the method
-                $.kinetic.callMethods.do = function(settings, options){
-                    // method functionality
+                $.Kinetic.prototype.do = function(options){
+                    // this -> instance of Kinetic
+                    // this.settings -> get current settings
+                    // options -> options passed in from call
                 };
 
                 // use the method
-                $('#elem').kinetic('do', { ... });
+                $('#elem').kinetic('do', { options });
 
 Running the tests
 -------
@@ -117,12 +119,18 @@ Then run from the root of the source
 
 There are manual tests as html files within the `/test` folder.
 
-### Selenium suite
-
-The selenium tests are not functioning at the moment and are a work in progress.
-
 Changes
 -------
+
+### 2.0
+- rewrite of plugin to an OO plugin
+- **BREAKING CHANGES**
+  - call methods are now attached to the `$.Kinetic.prototype` and have
+    slightly different arguments
+  - no more $.kinetic namespace
+  - `Kinetic` constructor is attached to $.Kinetic
+  - `$('#wrapper').data('kinetic-settings')` has been removed in favour of
+    `instance = $('#wrapper').data('kinetic'); settings = instance.settings`
 
 ### 1.8.2
 - fix #34, #28, now will discard any subsequent attempts to bind `.kinetic()`

@@ -52,6 +52,7 @@
     return this;
   };
 
+  Kinetic.DATA_KEY = 'kinetic';
   Kinetic.DEFAULTS = {
     cursor: 'move',
     decelerate: true,
@@ -434,21 +435,25 @@
   };
 
 
+  // EXPOSE KINETIC CONSTRUCTOR
+  // ==========================
+  $.Kinetic = Kinetic;
+
   // KINETIC PLUGIN DEFINITION
   // =======================
 
   $.fn.kinetic = function (option, callOptions) {
     return this.each(function () {
-      var $this   = $(this);
-      var data    = $this.data('kinetic');
-      var options = $.extend({}, Kinetic.DEFAULTS, $this.data(), typeof option === 'object' && option);
+      var $this    = $(this);
+      var instance = $this.data(Kinetic.DATA_KEY);
+      var options  = $.extend({}, Kinetic.DEFAULTS, $this.data(), typeof option === 'object' && option);
 
-      if (!data) {
-        $this.data('kinetic', (data = new Kinetic(this, options)));
+      if (!instance) {
+        $this.data(Kinetic.DATA_KEY, (instance = new Kinetic(this, options)));
       }
 
       if (typeof option === 'string') {
-        data[option](callOptions);
+        instance[option](callOptions);
       }
 
     });

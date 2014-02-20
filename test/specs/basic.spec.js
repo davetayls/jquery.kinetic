@@ -129,5 +129,16 @@ test('we can bind kinetic twice to the same element', function(){
     dragOver($wrapper, img, [200,200], [10,10]);
     equal(count, 2);
 });
+test('we can use our own call method', 3, function(){
+
+  $.Kinetic.prototype.do = function(options){
+    equal(this instanceof $.Kinetic, true);
+    equal(this.settings.velocity, 0);
+    equal(options.what, 'something');
+  };
+  var $wrapper = $('#wrapper').kinetic();
+  $wrapper.kinetic('do', { what: 'something' });
+
+});
 
 
