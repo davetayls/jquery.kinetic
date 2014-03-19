@@ -65,6 +65,12 @@ module.exports = function(grunt) {
           }]
         }
       }
+    },
+    bump: {
+      options: {
+        push: false,
+        tagName: '%VERSION%'
+      }
     }
   });
 
