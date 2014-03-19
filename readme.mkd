@@ -16,6 +16,7 @@ This plugin works with [jQuery](http://jquery.com) and
 [Zepto](http://zeptojs.com/)
 
 ### Browsers ###
+
 - ie: 7,8,9
 - firefox: 3.6,4,5
 - chrome: 13
@@ -23,7 +24,7 @@ This plugin works with [jQuery](http://jquery.com) and
 - iOS Safari: 4
 
 ## Demos
-Take a look at a demo on <http://the-taylors.org/jquery.kinetic>.
+Take a look at a demo on <http://davetayls.me/jquery.kinetic>.
 
 ## Options
 
@@ -90,16 +91,31 @@ Take a look at a demo on <http://the-taylors.org/jquery.kinetic>.
     attach      Re-attach listeners and functionality previously detached using
                 the detach method
 
-    Add your own method:
-                // add the method
-                $.Kinetic.prototype.do = function(options){
-                    // this -> instance of Kinetic
-                    // this.settings -> get current settings
-                    // options -> options passed in from call
-                };
+Add your own methods
+--------------------
 
-                // use the method
-                $('#elem').kinetic('do', { options });
+There are some example methods in the `extra-methods` folder. You can also add your own.
+
+	$.Kinetic.prototype.do = function(options){
+	  // this -> instance of Kinetic
+	  // this.settings -> get current settings
+	  // options -> options passed in from call
+	};
+	
+	// use the method
+	$('#elem').kinetic('do', { options });
+
+Hack the core
+-------------
+
+You can now hook in to the core functionality to make changes.
+
+    var _start = $.Kinetic.prototype.start;
+    $.Kinetic.prototype.start = function(options){
+   	  // -> do something
+   	  _start.apply(this, arguments);
+    };
+
 
 Running the tests
 -------
@@ -126,7 +142,7 @@ Changes
 - rewrite of plugin to an OO plugin
 - **BREAKING CHANGES**
   - call methods are now attached to the `$.Kinetic.prototype` and have
-    slightly different arguments
+    slightly different arguments (see docs above)
   - no more $.kinetic namespace
   - `Kinetic` constructor is attached to $.Kinetic
   - `$('#wrapper').data('kinetic-settings')` has been removed in favour of

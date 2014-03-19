@@ -45,6 +45,7 @@
 
   var Kinetic = function (element, settings) {
     this.settings = settings;
+    this.el       = element;
     this.$el      = $(element);
 
     this._initElements();
