@@ -147,6 +147,8 @@ Changes
   - `Kinetic` constructor is attached to $.Kinetic
   - `$('#wrapper').data('kinetic-settings')` has been removed in favour of
     `instance = $('#wrapper').data('kinetic'); settings = instance.settings`
+  - All events `this` context is now the instance of `Kinetic`. 
+    To access the `$scroller` which was previously the context you can use `this.$el`
 
 ### 1.8.2
 - fix #34, #28, now will discard any subsequent attempts to bind `.kinetic()`

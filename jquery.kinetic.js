@@ -82,6 +82,8 @@
 
   Kinetic.prototype.start = function (options){
     this.settings = $.extend(this.settings, options);
+    this.velocity = options.velocity || this.velocity;
+    this.velocityY = options.velocityY || this.velocityY;
     this.settings.decelerate = false;
     this._move();
   };
@@ -90,12 +92,12 @@
     this.settings.decelerate = true;
   };
 
-  Kinetic.prototype.stop = function ($scroller){
-    this.settings.velocity = 0;
-    this.settings.velocityY = 0;
+  Kinetic.prototype.stop = function (){
+    this.velocity = 0;
+    this.velocityY = 0;
     this.settings.decelerate = true;
     if ($.isFunction(this.settings.stopped)){
-      this.settings.stopped.call($scroller);
+      this.settings.stopped.call(this);
     }
   };
 
@@ -133,8 +135,8 @@
       elementFocused: null
     });
 
-    this.settings.velocity = 0;
-    this.settings.velocityY = 0;
+    this.velocity = 0;
+    this.velocityY = 0;
 
     // make sure we reset everything when mouse up
     $(document)
@@ -204,14 +206,14 @@
       },
       scroll: function (e){
         if ($.isFunction(self.settings.moved)){
-          self.settings.moved.call(self.$el, self.settings);
+          self.settings.moved.call(self, self.settings);
         }
         if (e.preventDefault){
           e.preventDefault();
         }
       },
       inputClick: function (e){
-        if (Math.abs(self.settings.velocity) > 0){
+        if (Math.abs(self.velocity) > 0){
           e.preventDefault();
           return false;
         }
@@ -230,6 +232,7 @@
 
   Kinetic.prototype._inputmove = function (clientX, clientY){
     var $this = this.$el;
+    var el = this.el;
 
     if (!this.lastMove || new Date() > new Date(this.lastMove.getTime() + this.throttleTimeout)){
       this.lastMove = new Date();
@@ -242,9 +245,9 @@
         }
 
         this.settings.decelerate = false;
-        this.settings.velocity = this.settings.velocityY = 0;
-        $this[0].scrollLeft = this.settings.scrollLeft = this.settings.x ? $this[0].scrollLeft - (clientX - this.xpos) : $this[0].scrollLeft;
-        $this[0].scrollTop = this.settings.scrollTop = this.settings.y ? $this[0].scrollTop - (clientY - this.ypos) : $this[0].scrollTop;
+        this.velocity = this.velocityY = 0;
+        el.scrollLeft = this.settings.scrollLeft = this.settings.x ? el.scrollLeft - (clientX - this.xpos) : el.scrollLeft;
+        el.scrollTop = this.settings.scrollTop = this.settings.y ? el.scrollTop - (clientY - this.ypos) : el.scrollTop;
         this.prevXPos = this.xpos;
         this.prevYPos = this.ypos;
         this.xpos = clientX;
@@ -261,8 +264,8 @@
   };
 
   Kinetic.prototype._calculateVelocities = function (){
-    this.settings.velocity = this._capVelocity(this.prevXPos - this.xpos, this.settings.maxvelocity);
-    this.settings.velocityY = this._capVelocity(this.prevYPos - this.ypos, this.settings.maxvelocity);
+    this.velocity = this._capVelocity(this.prevXPos - this.xpos, this.settings.maxvelocity);
+    this.velocityY = this._capVelocity(this.prevYPos - this.ypos, this.settings.maxvelocity);
   };
 
   Kinetic.prototype._end = function (){
@@ -283,8 +286,8 @@
 
   Kinetic.prototype._start = function (clientX, clientY){
     this.mouseDown = true;
-    this.settings.velocity = this.prevXPos = 0;
-    this.settings.velocityY = this.prevYPos = 0;
+    this.velocity = this.prevXPos = 0;
+    this.velocityY = this.prevYPos = 0;
     this.xpos = clientX;
     this.ypos = clientY;
   };
@@ -329,64 +332,68 @@
       .removeClass(settings.deceleratingClass.left)
       .removeClass(settings.deceleratingClass.right);
 
-    if (settings.velocity > 0){
+    if (this.velocity > 0){
       $this.addClass(classes.right);
     }
-    if (settings.velocity < 0){
+    if (this.velocity < 0){
       $this.addClass(classes.left);
     }
-    if (settings.velocityY > 0){
+    if (this.velocityY > 0){
       $this.addClass(classes.down);
     }
-    if (settings.velocityY < 0){
+    if (this.velocityY < 0){
       $this.addClass(classes.up);
     }
 
   };
 
 
+  // do the actual kinetic movement
   Kinetic.prototype._move = function (){
-    // do the actual kinetic movement
     var $scroller = this.$el;
-    var scroller = $scroller[0];
+    var scroller = this.el;
     var self = this;
     var settings = self.settings;
 
     // set scrollLeft
     if (settings.x && scroller.scrollWidth > 0){
-      scroller.scrollLeft = settings.scrollLeft = scroller.scrollLeft + settings.velocity;
-      if (Math.abs(settings.velocity) > 0){
-        settings.velocity = settings.decelerate ?
-          self._decelerateVelocity(settings.velocity, settings.slowdown) : settings.velocity;
+      scroller.scrollLeft = settings.scrollLeft = scroller.scrollLeft + this.velocity;
+      if (Math.abs(this.velocity) > 0){
+        this.velocity = settings.decelerate ?
+          self._decelerateVelocity(this.velocity, settings.slowdown) : this.velocity;
       }
     } else {
-      settings.velocity = 0;
+      this.velocity = 0;
     }
 
     // set scrollTop
     if (settings.y && scroller.scrollHeight > 0){
-      scroller.scrollTop = settings.scrollTop = scroller.scrollTop + settings.velocityY;
-      if (Math.abs(settings.velocityY) > 0){
-        settings.velocityY = settings.decelerate ?
-          self._decelerateVelocity(settings.velocityY, settings.slowdown) : settings.velocityY;
+      scroller.scrollTop = settings.scrollTop = scroller.scrollTop + this.velocityY;
+      if (Math.abs(this.velocityY) > 0){
+        this.velocityY = settings.decelerate ?
+          self._decelerateVelocity(this.velocityY, settings.slowdown) : this.velocityY;
       }
     } else {
-      settings.velocityY = 0;
+      this.velocityY = 0;
     }
 
     self._setMoveClasses(settings.deceleratingClass);
 
     if ($.isFunction(settings.moved)){
-      settings.moved.call($scroller, settings);
+      settings.moved.call(this, settings);
     }
 
-    if (Math.abs(settings.velocity) > 0 || Math.abs(settings.velocityY) > 0){
-      // tick for next movement
-      window.requestAnimationFrame(function (){
-        self._move();
-      });
+    if (Math.abs(this.velocity) > 0 || Math.abs(this.velocityY) > 0){
+      if (!this.moving) {
+        this.moving = true;
+        // tick for next movement
+        window.requestAnimationFrame(function (){
+          self.moving = false;
+          self._move();
+        });
+      }
     } else {
-      self._stop();
+      self.stop();
     }
   };
 
@@ -415,8 +422,6 @@
   Kinetic.prototype._detachListeners = function (){
     var $this = this.$el;
     var settings = this.settings;
-
-    var element = $this[0];
     if ($.support.touch){
       $this
         .unbind('touchstart', settings.events.touchStart)

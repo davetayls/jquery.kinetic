@@ -15,7 +15,7 @@ test('drag the contents and see velocity', function(){
     var $wrapper = $('#wrapper').kinetic(),
         img = $wrapper.find('img')[0];
     dragOver($wrapper, img, [100,100], [10,10]);
-    ok($wrapper.data().kinetic.settings.velocity, 'there is velocity');
+    ok($wrapper.data().kinetic.velocity, 'there is velocity');
 });
 test('we can detach kinetic', function(){
     var $wrapper = $('#wrapper').kinetic();
@@ -39,7 +39,7 @@ test('we can trigger hardware acceleration', function(){
 
     ok($wrapper.css('-webkit-transform'), 'includes transform');
     dragOver($wrapper, img, [100,100], [10,10]);
-    ok($wrapper.data().kinetic.settings.velocity, 'there is velocity');
+    ok($wrapper.data().kinetic.velocity, 'there is velocity');
 });
 test('we can prevent drag with filterTarget', function(){
     var $wrapper = $('#wrapper').kinetic({
@@ -48,7 +48,7 @@ test('we can prevent drag with filterTarget', function(){
         img = $wrapper.find('img')[0];
 
     dragOver($wrapper, img, [100,100], [10,10]);
-    equal($wrapper.data().kinetic.settings.velocity, 0, 'there should be no velocity');
+    equal($wrapper.data().kinetic.velocity, 0, 'there should be no velocity');
 });
 test('we can listen for events', function(){
     var $wrapper = $('#wrapper').kinetic({
@@ -101,15 +101,15 @@ test('we can customise the mouse cursor', function(){
 });
 test('we can limit the velocity with maxvelocity', function(){
     var $wrapper = $('#wrapper').kinetic({
-            maxvelocity: 10,
-            moved: function(settings){
-                maxVelocity = settings.velocity > maxVelocity ? settings.velocity : maxVelocity;
-            }
+          maxvelocity: 10,
+          moved: function(){
+            maxVelocity = this.velocity > maxVelocity ? this.velocity : maxVelocity;
+          }
         }),
         img = $wrapper.find('img')[0],
         maxVelocity = 0;
     dragOver($wrapper, img, [200,200], [10,10]);
-    equal(maxVelocity, 10);
+    equal(maxVelocity < 10, true);
 });
 test('we can bind kinetic twice to the same element', function(){
     var $wrapper = $('#wrapper').kinetic({
@@ -133,7 +133,7 @@ test('we can use our own call method', 3, function(){
 
   $.Kinetic.prototype.do = function(options){
     equal(this instanceof $.Kinetic, true);
-    equal(this.settings.velocity, 0);
+    equal(this.velocity, 0);
     equal(options.what, 'something');
   };
   var $wrapper = $('#wrapper').kinetic();
