@@ -3,8 +3,8 @@
  */
  (function($){
 
- 	$.kinetic.callMethods.farRight = function(settings){
- 		this.scrollLeft = this.scrollWidth;
- 	};
+  $.Kinetic.prototype.farRight = function(options){
+    this.scrollLeft = this.scrollWidth;
+  };
 
  }(jQuery));

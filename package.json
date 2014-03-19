@@ -1,8 +1,8 @@
 {
   "name": "jquery.kinetic",
-  "version": "1.8.4",
+  "version": "2.0.0",
   "description": "adds smooth drag scrolling with gradual deceleration to containers",
-  "homepage": "http://davetayls.me/jquery.kinetic",
+  "homepage": "http://the-taylors.org/jquery.kinetic",
   "author": {
     "name": "Dave Taylor"
   },
@@ -17,7 +17,8 @@
     "grunt-string-replace": "0.2.x",
     "grunt-contrib-jshint": "~0.2.0",
     "grunt-contrib-qunit": "~0.2.0",
-    "grunt-contrib-uglify": "~0.2.0"
+    "grunt-contrib-uglify": "~0.2.0",
+    "grunt-contrib-watch": "~0.5.3"
   },
   "scripts": {
     "test": "grunt --verbose"

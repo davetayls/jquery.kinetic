@@ -1,6 +1,6 @@
 jQuery.kinetic
 ==============
-Dave Taylor <http://davetayls.me>
+Dave Taylor <http://the-taylors.org>
 The MIT License (MIT)
 
 Master: [![Build Status](https://secure.travis-ci.org/davetayls/jquery.kinetic.png?branch=master)](http://travis-ci.org/davetayls/jquery.kinetic)
@@ -10,20 +10,13 @@ All branches: [![Build Status](https://secure.travis-ci.org/davetayls/jquery.kin
 jQuery.kinetic is a simple plugin which adds smooth drag scrolling with
 gradual deceleration to containers.
 
-## Looking for Contributors
-
-This little plugin has been around for some time now. I originally created it for a little project and now it seems to be used by a fair number of you. I'm looking for a couple of people who actively use this plugin to help build on it there are a few fixes and enhancements I am working towards in a 2.0 version. The biggest being converting this to an OO plugin.
-
-Please get in touch if you're interested <http://twitter.com/davetayls>
-
-Thanks to those who have helped out so far.
-
 ## Compatibility
 
 This plugin works with [jQuery](http://jquery.com) and
 [Zepto](http://zeptojs.com/)
 
 ### Browsers ###
+
 - ie: 7,8,9
 - firefox: 3.6,4,5
 - chrome: 13
@@ -46,7 +39,7 @@ Take a look at a demo on <http://davetayls.me/jquery.kinetic>.
     triggerHardware {boolean} false             This adds css to the wrapper which
                                                 will trigger iOS to use hardware acceleration
 
-    filterTarget    {function(target, ev)}     Return false from this function to
+    filterTarget    {function(target)}          Return false from this function to
                                                 prevent capturing the scroll
 
     movingClass     {object}
@@ -98,40 +91,31 @@ Take a look at a demo on <http://davetayls.me/jquery.kinetic>.
     attach      Re-attach listeners and functionality previously detached using
                 the detach method
 
-    Add your own method:
-                // add the method
-                $.kinetic.callMethods.do = function(settings, options){
-                    // method functionality
-                };
+Add your own methods
+--------------------
 
-                // use the method
-                $('#elem').kinetic('do', { ... });
+There are some example methods in the `extra-methods` folder. You can also add your own.
 
+	$.Kinetic.prototype.do = function(options){
+	  // this -> instance of Kinetic
+	  // this.settings -> get current settings
+	  // options -> options passed in from call
+	};
+	
+	// use the method
+	$('#elem').kinetic('do', { options });
 
-Filtering Clickable elements
----
+Hack the core
+-------------
 
-If you need to allow events to be passed through the wrapper. For example to allow clicking on a link or an input then you can use `filterTarget` like so.
+You can now hook in to the core functionality to make changes.
 
-```javascript
-$('#wrapper').kinetic({
-    filterTarget: function(target, e){
-        if (!/down|start/.test(e.type)){
-            return !(/area|a|input/i.test(target.tagName));
-        }
-    }
-});
-```
+    var _start = $.Kinetic.prototype.start;
+    $.Kinetic.prototype.start = function(options){
+   	  // -> do something
+   	  _start.apply(this, arguments);
+    };
 
-Contributors
--------
-
- - @cc-lam
- - @dennipahmah
- - @edmelly
- - @peterhartree
- - @sidoh
- - @skovhus
 
 Running the tests
 -------
@@ -151,19 +135,20 @@ Then run from the root of the source
 
 There are manual tests as html files within the `/test` folder.
 
-### Selenium suite
-
-The selenium tests are not functioning at the moment and are a work in progress.
-
 Changes
 -------
 
-### 1.8.4
-- fix #50, Making attach function idempotent and cursor type configurable (@skovhus)
-- fix #51, Stop inputEnd from stealing mouse up events (@skovhus)
-
-### 1.8.3
-- fix #47, prevent drag on right mouse click
+### 2.0
+- rewrite of plugin to an OO plugin
+- **BREAKING CHANGES**
+  - call methods are now attached to the `$.Kinetic.prototype` and have
+    slightly different arguments (see docs above)
+  - no more $.kinetic namespace
+  - `Kinetic` constructor is attached to $.Kinetic
+  - `$('#wrapper').data('kinetic-settings')` has been removed in favour of
+    `instance = $('#wrapper').data('kinetic'); settings = instance.settings`
+  - All events `this` context is now the instance of `Kinetic`. 
+    To access the `$scroller` which was previously the context you can use `this.$el`
 
 ### 1.8.2
 - fix #34, #28, now will discard any subsequent attempts to bind `.kinetic()`

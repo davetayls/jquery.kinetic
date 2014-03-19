@@ -1,12 +1,13 @@
 /**
  * Kinetic method to jump to far right
  */
- (function($){
+(function($){
+  'use strict';
 
- 	$.kinetic.callMethods.jumpTo = function(settings, options){
-        $(this).kinetic('stop');
- 		this.scrollLeft = options.x;
-        this.scrollTop = options.y;
- 	};
+  $.Kinetic.prototype.jumpTo = function(options){
+    this.stop();
+    this.el.scrollLeft = options.x;
+    this.el.scrollTop = options.y;
+  };
 
- }(jQuery));
+}(jQuery));
