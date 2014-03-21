@@ -142,6 +142,10 @@ There are manual tests as html files within the `/test` folder.
 Changes
 -------
 
+### 2.0.1
+
+ - changes to allow attaching to `<body>` with `$('body').kinetic()` #61
+
 ### 2.0
 
 After several years, this plugin has had a major refactor. Big thanks to (@skovhus) for helping with this rewrite. Here's what has happened.
