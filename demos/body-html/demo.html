@@ -1,0 +1,177 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <title>jQuery.kinetic demos</title>
+        <meta name="viewport" content="width=550" />
+
+        <script src="../../lib/jquery-2.1.0.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../../jquery.kinetic.js" type="text/javascript" charset="utf-8"></script>
+
+        <style type="text/css">
+            body {
+            	font-family: arial, sans-serif;
+            }
+            pre code {
+            	background: #ddd;
+            	display: block;
+            	padding: 10px;
+            	-webkit-border-radius: 5px;
+            	-moz-border-radius: 5px;
+            	-o-border-radius: 5px;
+            	border-radius: 5px;
+            }
+            #container {
+            	margin: 0 auto;
+            	width: 2000px;
+            }
+            #wrapper {
+                border: solid 5px #000;
+                height: 400px;
+                width: 100%;
+                overflow: hidden;
+            }
+            #controls {
+            	padding: 10px;
+            }
+                #controls span {
+                	cursor: pointer;
+                }
+
+            .kinetic-moving-up {
+                border-top-color: green !important;
+            }
+            .kinetic-moving-down {
+                border-bottom-color: green !important;
+            }
+            .kinetic-moving-left {
+                border-left-color: green !important;
+            }
+            .kinetic-moving-right {
+                border-right-color: green !important;
+            }
+
+            .kinetic-decelerating-up {
+                border-top-color: red !important;
+            }
+            .kinetic-decelerating-down {
+                border-bottom-color: red !important;
+            }
+            .kinetic-decelerating-left {
+                border-left-color: red !important;
+            }
+            .kinetic-decelerating-right {
+                border-right-color: red !important;
+            }
+
+            #inner { width: 2000px; height: 100px; }
+                #inner img {
+                    display: block;
+                    width: 2000px;
+                }
+            #left, #right { cursor: pointer; }
+
+        </style>
+    </head>
+    <body>
+        <div id="container">
+            <h1>jQuery.kinetic demos</h1>
+            <p>
+                Drag a mouse or use touch gestures over the windows below to scroll
+                the pane. If you let go with momentum the scrolling will slow
+                gradually.
+            </p>
+            <div id="wrapper">
+                <div id="inner">
+                    <img src="../../lib/wembley.jpg" alt="wembley stadium" />
+                </div>
+            </div>
+            <div id="controls">
+                <span id="left">&lt; left</span> |
+                <span id="right">right &gt;</span>
+                &nbsp;&nbsp; -- &nbsp;&nbsp;
+                <span id="end">end (decelerates)</span>
+
+                &nbsp;&nbsp; -- &nbsp;&nbsp;
+                <span id="stop">stop (stop immediately)</span>
+
+                &nbsp;&nbsp; -- &nbsp;&nbsp;
+                <span id="detach">detach</span>
+
+                &nbsp;&nbsp; -- &nbsp;&nbsp;
+                <span id="attach">attach</span>
+            </div>
+            <script type="text/javascript" charset="utf-8">
+                var $scroller = $('body').kinetic();
+
+                $('#left').click(function(){
+                    $scroller.kinetic('start', { velocity: -10 });
+                });
+                $('#right').click(function(){
+                    $scroller.kinetic('start', { velocity: 10 });
+                });
+                $('#end').click(function(){
+                    $scroller.kinetic('end');
+                });
+                $('#stop').click(function(){
+                    $scroller.kinetic('stop');
+                });
+                $('#detach').click(function(){
+                    $scroller.kinetic('detach');
+                });
+                $('#attach').click(function(){
+                    $scroller.kinetic('attach');
+                });
+            </script>
+
+            <h2>Options</h2>
+            <p>
+                <a href="https://github.com/davetayls/jquery.kinetic/blob/master/readme.mkd">View Readme file</a>
+            </p>
+
+            <div id="spacer">
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean a laoreet ligula. Pellentesque dui risus, luctus vitae nunc in, faucibus aliquam mauris. Integer congue nisi mauris, a cursus nibh posuere nec. Proin at tristique lacus. Aenean enim ante, condimentum id accumsan in, vehicula nec purus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Mauris egestas nibh quis ligula auctor, et sollicitudin mi aliquet. Aliquam pretium ligula a diam auctor, eu tincidunt sem tempus. Proin scelerisque vitae nisl nec placerat. Phasellus dictum suscipit magna ut luctus. Morbi diam mauris, elementum ut mattis eleifend, semper in ligula.</p>
+
+                <p>Etiam augue sem, imperdiet id metus ornare, eleifend egestas nulla. Ut vestibulum lorem turpis, ut sollicitudin turpis placerat a. Cras feugiat faucibus nibh, ac egestas est porta in. In cursus nulla ac rhoncus vestibulum. Nullam dignissim pulvinar mauris, gravida auctor quam sodales euismod. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc auctor fringilla augue eget ultricies. Sed laoreet magna id lobortis mollis. Nullam lacinia urna nisl, ac lacinia felis blandit in. Morbi luctus vitae enim ac ullamcorper. Praesent mollis aliquam mi sed condimentum. Donec in turpis ut enim posuere lobortis vel at quam. Donec velit risus, feugiat a rutrum tempus, porttitor sagittis enim.</p>
+
+                <p>Suspendisse eu urna nec odio interdum imperdiet in vel ipsum. Etiam iaculis volutpat lacus, vitae mollis sapien ullamcorper pellentesque. Vivamus massa felis, cursus in justo vel, iaculis ultrices felis. Proin risus risus, sodales at ullamcorper nec, ornare quis metus. Mauris ullamcorper eros eget mauris auctor tristique. Quisque quis gravida lectus. Mauris ut tincidunt est. Etiam euismod, nisl eget eleifend dictum, leo urna commodo ante, sed placerat turpis purus vitae augue. Fusce quis ligula ullamcorper, rutrum diam id, vestibulum felis. Aenean rutrum facilisis nibh at vestibulum.</p>
+
+                <p>Nulla ornare nisl vitae nisi interdum dapibus. Maecenas tempor elit a tempor pellentesque. Praesent mi ligula, faucibus eget faucibus scelerisque, feugiat sit amet neque. Nulla fermentum tristique mauris et condimentum. Integer nibh neque, sodales in mauris consectetur, gravida bibendum quam. Cras posuere cursus ante. Nunc eget mauris auctor, laoreet dui vel, consequat orci. Vestibulum nec tempus odio. Cras neque lectus, ultricies nec ultricies at, convallis viverra felis. Mauris quis erat quis erat ullamcorper venenatis nec eu risus. Proin risus elit, porta non tristique in, faucibus vel quam. Nullam luctus eros at tellus commodo imperdiet.</p>
+
+                <p>Proin aliquam orci nibh, at venenatis lectus ornare non. Ut congue mauris ligula, a lacinia tellus accumsan et. Cras ipsum ante, ullamcorper sed fringilla quis, fringilla adipiscing risus. Aenean dapibus orci non orci sodales, sit amet vulputate ligula placerat. Suspendisse id neque tempor, posuere lacus vitae, pulvinar mi. Phasellus dapibus magna odio, sed varius est cursus ut. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Proin at magna sapien. Aenean quis arcu dignissim, luctus lacus sit amet, pulvinar quam. Pellentesque sed libero sapien. Interdum et malesuada fames ac ante ipsum primis in faucibus. Nulla velit odio, sodales eget est ut, tincidunt ullamcorper lorem. Maecenas eu sollicitudin ipsum. Nulla id lobortis nisl.</p>
+
+                <p>Nulla sed mi mi. Aliquam erat volutpat. Fusce bibendum consectetur elit sed pellentesque. Praesent leo erat, facilisis vitae turpis et, auctor sollicitudin dolor. Praesent ut neque venenatis, euismod nulla tincidunt, tincidunt libero. Fusce tincidunt euismod lacinia. Nunc vitae purus at dolor interdum tempus ornare at urna. Phasellus in rutrum nisi. Cras eu ullamcorper velit. Morbi ligula mauris, convallis vitae tellus in, rhoncus faucibus metus. Aenean eleifend dolor arcu, ac porttitor diam varius at. Nam nec quam mauris.</p>
+
+                <p>Nulla sed erat metus. Duis sodales mauris massa. Nunc leo nibh, tincidunt et nisi eget, pharetra ultricies lorem. Maecenas in ipsum hendrerit, tincidunt massa at, sagittis risus. Aenean sed velit pellentesque, hendrerit urna ac, commodo sapien. Pellentesque dictum ligula tincidunt porttitor ornare. Donec vitae dolor sodales, porta nibh quis, laoreet felis. Etiam fringilla consequat mattis.</p>
+
+                <p>Nunc blandit arcu euismod dictum ullamcorper. Nulla pharetra ornare risus, sed congue dui tempus non. Phasellus lobortis fermentum nisi, quis tristique urna cursus id. Curabitur lobortis at justo nec semper. Aenean mauris tellus, varius sit amet rutrum vitae, sollicitudin vel mauris. Sed sed tortor in ligula hendrerit tincidunt. Suspendisse potenti. In in augue in sem dapibus scelerisque sed ut ligula. Maecenas adipiscing urna at faucibus volutpat. Vestibulum ullamcorper varius laoreet. Quisque magna augue, consectetur nec laoreet ut, tincidunt nec augue. Ut fermentum quam mauris, at pharetra eros semper in. Curabitur hendrerit eros enim, ac pulvinar urna tempor in.</p>
+
+                <p>Proin ac ante placerat, molestie odio vitae, mattis tellus. Nullam viverra turpis eu nibh volutpat laoreet. Nullam porttitor lectus urna, vel suscipit nulla vestibulum at. Phasellus id nisi id erat imperdiet convallis. Vivamus ut nibh faucibus neque aliquam consequat. Quisque non lacus quis est aliquet condimentum eu ut mauris. Donec auctor erat orci, a imperdiet felis sollicitudin eu. Vivamus lacus nulla, aliquam a elit id, rutrum laoreet ligula. Maecenas dapibus eros posuere, eleifend nulla iaculis, convallis nulla. Nunc tristique risus ipsum, ac accumsan nulla suscipit non. Proin vulputate semper nunc ut varius. Proin erat lectus, vehicula vel tincidunt ut, volutpat non odio.</p>
+
+                <p>Donec a libero mi. Cras vitae quam sed urna consequat egestas. Donec eget lobortis turpis. Sed suscipit est quam, ut pharetra neque tincidunt eget. Phasellus imperdiet condimentum tristique. Donec bibendum, turpis sed vestibulum facilisis, odio sapien dictum ligula, sit amet iaculis purus felis vitae sapien. Integer velit turpis, sollicitudin vel ipsum at, viverra laoreet odio. Ut scelerisque fringilla quam, eu dictum metus semper vel.</p>
+
+                <p>Suspendisse sagittis rutrum tellus, eu ullamcorper neque facilisis vitae. Suspendisse nec hendrerit velit. Aliquam a velit blandit, rutrum arcu ac, volutpat lacus. Integer eu aliquam mi. Donec eget commodo sapien. Duis nec suscipit nulla, vitae luctus quam. Mauris at magna facilisis, bibendum leo at, sagittis neque. Donec pellentesque consectetur odio, vel hendrerit lacus varius ac. Maecenas volutpat elit quam, ut consequat nulla accumsan at.</p>
+
+                <p>Cras id condimentum nulla. Praesent ut dictum odio. Proin fermentum neque eu placerat aliquam. Maecenas orci purus, aliquet ac massa et, aliquet eleifend enim. Pellentesque accumsan lacus ut velit tincidunt euismod. Sed lobortis rhoncus gravida. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Interdum et malesuada fames ac ante ipsum primis in faucibus. Etiam vulputate sit amet nunc quis rutrum. Aenean tincidunt augue eu odio gravida sollicitudin. Pellentesque sed sapien ut diam placerat eleifend vitae a leo. Vivamus rutrum, augue nec interdum interdum, diam sem vulputate elit, nec pharetra lacus tortor nec metus. Curabitur aliquet dui ipsum, non vehicula purus tincidunt tincidunt. Aenean malesuada dignissim dolor eu dapibus. Morbi libero odio, mollis sit amet sagittis vel, tempus ut nisi.</p>
+
+                <p>Donec diam enim, consequat ut mi a, volutpat luctus nulla. Sed sed eros in erat gravida gravida. Donec dignissim lacus ut quam varius, a consequat mauris vulputate. Aliquam placerat augue nec suscipit vehicula. Cras sit amet neque non mi gravida tincidunt. Nulla condimentum ac velit at ullamcorper. Cras nec lacinia lectus, eget cursus odio. Proin ullamcorper ultrices lacus, eu hendrerit leo volutpat at. Proin eget convallis quam, ac scelerisque diam.</p>
+
+                <p>Quisque rutrum justo erat, id semper odio semper eu. Suspendisse imperdiet tristique dolor, a tincidunt nibh sollicitudin eu. Sed dignissim eros non felis tincidunt gravida. Duis egestas augue sed lorem facilisis, eget sollicitudin velit placerat. Aliquam eget placerat dolor. Etiam et neque erat. In rhoncus pellentesque fringilla. Fusce aliquam pellentesque urna, ac tincidunt dui pulvinar a. In hac habitasse platea dictumst. Fusce dapibus justo id condimentum condimentum.</p>
+
+                <p>Duis eu augue rutrum, ultrices elit in, vulputate nibh. Morbi venenatis nulla quis volutpat tempus. Praesent enim odio, ultricies et vulputate ut, facilisis consectetur quam. Donec nec tincidunt felis. Cras arcu odio, blandit quis nisl et, ultricies pulvinar felis. Donec ut viverra orci. Praesent aliquet fringilla elementum. Duis lobortis erat non mauris adipiscing, et tempor odio egestas.</p>
+
+                <p>In hac habitasse platea dictumst. Pellentesque feugiat nunc at enim tempus, id suscipit ligula rhoncus. Pellentesque egestas vestibulum justo vitae condimentum. Curabitur vitae metus luctus, egestas mauris ut, tempor odio. Nullam sed ante ultricies, pulvinar tellus mollis, luctus ipsum. Etiam porta pharetra enim at condimentum. Curabitur ornare diam quis massa accumsan, in accumsan ante sagittis. Sed dapibus metus urna, eu hendrerit odio dictum sit amet. Suspendisse porta ligula libero, in elementum arcu ullamcorper et. Nam convallis cursus erat sed mollis. Integer vel tristique ligula. Sed auctor rhoncus varius.</p>
+
+                <p>Vivamus lacinia tempus nunc id gravida. Praesent dictum libero non pellentesque pretium. Suspendisse sodales, ligula non dictum rutrum, tortor libero convallis felis, vitae sollicitudin ligula ligula in nisi. Nunc malesuada, quam in dapibus egestas, orci purus luctus erat, sit amet condimentum erat quam aliquet enim. Duis facilisis varius dui, vitae feugiat urna suscipit eget. Fusce ut odio eu sem commodo tincidunt. Aenean ultricies felis ac neque volutpat, ut pharetra dolor placerat. Nulla viverra suscipit tortor sit amet fringilla. Sed rutrum tortor sed varius sagittis. Sed pretium mollis felis, tincidunt molestie orci scelerisque et.</p>
+
+                <p>Nulla ut ligula fermentum, euismod urna eu, faucibus quam. Duis fermentum tortor ut eros faucibus, bibendum fringilla urna lacinia. Nunc euismod massa ac lectus volutpat, sed dapibus justo volutpat. Praesent in lacinia augue. Etiam ligula eros, ultricies sed imperdiet ut, placerat sed magna. Morbi pretium nibh a justo condimentum lacinia. Nulla ut nisi vel justo dignissim iaculis. Etiam nec ullamcorper risus, a dapibus lectus. Vivamus mollis nisl eget orci pellentesque varius. In vitae malesuada sem, ut iaculis diam. Ut pharetra nulla id ante feugiat, nec dictum lorem facilisis. Morbi id lorem ultrices, consectetur ante a, tincidunt sem. Duis est libero, consectetur et tortor eget, commodo mollis mauris.</p>
+
+                <p>Maecenas at augue non risus auctor mattis. Duis quis ultrices lectus. Nam nec lorem eget felis gravida adipiscing. In facilisis enim at enim ultrices tristique. Nulla ullamcorper risus ac placerat rhoncus. Integer aliquam mauris nec quam molestie, eu luctus purus luctus. Ut consectetur nisl eget mauris accumsan, eu auctor quam rhoncus. Nullam rutrum velit eget lobortis porta. Duis luctus odio facilisis, molestie est et, ultricies risus. Quisque dui magna, sollicitudin et lacus vel, dignissim ultricies nisi. Integer faucibus sollicitudin lorem eget pretium. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.</p>
+
+                <p>Nunc imperdiet consequat arcu quis faucibus. Curabitur fermentum congue mattis. Nunc tristique dapibus nibh, sit amet tincidunt magna volutpat a. Maecenas elit felis, venenatis sit amet sem ac, malesuada suscipit elit. Aenean luctus mattis felis. Praesent auctor eu diam vel interdum. Vestibulum vel mattis tellus. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Curabitur vel risus in tellus porta molestie. Donec hendrerit ac diam ac condimentum. Suspendisse condimentum fermentum purus sed consequat</p>
+
+            </div>
+
+
+        </div>
+    </body>
+</html>

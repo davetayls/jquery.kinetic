@@ -246,8 +246,15 @@
 
         this.settings.decelerate = false;
         this.velocity = this.velocityY = 0;
-        el.scrollLeft = this.settings.scrollLeft = this.settings.x ? el.scrollLeft - (clientX - this.xpos) : el.scrollLeft;
-        el.scrollTop = this.settings.scrollTop = this.settings.y ? el.scrollTop - (clientY - this.ypos) : el.scrollTop;
+
+        var scrollLeft = this.scrollLeft();
+        var scrollTop = this.scrollTop();
+        var movedX = (clientX - this.xpos);
+        var movedY = (clientY - this.ypos);
+
+        this.scrollLeft(this.settings.x ? scrollLeft - movedX : scrollLeft);
+        this.scrollTop(this.settings.y ? scrollTop - movedY : scrollTop);
+
         this.prevXPos = this.xpos;
         this.prevYPos = this.ypos;
         this.xpos = clientX;
@@ -357,7 +364,7 @@
 
     // set scrollLeft
     if (settings.x && scroller.scrollWidth > 0){
-      scroller.scrollLeft = settings.scrollLeft = scroller.scrollLeft + this.velocity;
+      this.scrollLeft(this.scrollLeft() + this.velocity);
       if (Math.abs(this.velocity) > 0){
         this.velocity = settings.decelerate ?
           self._decelerateVelocity(this.velocity, settings.slowdown) : this.velocity;
@@ -368,7 +375,7 @@
 
     // set scrollTop
     if (settings.y && scroller.scrollHeight > 0){
-      scroller.scrollTop = settings.scrollTop = scroller.scrollTop + this.velocityY;
+      this.scrollTop(this.scrollTop() + this.velocityY);
       if (Math.abs(this.velocityY) > 0){
         this.velocityY = settings.decelerate ?
           self._decelerateVelocity(this.velocityY, settings.slowdown) : this.velocityY;
@@ -394,6 +401,35 @@
       }
     } else {
       self.stop();
+    }
+  };
+
+  // get current scroller to apply positioning to
+  Kinetic.prototype._getScroller = function(){
+    var $scroller = this.$el;
+    if (this.$el.is('body') || this.$el.is('html')){
+      $scroller = $(window);
+    }
+    return $scroller;
+  };
+
+  // set the scroll position
+  Kinetic.prototype.scrollLeft = function(left){
+    var $scroller = this._getScroller();
+    if (typeof left === 'number'){
+      $scroller.scrollLeft(left);
+      this.settings.scrollLeft = left;
+    } else {
+      return $scroller.scrollLeft();
+    }
+  };
+  Kinetic.prototype.scrollTop = function(top){
+    var $scroller = this._getScroller();
+    if (typeof top === 'number'){
+      $scroller.scrollTop(top);
+      this.settings.scrollTop = top;
+    } else {
+      return $scroller.scrollTop();
     }
   };
 
