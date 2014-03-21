@@ -170,7 +170,6 @@
       touchMove: function (e){
         var touch;
         if (self.mouseDown){
-		  
           touch = e.originalEvent.touches[0];
           self._inputmove(touch.clientX, touch.clientY);
           if (e.preventDefault){
@@ -180,7 +179,6 @@
       },
       inputDown: function (e){
         if (self._useTarget(e.target)){
-		  
           self._start(e.clientX, e.clientY);
           self.elementFocused = e.target;
           if (e.target.nodeName === 'IMG'){
@@ -200,8 +198,6 @@
       },
       inputMove: function (e){
         if (self.mouseDown){
-		  
-		  
           self._inputmove(e.clientX, e.clientY);
           if (e.preventDefault){
             e.preventDefault();
@@ -229,7 +225,6 @@
         }
       }
     };
-
     this._attachListeners(this.$el, this.settings);
 
   };
@@ -252,13 +247,11 @@
   };
   
   Kinetic.prototype._inputmove = function (clientX, clientY){
-  
     var $this = this.$el;
     var el = this.el;
 	
     if (!this.lastMove || new Date() > new Date(this.lastMove.getTime() + this.throttleTimeout)){
       this.lastMove = new Date();
-
       if (this.mouseDown && (this.xpos || this.ypos)){
         if (this.elementFocused){
           $(this.elementFocused).blur();
@@ -266,7 +259,6 @@
 		  // do not focus when el is HTML && IE in use
 		  if (!$(el).is('html') && !this.detectIE()) $this.focus();
         }
-		
         this.settings.decelerate = false;
         this.velocity = this.velocityY = 0;
         el.scrollLeft = this.settings.scrollLeft = this.settings.x ? el.scrollLeft - (clientX - this.xpos) : el.scrollLeft;
