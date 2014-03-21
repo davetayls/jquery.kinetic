@@ -170,6 +170,7 @@
       touchMove: function (e){
         var touch;
         if (self.mouseDown){
+		  
           touch = e.originalEvent.touches[0];
           self._inputmove(touch.clientX, touch.clientY);
           if (e.preventDefault){
@@ -179,6 +180,7 @@
       },
       inputDown: function (e){
         if (self._useTarget(e.target)){
+		  
           self._start(e.clientX, e.clientY);
           self.elementFocused = e.target;
           if (e.target.nodeName === 'IMG'){
@@ -198,6 +200,8 @@
       },
       inputMove: function (e){
         if (self.mouseDown){
+		  
+		  
           self._inputmove(e.clientX, e.clientY);
           if (e.preventDefault){
             e.preventDefault();
@@ -230,10 +234,28 @@
 
   };
 
+  Kinetic.prototype.detectIE = function () {
+	var ua = window.navigator.userAgent;
+	var msie = ua.indexOf('MSIE ');
+	var trident = ua.indexOf('Trident/');
+	if (msie > 0) {
+		// IE 10 or older => return version number
+		return parseInt(ua.substring(msie + 5, ua.indexOf('.', msie)), 10);
+	}
+	if (trident > 0) {
+		// IE 11 (or newer) => return version number
+		var rv = ua.indexOf('rv:');
+		return parseInt(ua.substring(rv + 3, ua.indexOf('.', rv)), 10);
+	}
+	// other browser
+	return false;
+  };
+  
   Kinetic.prototype._inputmove = function (clientX, clientY){
+  
     var $this = this.$el;
     var el = this.el;
-
+	
     if (!this.lastMove || new Date() > new Date(this.lastMove.getTime() + this.throttleTimeout)){
       this.lastMove = new Date();
 
@@ -241,15 +263,19 @@
         if (this.elementFocused){
           $(this.elementFocused).blur();
           this.elementFocused = null;
-          $this.focus();
+		  // do not focus when el is HTML && IE in use
+		  if (!$(el).is('html') && !this.detectIE()) $this.focus();
         }
-
+		
         this.settings.decelerate = false;
         this.velocity = this.velocityY = 0;
         el.scrollLeft = this.settings.scrollLeft = this.settings.x ? el.scrollLeft - (clientX - this.xpos) : el.scrollLeft;
-        el.scrollTop = this.settings.scrollTop = this.settings.y ? el.scrollTop - (clientY - this.ypos) : el.scrollTop;
+        el.scrollTop  = this.settings.scrollTop = this.settings.y ? el.scrollTop - (clientY - this.ypos) : el.scrollTop;
+
         this.prevXPos = this.xpos;
         this.prevYPos = this.ypos;
+		
+		
         this.xpos = clientX;
         this.ypos = clientY;
 
