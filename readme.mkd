@@ -10,6 +10,17 @@ All branches: [![Build Status](https://secure.travis-ci.org/davetayls/jquery.kin
 jQuery.kinetic is a simple plugin which adds smooth drag scrolling with
 gradual deceleration to containers.
 
+## Installation
+
+### Bower
+
+	$ bower install jquery.kinetic --save
+
+### Script tag
+You can add the script to the page.
+
+	<script src="jquery.kinetic.js"></script>
+
 ## Major new release 2.0 has BREAKING CHANGES
 
 See release history below for details.
