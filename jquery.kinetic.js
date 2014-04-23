@@ -220,7 +220,7 @@
       },
       // prevent drag and drop images in ie
       dragStart: function (e){
-        if (self.elementFocused){
+        if (self._useTarget(e.target) && self.elementFocused){
           return false;
         }
       }
