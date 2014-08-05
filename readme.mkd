@@ -167,6 +167,8 @@ There are manual tests as html files within the `/test` folder.
 
 Changes
 -------
+### 2.0.3
+ - only prevent drag and drop if element is usable target (@andrew-pause)
 
 ### 2.0.1
 
