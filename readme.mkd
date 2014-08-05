@@ -41,6 +41,21 @@ This plugin works with [jQuery](http://jquery.com) and
 ## Demos
 Take a look at a demo on <http://davetayls.me/jquery.kinetic>.
 
+Filtering Clickable elements
+---
+
+If you need to allow events to be passed through the wrapper. For example to allow clicking on a link or an input then you can use `filterTarget` like so.
+
+```javascript
+$('#wrapper').kinetic({
+    filterTarget: function(target, e){
+        if (!/down|start/.test(e.type)){
+            return !(/area|a|input/i.test(target.tagName));
+        }
+    }
+});
+```
+
 ## Options
 
     cursor          {string}    default: move   Specify the cursor to use on the wrapper
