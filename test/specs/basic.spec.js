@@ -50,6 +50,24 @@ test('we can prevent drag with filterTarget', function(){
     dragOver($wrapper, img, [100,100], [10,10]);
     equal($wrapper.data().kinetic.velocity, 0, 'there should be no velocity');
 });
+test('filterTarget is passed both a target and event', function() {
+    var targetValid = false;
+    var eventValid = false;
+
+    var $wrapper = $('#wrapper').kinetic({
+        filterTarget: function(target, event){ 
+            if (target) targetValid = true;
+            if (event) eventValid = true;
+        }
+    });
+
+    var img = $wrapper.find('img')[0];
+
+    dragOver($wrapper, img, [100, 100], [10, 10]);
+    equal(targetValid, true, 'there should be a target passed to filterTarget');
+    equal(eventValid, true, 'there should be a event passed to filterTarget');
+
+});
 test('we can listen for events', function(){
     var $wrapper = $('#wrapper').kinetic({
             moved: function(){ moved++; },
