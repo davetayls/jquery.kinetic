@@ -161,7 +161,7 @@
     this.settings.events = {
       touchStart: function (e){
         var touch;
-        if (self._useTarget(e.target)){
+        if (self._useTarget(e.target, e)){
           touch = e.originalEvent.touches[0];
           self._start(touch.clientX, touch.clientY);
           e.stopPropagation();
@@ -178,7 +178,7 @@
         }
       },
       inputDown: function (e){
-        if (self._useTarget(e.target)){
+        if (self._useTarget(e.target, e)){
           self._start(e.clientX, e.clientY);
           self.elementFocused = e.target;
           if (e.target.nodeName === 'IMG'){
@@ -188,7 +188,7 @@
         }
       },
       inputEnd: function (e){
-        if (self._useTarget(e.target)){
+        if (self._useTarget(e.target, e)){
           self._end();
           self.elementFocused = null;
           if (e.preventDefault){
@@ -220,7 +220,7 @@
       },
       // prevent drag and drop images in ie
       dragStart: function (e){
-        if (self._useTarget(e.target) && self.elementFocused){
+        if (self._useTarget(e.target, e) && self.elementFocused){
           return false;
         }
       }
@@ -284,9 +284,9 @@
     }
   };
 
-  Kinetic.prototype._useTarget = function (target){
+  Kinetic.prototype._useTarget = function (target, event){
     if ($.isFunction(this.settings.filterTarget)){
-      return this.settings.filterTarget.call(this, target) !== false;
+      return this.settings.filterTarget.call(this, target, event) !== false;
     }
     return true;
   };
