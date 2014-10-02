@@ -467,11 +467,11 @@
       $this
         .unbind('mousedown', settings.events.inputDown)
         .unbind('mouseup', settings.events.inputEnd)
-        .unbind('mousemove', settings.events.inputMove)
-        .unbind('scroll', settings.events.scroll);
+        .unbind('mousemove', settings.events.inputMove);
     }
     $this
       .unbind('click', settings.events.inputClick)
+      .unbind('scroll', settings.events.scroll)
       .unbind('selectstart', selectStart) // prevent selection when dragging
       .unbind('dragstart', settings.events.dragStart);
   };
