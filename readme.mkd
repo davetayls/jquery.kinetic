@@ -167,6 +167,9 @@ There are manual tests as html files within the `/test` folder.
 
 Changes
 -------
+### 2.0.5
+ - Fix detach scroll event for touch devices (@Jaemu)
+
 ### 2.0.4
  - Fix the useTarget call to include the event as per the example in the readme for ignoring scroll events. (@mooreOn)
 

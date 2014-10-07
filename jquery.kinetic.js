@@ -1,5 +1,5 @@
 /**
- jQuery.kinetic v2.0.3
+ jQuery.kinetic v2.0.4
  Dave Taylor http://davetayls.me
 
  @license The MIT License (MIT)
