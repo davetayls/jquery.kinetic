@@ -85,12 +85,10 @@ $('#wrapper').kinetic({
         right:      {string}    default: 'kinetic-decelerating-right'
 
     Listeners:  All listeners are called with:
-                - this = jQuery object holding the scroll container
-                - a single settings argument which are all the options and
-                  { scrollLeft, scrollTop, velocity, velocityY }
+                - this = the instance of the Kinetic class
 
-    moved       {function(settings)}           A function which is called on every move
-    stopped     {function(settings)}           A function which is called once all
+    moved       {function()}           A function which is called on every move
+    stopped     {function()}           A function which is called once all
                                                movement has stopped
 
     Methods:    You can call methods by running the kinetic plugin
