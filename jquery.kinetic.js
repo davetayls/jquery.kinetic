@@ -1,5 +1,5 @@
 /**
- jQuery.kinetic v2.0.4
+ jQuery.kinetic v2.0.6
  Dave Taylor http://davetayls.me
 
  @license The MIT License (MIT)
@@ -442,12 +442,13 @@
         .bind('touchstart', settings.events.touchStart)
         .bind('touchend', settings.events.inputEnd)
         .bind('touchmove', settings.events.touchMove);
-    } else {
-      $this
-        .mousedown(settings.events.inputDown)
-        .mouseup(settings.events.inputEnd)
-        .mousemove(settings.events.inputMove);
     }
+    
+    $this
+      .mousedown(settings.events.inputDown)
+      .mouseup(settings.events.inputEnd)
+      .mousemove(settings.events.inputMove);
+
     $this
       .click(settings.events.inputClick)
       .scroll(settings.events.scroll)
@@ -463,12 +464,13 @@
         .unbind('touchstart', settings.events.touchStart)
         .unbind('touchend', settings.events.inputEnd)
         .unbind('touchmove', settings.events.touchMove);
-    } else {
-      $this
-        .unbind('mousedown', settings.events.inputDown)
-        .unbind('mouseup', settings.events.inputEnd)
-        .unbind('mousemove', settings.events.inputMove);
     }
+
+    $this
+      .unbind('mousedown', settings.events.inputDown)
+      .unbind('mouseup', settings.events.inputEnd)
+      .unbind('mousemove', settings.events.inputMove);
+
     $this
       .unbind('click', settings.events.inputClick)
       .unbind('scroll', settings.events.scroll)

@@ -167,6 +167,9 @@ There are manual tests as html files within the `/test` folder.
 
 Changes
 -------
+### 2.0.6
+ - Fix touch and mouse bindings so that an external pointing device can be used with a touchscreen device.
+
 ### 2.0.5
  - Fix detach scroll event for touch devices (@Jaemu)
 
