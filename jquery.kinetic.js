@@ -58,6 +58,7 @@
     cursor: 'move',
     decelerate: true,
     triggerHardware: false,
+    threshold: 0,
     y: true,
     x: true,
     slowdown: 0.9,
@@ -163,6 +164,7 @@
         var touch;
         if (self._useTarget(e.target, e)){
           touch = e.originalEvent.touches[0];
+          self.threshold = self._threshold(e.target, e);
           self._start(touch.clientX, touch.clientY);
           e.stopPropagation();
         }
@@ -179,6 +181,7 @@
       },
       inputDown: function (e){
         if (self._useTarget(e.target, e)){
+          self.threshold = self._threshold(e.target, e);
           self._start(e.clientX, e.clientY);
           self.elementFocused = e.target;
           if (e.target.nodeName === 'IMG'){
@@ -238,33 +241,40 @@
       this.lastMove = new Date();
 
       if (this.mouseDown && (this.xpos || this.ypos)){
-        if (this.elementFocused){
-          $(this.elementFocused).blur();
-          this.elementFocused = null;
-          $this.focus();
-        }
+        if(this.threshold <= 0){
+          if (this.elementFocused){
+            $(this.elementFocused).blur();
+            this.elementFocused = null;
+            $this.focus();
+          }
 
-        this.settings.decelerate = false;
-        this.velocity = this.velocityY = 0;
+          this.settings.decelerate = false;
+          this.velocity = this.velocityY = 0;
 
-        var scrollLeft = this.scrollLeft();
-        var scrollTop = this.scrollTop();
-        var movedX = (clientX - this.xpos);
-        var movedY = (clientY - this.ypos);
+          var scrollLeft = this.scrollLeft();
+          var scrollTop = this.scrollTop();
+          var movedX = (clientX - this.xpos);
+          var movedY = (clientY - this.ypos);
 
-        this.scrollLeft(this.settings.x ? scrollLeft - movedX : scrollLeft);
-        this.scrollTop(this.settings.y ? scrollTop - movedY : scrollTop);
+          this.scrollLeft(this.settings.x ? scrollLeft - movedX : scrollLeft);
+          this.scrollTop(this.settings.y ? scrollTop - movedY : scrollTop);
 
-        this.prevXPos = this.xpos;
-        this.prevYPos = this.ypos;
-        this.xpos = clientX;
-        this.ypos = clientY;
+          this.prevXPos = this.xpos;
+          this.prevYPos = this.ypos;
+          this.xpos = clientX;
+          this.ypos = clientY;
 
-        this._calculateVelocities();
-        this._setMoveClasses(this.settings.movingClass);
+          this._calculateVelocities();
+          this._setMoveClasses(this.settings.movingClass);
 
-        if ($.isFunction(this.settings.moved)){
-          this.settings.moved.call($this, this.settings);
+          if ($.isFunction(this.settings.moved)){
+            this.settings.moved.call($this, this.settings);
+          }
+        } else {
+          var movedX = (clientX - this.xpos);
+          var movedY = (clientY - this.ypos);
+          var moved = Math.sqrt(movedX * movedX + movedY * movedY);
+          this.threshold -= moved;
         }
       }
     }
@@ -289,6 +299,13 @@
       return this.settings.filterTarget.call(this, target, event) !== false;
     }
     return true;
+  };
+
+  Kinetic.prototype._threshold = function (target, event){
+    if ($.isFunction(this.settings.threshold)){
+      return this.settings.threshold.call(this, target, event);
+    }
+    return this.settings.threshold;
   };
 
   Kinetic.prototype._start = function (clientX, clientY){
