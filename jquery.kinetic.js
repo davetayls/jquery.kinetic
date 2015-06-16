@@ -273,6 +273,10 @@
         } else {
           var movedX = (clientX - this.xpos);
           var movedY = (clientY - this.ypos);
+          this.prevXPos = this.xpos;
+          this.prevYPos = this.ypos;
+          this.xpos = clientX;
+          this.ypos = clientY;
           var moved = Math.sqrt(movedX * movedX + movedY * movedY);
           this.threshold -= moved;
         }
