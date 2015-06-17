@@ -163,9 +163,15 @@
       touchStart: function (e){
         var touch;
         if (self._useTarget(e.target, e)){
+          if ($.isFunction(self.settings.started)) {
+            self.settings.started.call(self, e.target, e);
+          }
           touch = e.originalEvent.touches[0];
           self.threshold = self._threshold(e.target, e);
           self._start(touch.clientX, touch.clientY);
+          if (self.threshold <= 0 && $.isFunction(self.settings.startedMoving)) {
+            self.settings.startedMoving.call(self);
+          }
           e.stopPropagation();
         }
       },
@@ -181,8 +187,14 @@
       },
       inputDown: function (e){
         if (self._useTarget(e.target, e)){
+          if ($.isFunction(self.settings.started)) {
+            self.settings.started.call(self, e.target, e);
+          }
           self.threshold = self._threshold(e.target, e);
           self._start(e.clientX, e.clientY);
+          if (self.threshold <= 0 && $.isFunction(self.settings.startedMoving)) {
+            self.settings.startedMoving.call(self);
+          }
           self.elementFocused = e.target;
           if (e.target.nodeName === 'IMG'){
             e.preventDefault();
@@ -196,6 +208,9 @@
           self.elementFocused = null;
           if (e.preventDefault){
             e.preventDefault();
+          }
+          if ($.isFunction(self.settings.ended)) {
+            self.settings.ended.call(self, e.target, e);
           }
         }
       },
@@ -279,6 +294,9 @@
           this.ypos = clientY;
           var moved = Math.sqrt(movedX * movedX + movedY * movedY);
           this.threshold -= moved;
+          if (this.threshold <= 0 && $.isFunction(this.settings.startedMoving)) {
+            this.settings.startedMoving.call(this);
+          }
         }
       }
     }
