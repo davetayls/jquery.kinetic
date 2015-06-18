@@ -158,5 +158,31 @@ test('we can use our own call method', 3, function(){
   $wrapper.kinetic('do', { what: 'something' });
 
 });
-
-
+test('we can pass the threshold', function(){
+    var $wrapper = $('#wrapper').kinetic({
+          threshold: 50,
+          moved: function(){
+            count++;
+          }
+        }),
+        img = $wrapper.find('img')[0],
+        count = 0,
+        self = $wrapper.data().kinetic;
+    dragOver($wrapper, img, [100,100], [130,140]);
+    equal(count > 0, true);
+    equal(self.threshold, 0);
+});
+test('we can stay within the threshold', function(){
+    var $wrapper = $('#wrapper').kinetic({
+          threshold: 50,
+          moved: function(){
+            count++;
+          }
+        }),
+        img = $wrapper.find('img')[0],
+        count = 0,
+        self = $wrapper.data().kinetic;
+    dragOver($wrapper, img, [100,100], [129,139]);
+    equal(count > 0, false);
+    equal(self.threshold, 50);
+});
