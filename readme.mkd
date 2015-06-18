@@ -62,6 +62,7 @@ $('#wrapper').kinetic({
 
     cursor          {string}    default: move   Specify the cursor to use on the wrapper
     slowdown        {number}    default: 0.9    This option affects the speed at which the scroll slows
+    threshold       {number|function(target, e)}    default: 0   This is the number of pixels the mouse needs to move before the element starts scrolling
     x               {string}    default: true   Toggles movement along the x axis
     y               {string}    default: true   Toggles movement along the y axis
     maxvelocity     {number}    default: 40     This option puts a cap on speed at which the container
@@ -89,8 +90,8 @@ $('#wrapper').kinetic({
     Listeners:  All listeners are called with:
                 - this = the instance of the Kinetic class
 
-    moved       {function()}           A function which is called on every move
-    stopped     {function()}           A function which is called once all
+    moved       {function(target, e)}           A function which is called on every move
+    stopped     {function(target, e)}           A function which is called once all
                                                movement has stopped
 
     Methods:    You can call methods by running the kinetic plugin
