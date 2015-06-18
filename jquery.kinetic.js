@@ -91,9 +91,9 @@
 
   Kinetic.prototype.end = function (){
     this.settings.decelerate = true;
-		if ($.isFunction(this.settings.ended)) {
-			this.settings.ended.call(this);
-		}
+    if ($.isFunction(this.settings.ended)) {
+      this.settings.ended.call(this);
+    }
   };
 
   Kinetic.prototype.stop = function (){
@@ -307,9 +307,9 @@
   Kinetic.prototype._end = function (){
     if (this.xpos && this.prevXPos && this.settings.decelerate === false){
       this.settings.decelerate = true;
-			if ($.isFunction(this.settings.ended)) {
-				this.settings.ended.call(this);
-			}
+      if ($.isFunction(this.settings.ended)) {
+        this.settings.ended.call(this);
+      }
       this._calculateVelocities();
       this.xpos = this.prevXPos = this.mouseDown = false;
       this._move();
