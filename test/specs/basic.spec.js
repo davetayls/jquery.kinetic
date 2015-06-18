@@ -70,16 +70,25 @@ test('filterTarget is passed both a target and event', function() {
 });
 test('we can listen for events', function(){
     var $wrapper = $('#wrapper').kinetic({
+            started: function(){ started++; },
+            startedMoving: function(){ startedMoving++; },
             moved: function(){ moved++; },
+            ended: function(){ ended++; },
             stopped: function(){ stopped++; }
         }),
         img = $wrapper.find('img')[0],
+        started = 0,
+        startedMoving = 0,
         moved = 0,
+        ended = 0,
         stopped = 0;
 
     dragOver($wrapper, img, [100,100], [10,10]);
     $wrapper.kinetic('stop');
+    equal(started, 1, 'started event has fired');
+    equal(startedMoving, 1, 'startedMoving event has fired');
     equal(moved, 2, 'moved event has fired');
+    equal(ended, 1, 'ended event has fired');
     equal(stopped, 1, 'stopped event has fired');
 });
 test('scroll event triggered on scroll', function(){
@@ -168,9 +177,9 @@ test('we can pass the threshold', function(){
         img = $wrapper.find('img')[0],
         count = 0,
         self = $wrapper.data().kinetic;
-    dragOver($wrapper, img, [100,100], [130,140]);
-    equal(count > 0, true);
-    equal(self.threshold, 0);
+    dragOver($wrapper, img, [100,100], [131,141]);
+    equal(count > 0, true, 'image has moved');
+    equal(self.threshold, 0, 'threshold = 0');
 });
 test('we can stay within the threshold', function(){
     var $wrapper = $('#wrapper').kinetic({
@@ -183,6 +192,6 @@ test('we can stay within the threshold', function(){
         count = 0,
         self = $wrapper.data().kinetic;
     dragOver($wrapper, img, [100,100], [129,139]);
-    equal(count > 0, false);
-    equal(self.threshold, 50);
+    equal(count > 0, false, 'image has not moved');
+    equal(self.threshold, 50, 'threshold = 50');
 });
