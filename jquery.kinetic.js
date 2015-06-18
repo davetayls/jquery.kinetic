@@ -271,12 +271,10 @@
             this.settings.moved.call(this, this.settings);
           }
         } else {
-          this.prevXPos = this.xpos;
-          this.prevYPos = this.ypos;
-          this.xpos = clientX;
-          this.ypos = clientY;
           var moved = Math.sqrt(movedX * movedX + movedY * movedY);
-          this.threshold -= moved;
+          if(this.threshold <= moved){
+            this.threshold = 0;
+          }
         }
       }
     }
