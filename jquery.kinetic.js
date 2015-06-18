@@ -256,6 +256,8 @@
       this.lastMove = new Date();
 
       if (this.mouseDown && (this.xpos || this.ypos)){
+        var movedX = (clientX - this.xpos);
+        var movedY = (clientY - this.ypos);
         if(this.threshold <= 0){
           if (this.elementFocused){
             $(this.elementFocused).blur();
@@ -268,8 +270,6 @@
 
           var scrollLeft = this.scrollLeft();
           var scrollTop = this.scrollTop();
-          var movedX = (clientX - this.xpos);
-          var movedY = (clientY - this.ypos);
 
           this.scrollLeft(this.settings.x ? scrollLeft - movedX : scrollLeft);
           this.scrollTop(this.settings.y ? scrollTop - movedY : scrollTop);
@@ -286,8 +286,6 @@
             this.settings.moved.call($this, this.settings);
           }
         } else {
-          var movedX = (clientX - this.xpos);
-          var movedY = (clientY - this.ypos);
           this.prevXPos = this.xpos;
           this.prevYPos = this.ypos;
           this.xpos = clientX;
