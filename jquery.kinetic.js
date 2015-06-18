@@ -243,38 +243,39 @@
       if (this.mouseDown && (this.xpos || this.ypos)){
         var movedX = (clientX - this.xpos);
         var movedY = (clientY - this.ypos);
-        if(this.threshold <= 0){
-          if (this.elementFocused){
-            $(this.elementFocused).blur();
-            this.elementFocused = null;
-            $this.focus();
-          }
-
-          this.settings.decelerate = false;
-          this.velocity = this.velocityY = 0;
-
-          var scrollLeft = this.scrollLeft();
-          var scrollTop = this.scrollTop();
-
-          this.scrollLeft(this.settings.x ? scrollLeft - movedX : scrollLeft);
-          this.scrollTop(this.settings.y ? scrollTop - movedY : scrollTop);
-
-          this.prevXPos = this.xpos;
-          this.prevYPos = this.ypos;
-          this.xpos = clientX;
-          this.ypos = clientY;
-
-          this._calculateVelocities();
-          this._setMoveClasses(this.settings.movingClass);
-
-          if ($.isFunction(this.settings.moved)){
-            this.settings.moved.call(this, this.settings);
-          }
-        } else {
+        if(this.threshold > 0){
           var moved = Math.sqrt(movedX * movedX + movedY * movedY);
-          if(this.threshold <= moved){
+          if(this.threshold > moved){
+            return;
+          } else {
             this.threshold = 0;
           }
+        }
+        if (this.elementFocused){
+          $(this.elementFocused).blur();
+          this.elementFocused = null;
+          $this.focus();
+        }
+
+        this.settings.decelerate = false;
+        this.velocity = this.velocityY = 0;
+
+        var scrollLeft = this.scrollLeft();
+        var scrollTop = this.scrollTop();
+
+        this.scrollLeft(this.settings.x ? scrollLeft - movedX : scrollLeft);
+        this.scrollTop(this.settings.y ? scrollTop - movedY : scrollTop);
+
+        this.prevXPos = this.xpos;
+        this.prevYPos = this.ypos;
+        this.xpos = clientX;
+        this.ypos = clientY;
+
+        this._calculateVelocities();
+        this._setMoveClasses(this.settings.movingClass);
+
+        if ($.isFunction(this.settings.moved)){
+          this.settings.moved.call(this, this.settings);
         }
       }
     }
