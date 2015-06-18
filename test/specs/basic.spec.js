@@ -168,9 +168,9 @@ test('we can pass the threshold', function(){
         img = $wrapper.find('img')[0],
         count = 0,
         self = $wrapper.data().kinetic;
-    dragOver($wrapper, img, [100,100], [130,140]);
-    equal(count > 0, true);
-    equal(self.threshold, 0);
+    dragOver($wrapper, img, [100,100], [131,141]);
+    equal(count > 0, true, 'image has moved');
+    equal(self.threshold, 0, 'threshold = 0');
 });
 test('we can stay within the threshold', function(){
     var $wrapper = $('#wrapper').kinetic({
@@ -183,6 +183,6 @@ test('we can stay within the threshold', function(){
         count = 0,
         self = $wrapper.data().kinetic;
     dragOver($wrapper, img, [100,100], [129,139]);
-    equal(count > 0, false);
-    equal(self.threshold, 50);
+    equal(count > 0, false, 'image has not moved');
+    equal(self.threshold, 50, 'threshold = 50');
 });
