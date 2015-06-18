@@ -127,7 +127,7 @@ test('we can limit the velocity with maxvelocity', function(){
         img = $wrapper.find('img')[0],
         maxVelocity = 0;
     dragOver($wrapper, img, [200,200], [10,10]);
-    equal(maxVelocity < 10, true);
+    equal(maxVelocity <= 10, true);
 });
 test('we can bind kinetic twice to the same element', function(){
     var $wrapper = $('#wrapper').kinetic({
