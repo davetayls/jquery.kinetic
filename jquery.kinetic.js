@@ -163,9 +163,15 @@
       touchStart: function (e){
         var touch;
         if (self._useTarget(e.target, e)){
+          if ($.isFunction(self.settings.started)) {
+            self.settings.started.call(self, e.target, e);
+          }
           touch = e.originalEvent.touches[0];
           self.threshold = self._threshold(e.target, e);
           self._start(touch.clientX, touch.clientY);
+          if (self.threshold <= 0 && $.isFunction(self.settings.startedMoving)) {
+            self.settings.startedMoving.call(self);
+          }
           e.stopPropagation();
         }
       },
@@ -181,8 +187,14 @@
       },
       inputDown: function (e){
         if (self._useTarget(e.target, e)){
+          if ($.isFunction(self.settings.started)) {
+            self.settings.started.call(self, e.target, e);
+          }
           self.threshold = self._threshold(e.target, e);
           self._start(e.clientX, e.clientY);
+          if (self.threshold <= 0 && $.isFunction(self.settings.startedMoving)) {
+            self.settings.startedMoving.call(self);
+          }
           self.elementFocused = e.target;
           if (e.target.nodeName === 'IMG'){
             e.preventDefault();
@@ -196,6 +208,9 @@
           self.elementFocused = null;
           if (e.preventDefault){
             e.preventDefault();
+          }
+          if ($.isFunction(self.settings.ended)) {
+            self.settings.ended.call(self, e.target, e);
           }
         }
       },
@@ -243,12 +258,20 @@
       if (this.mouseDown && (this.xpos || this.ypos)){
         var movedX = (clientX - this.xpos);
         var movedY = (clientY - this.ypos);
+<<<<<<< HEAD
         if(this.threshold > 0){
           var moved = Math.sqrt(movedX * movedX + movedY * movedY);
           if(this.threshold > moved){
             return;
           } else {
             this.threshold = 0;
+=======
+        if(this.threshold <= 0){
+          if (this.elementFocused){
+            $(this.elementFocused).blur();
+            this.elementFocused = null;
+            $this.focus();
+>>>>>>> origin/new-events
           }
         }
         if (this.elementFocused){
@@ -260,8 +283,13 @@
         this.settings.decelerate = false;
         this.velocity = this.velocityY = 0;
 
+<<<<<<< HEAD
         var scrollLeft = this.scrollLeft();
         var scrollTop = this.scrollTop();
+=======
+          var scrollLeft = this.scrollLeft();
+          var scrollTop = this.scrollTop();
+>>>>>>> origin/new-events
 
         this.scrollLeft(this.settings.x ? scrollLeft - movedX : scrollLeft);
         this.scrollTop(this.settings.y ? scrollTop - movedY : scrollTop);
@@ -274,8 +302,24 @@
         this._calculateVelocities();
         this._setMoveClasses(this.settings.movingClass);
 
+<<<<<<< HEAD
         if ($.isFunction(this.settings.moved)){
           this.settings.moved.call(this, this.settings);
+=======
+          if ($.isFunction(this.settings.moved)){
+            this.settings.moved.call(this, this.settings);
+          }
+        } else {
+          this.prevXPos = this.xpos;
+          this.prevYPos = this.ypos;
+          this.xpos = clientX;
+          this.ypos = clientY;
+          var moved = Math.sqrt(movedX * movedX + movedY * movedY);
+          this.threshold -= moved;
+          if (this.threshold <= 0 && $.isFunction(this.settings.startedMoving)) {
+            this.settings.startedMoving.call(this);
+          }
+>>>>>>> origin/new-events
         }
       }
     }
