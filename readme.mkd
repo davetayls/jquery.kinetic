@@ -90,8 +90,8 @@ $('#wrapper').kinetic({
     Listeners:  All listeners are called with:
                 - this = the instance of the Kinetic class
 
-    moved       {function(target, e)}           A function which is called on every move
-    stopped     {function(target, e)}           A function which is called once all
+    moved       {function()}           A function which is called on every move
+    stopped     {function()}           A function which is called once all
                                                movement has stopped
 
     Methods:    You can call methods by running the kinetic plugin
