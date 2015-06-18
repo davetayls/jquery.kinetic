@@ -268,7 +268,7 @@
           this._setMoveClasses(this.settings.movingClass);
 
           if ($.isFunction(this.settings.moved)){
-            this.settings.moved.call($this, this.settings);
+            this.settings.moved.call(this, this.settings);
           }
         } else {
           this.prevXPos = this.xpos;
