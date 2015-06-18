@@ -91,6 +91,9 @@
 
   Kinetic.prototype.end = function (){
     this.settings.decelerate = true;
+		if ($.isFunction(this.settings.ended)) {
+			this.settings.ended.call(this);
+		}
   };
 
   Kinetic.prototype.stop = function (){
@@ -159,7 +162,7 @@
 
   Kinetic.prototype._initEvents = function(){
     var self = this;
-    this.settings.events = {
+    self.settings.events = {
       touchStart: function (e){
         var touch;
         if (self._useTarget(e.target, e)){
@@ -209,9 +212,6 @@
           if (e.preventDefault){
             e.preventDefault();
           }
-          if ($.isFunction(self.settings.ended)) {
-            self.settings.ended.call(self, e.target, e);
-          }
         }
       },
       inputMove: function (e){
@@ -258,20 +258,15 @@
       if (this.mouseDown && (this.xpos || this.ypos)){
         var movedX = (clientX - this.xpos);
         var movedY = (clientY - this.ypos);
-<<<<<<< HEAD
         if(this.threshold > 0){
           var moved = Math.sqrt(movedX * movedX + movedY * movedY);
           if(this.threshold > moved){
             return;
           } else {
             this.threshold = 0;
-=======
-        if(this.threshold <= 0){
-          if (this.elementFocused){
-            $(this.elementFocused).blur();
-            this.elementFocused = null;
-            $this.focus();
->>>>>>> origin/new-events
+            if ($.isFunction(this.settings.startedMoving)) {
+              this.settings.startedMoving.call(this);
+            }
           }
         }
         if (this.elementFocused){
@@ -283,13 +278,8 @@
         this.settings.decelerate = false;
         this.velocity = this.velocityY = 0;
 
-<<<<<<< HEAD
         var scrollLeft = this.scrollLeft();
         var scrollTop = this.scrollTop();
-=======
-          var scrollLeft = this.scrollLeft();
-          var scrollTop = this.scrollTop();
->>>>>>> origin/new-events
 
         this.scrollLeft(this.settings.x ? scrollLeft - movedX : scrollLeft);
         this.scrollTop(this.settings.y ? scrollTop - movedY : scrollTop);
@@ -302,24 +292,8 @@
         this._calculateVelocities();
         this._setMoveClasses(this.settings.movingClass);
 
-<<<<<<< HEAD
         if ($.isFunction(this.settings.moved)){
           this.settings.moved.call(this, this.settings);
-=======
-          if ($.isFunction(this.settings.moved)){
-            this.settings.moved.call(this, this.settings);
-          }
-        } else {
-          this.prevXPos = this.xpos;
-          this.prevYPos = this.ypos;
-          this.xpos = clientX;
-          this.ypos = clientY;
-          var moved = Math.sqrt(movedX * movedX + movedY * movedY);
-          this.threshold -= moved;
-          if (this.threshold <= 0 && $.isFunction(this.settings.startedMoving)) {
-            this.settings.startedMoving.call(this);
-          }
->>>>>>> origin/new-events
         }
       }
     }
@@ -333,6 +307,9 @@
   Kinetic.prototype._end = function (){
     if (this.xpos && this.prevXPos && this.settings.decelerate === false){
       this.settings.decelerate = true;
+			if ($.isFunction(this.settings.ended)) {
+				this.settings.ended.call(this);
+			}
       this._calculateVelocities();
       this.xpos = this.prevXPos = this.mouseDown = false;
       this._move();
