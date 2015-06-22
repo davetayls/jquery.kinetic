@@ -63,7 +63,7 @@ function dragOver($el, target, from, to){
 				touches: [
 					{
 						clientX: to[0],
-						clientY: to[0]
+						clientY: to[1]
 					}
 				]
 			}
