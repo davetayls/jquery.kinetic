@@ -4,6 +4,7 @@ module.exports = function(grunt) {
   // Project configuration.
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
+    bower: grunt.file.readJSON('bower.json'),
     server: {
       port: 8989,
       base: '.'
@@ -68,6 +69,8 @@ module.exports = function(grunt) {
     },
     bump: {
       options: {
+        files: ['package.json', 'bower.json'],
+        updateConfigs: ['pkg', 'bower'],
         push: false,
         tagName: '%VERSION%',
         commitFiles: ['.']
