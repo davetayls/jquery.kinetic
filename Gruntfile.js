@@ -86,10 +86,17 @@ module.exports = function(grunt) {
 
   // Default task.
   grunt.registerTask('default', ['jshint', 'qunit']);
-  grunt.registerTask('selenium', ['vows:local']);
+  //grunt.registerTask('selenium', ['vows:local']); not used any more
   grunt.registerTask('sauce', ['vows:sauce']);
-  grunt.registerTask('minor', ['bump:minor']);
-  grunt.registerTask('patch', ['bump']);
-  grunt.registerTask('release', ['default','string-replace:version','uglify']);
+  grunt.registerTask('release', function(release) {
+    release = release || 'patch';
+    grunt.task.run([
+      'bump-only:' + release,
+      'default',
+      'string-replace:version',
+      'uglify',
+      'bump-commit'
+    ]);
+  });
 
 };

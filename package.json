@@ -13,7 +13,7 @@
     "vows": "0.7.x",
     "underscore": "1.7.x",
     "grunt-vows": "0.4.x",
-    "grunt-bump": "0.0.x",
+    "grunt-bump": "0.3.x",
     "grunt-string-replace": "0.2.x",
     "grunt-contrib-jshint": "0.10.x",
     "grunt-contrib-qunit": "0.5.x",

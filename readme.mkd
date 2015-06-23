@@ -166,8 +166,24 @@ Then run from the root of the source
 
 There are manual tests as html files within the `/test` folder.
 
+Releasing a new version
+-----------------------
+
+Releasing a small fix or change. The following will update the patch version
+number.
+
+    $ grunt release
+    
+Releasing a potentially breaking feature. The following will update the minor
+version number.
+
+    $ grunt release:minor
+
 Changes
 -------
+### 2.1.0
+ - Added `threshold` option (@UziTech) https://github.com/davetayls/jquery.kinetic/pull/84
+ 
 ### 2.0.6
  - Fix touch and mouse bindings so that an external pointing device can be used with a touchscreen device.
 
@@ -242,10 +258,5 @@ After several years, this plugin has had a major refactor. Big thanks to (@skovh
 - Added stop method
 - Fix bug with ignored axis triggering animation frames
 
-
-
-Notes
------
-The scrollbar plugin is still very much an alpha version.
 
 
