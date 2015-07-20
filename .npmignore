@@ -1,0 +1,8 @@
+
+bower_components
+node_modules
+demos
+lib
+test
+demo.html
+bower.json
