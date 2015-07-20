@@ -1,7 +1,7 @@
 {
   "name": "jquery.kinetic",
   "main": "jquery.kinetic.js",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "homepage": "http://davetayls.me/jquery.kinetic",
   "authors": [
     "davetayls <dave@the-taylors.org>"
