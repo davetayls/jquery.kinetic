@@ -91,6 +91,9 @@
 
   Kinetic.prototype.end = function (){
     this.settings.decelerate = true;
+    if ($.isFunction(this.settings.ended)) {
+      this.settings.ended.call(this);
+    }
   };
 
   Kinetic.prototype.stop = function (){
@@ -159,13 +162,19 @@
 
   Kinetic.prototype._initEvents = function(){
     var self = this;
-    this.settings.events = {
+    self.settings.events = {
       touchStart: function (e){
         var touch;
         if (self._useTarget(e.target, e)){
+          if ($.isFunction(self.settings.started)) {
+            self.settings.started.call(self, e.target, e);
+          }
           touch = e.originalEvent.touches[0];
           self.threshold = self._threshold(e.target, e);
           self._start(touch.clientX, touch.clientY);
+          if (self.threshold <= 0 && $.isFunction(self.settings.startedMoving)) {
+            self.settings.startedMoving.call(self);
+          }
           e.stopPropagation();
         }
       },
@@ -181,8 +190,14 @@
       },
       inputDown: function (e){
         if (self._useTarget(e.target, e)){
+          if ($.isFunction(self.settings.started)) {
+            self.settings.started.call(self, e.target, e);
+          }
           self.threshold = self._threshold(e.target, e);
           self._start(e.clientX, e.clientY);
+          if (self.threshold <= 0 && $.isFunction(self.settings.startedMoving)) {
+            self.settings.startedMoving.call(self);
+          }
           self.elementFocused = e.target;
           if (e.target.nodeName === 'IMG'){
             e.preventDefault();
@@ -249,6 +264,9 @@
             return;
           } else {
             this.threshold = 0;
+            if ($.isFunction(this.settings.startedMoving)) {
+              this.settings.startedMoving.call(this);
+            }
           }
         }
         if (this.elementFocused){
@@ -289,6 +307,9 @@
   Kinetic.prototype._end = function (){
     if (this.xpos && this.prevXPos && this.settings.decelerate === false){
       this.settings.decelerate = true;
+      if ($.isFunction(this.settings.ended)) {
+        this.settings.ended.call(this);
+      }
       this._calculateVelocities();
       this.xpos = this.prevXPos = this.mouseDown = false;
       this._move();

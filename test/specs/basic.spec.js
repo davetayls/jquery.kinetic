@@ -70,16 +70,25 @@ test('filterTarget is passed both a target and event', function() {
 });
 test('we can listen for events', function(){
     var $wrapper = $('#wrapper').kinetic({
+            started: function(){ started++; },
+            startedMoving: function(){ startedMoving++; },
             moved: function(){ moved++; },
+            ended: function(){ ended++; },
             stopped: function(){ stopped++; }
         }),
         img = $wrapper.find('img')[0],
+        started = 0,
+        startedMoving = 0,
         moved = 0,
+        ended = 0,
         stopped = 0;
 
     dragOver($wrapper, img, [100,100], [10,10]);
     $wrapper.kinetic('stop');
+    equal(started, 1, 'started event has fired');
+    equal(startedMoving, 1, 'startedMoving event has fired');
     equal(moved, 2, 'moved event has fired');
+    equal(ended, 1, 'ended event has fired');
     equal(stopped, 1, 'stopped event has fired');
 });
 test('scroll event triggered on scroll', function(){
