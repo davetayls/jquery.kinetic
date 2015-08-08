@@ -186,3 +186,21 @@ test('we can stay within the threshold', function(){
     equal(count > 0, false, 'image has not moved');
     equal(self.threshold, 50, 'threshold = 50');
 });
+test('we can pass the invert option', function(){
+    var $wrapper = $('#wrapper').kinetic({
+          invert: true,
+          moved: function(){
+            count++;
+            if (this.velocity > 0) {
+              countVelocityPositive++;
+            }
+          }
+        }),
+        img = $wrapper.find('img')[0],
+        count = 0,
+        countVelocityPositive = 0,
+        self = $wrapper.data().kinetic;
+    dragOver($wrapper, img, [100,100], [131,141]);
+    equal(count > 0, true, 'image has moved');
+    equal(countVelocityPositive > 0, true, 'velocity positive');
+});

@@ -64,6 +64,7 @@
     slowdown: 0.9,
     maxvelocity: 40,
     throttleFPS: 60,
+    invert: false,
     movingClass: {
       up: 'kinetic-moving-up',
       down: 'kinetic-moving-down',
@@ -243,6 +244,10 @@
       if (this.mouseDown && (this.xpos || this.ypos)){
         var movedX = (clientX - this.xpos);
         var movedY = (clientY - this.ypos);
+        if (this.settings.invert) {
+          movedX *= -1;
+          movedY *= -1;
+        }
         if(this.threshold > 0){
           var moved = Math.sqrt(movedX * movedX + movedY * movedY);
           if(this.threshold > moved){
@@ -284,6 +289,10 @@
   Kinetic.prototype._calculateVelocities = function (){
     this.velocity = this._capVelocity(this.prevXPos - this.xpos, this.settings.maxvelocity);
     this.velocityY = this._capVelocity(this.prevYPos - this.ypos, this.settings.maxvelocity);
+    if (this.settings.invert) {
+      this.velocity *= -1;
+      this.velocityY *= -1;
+    }
   };
 
   Kinetic.prototype._end = function (){

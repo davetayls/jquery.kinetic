@@ -71,6 +71,7 @@ $('#wrapper').kinetic({
                                                 performance when scrolling
     triggerHardware {boolean} false             This adds css to the wrapper which
                                                 will trigger iOS to use hardware acceleration
+    invert          {boolean}   default: false  Invert movement direction
 
     filterTarget    {function(target)}          Return false from this function to
                                                 prevent capturing the scroll
