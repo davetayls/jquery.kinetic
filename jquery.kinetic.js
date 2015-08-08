@@ -35,9 +35,6 @@
   $.extend($.support, {
     touch: 'ontouchend' in document
   });
-  var selectStart = function (){
-    return false;
-  };
 
 
   // KINETIC CLASS DEFINITION
@@ -225,6 +222,12 @@
       // prevent drag and drop images in ie
       dragStart: function (e){
         if (self._useTarget(e.target, e) && self.elementFocused){
+          return false;
+        }
+      },
+      // prevent selection when dragging
+      selectStart: function (e){
+        if (self._useTarget(e.target, e)){
           return false;
         }
       }
@@ -479,7 +482,7 @@
     $this
       .click(settings.events.inputClick)
       .scroll(settings.events.scroll)
-      .bind('selectstart', selectStart) // prevent selection when dragging
+      .bind('selectstart', settings.events.selectStart)
       .bind('dragstart', settings.events.dragStart);
   };
 
@@ -501,7 +504,7 @@
     $this
       .unbind('click', settings.events.inputClick)
       .unbind('scroll', settings.events.scroll)
-      .unbind('selectstart', selectStart) // prevent selection when dragging
+      .unbind('selectstart', settings.events.selectStart)
       .unbind('dragstart', settings.events.dragStart);
   };
 
