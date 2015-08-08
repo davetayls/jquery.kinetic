@@ -375,8 +375,8 @@
 
   // do the actual kinetic movement
   Kinetic.prototype._move = function (){
-    var $scroller = this.$el;
-    var scroller = this.el;
+    var $scroller = this._getScroller();
+    var scroller = $scroller[0];
     var self = this;
     var settings = self.settings;
 
