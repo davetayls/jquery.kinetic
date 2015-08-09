@@ -227,9 +227,10 @@
       },
       // prevent selection when dragging
       selectStart: function (e){
-        if (self._useTarget(e.target, e)){
-          return false;
+        if ($.isFunction(self.settings.selectStart)){
+          return self.settings.selectStart.apply(self, arguments);
         }
+        return false;
       }
     };
 
