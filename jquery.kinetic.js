@@ -1,5 +1,5 @@
 /**
- jQuery.kinetic v2.1.1
+ jQuery.kinetic v2.2.0
  Dave Taylor http://davetayls.me
 
  @license The MIT License (MIT)
@@ -35,9 +35,6 @@
   $.extend($.support, {
     touch: 'ontouchend' in document
   });
-  var selectStart = function (){
-    return false;
-  };
 
 
   // KINETIC CLASS DEFINITION
@@ -64,6 +61,7 @@
     slowdown: 0.9,
     maxvelocity: 40,
     throttleFPS: 60,
+    invert: false,
     movingClass: {
       up: 'kinetic-moving-up',
       down: 'kinetic-moving-down',
@@ -226,6 +224,16 @@
         if (self._useTarget(e.target, e) && self.elementFocused){
           return false;
         }
+      },
+      // prevent selection when dragging
+      selectStart: function (e){
+        if ($.isFunction(self.settings.selectStart)){
+          return self.settings.selectStart.apply(self, arguments);
+        } else if (self._useTarget(e.target, e)) {
+          return false;
+        } else {
+          return false;
+        }
       }
     };
 
@@ -243,6 +251,10 @@
       if (this.mouseDown && (this.xpos || this.ypos)){
         var movedX = (clientX - this.xpos);
         var movedY = (clientY - this.ypos);
+        if (this.settings.invert) {
+          movedX *= -1;
+          movedY *= -1;
+        }
         if(this.threshold > 0){
           var moved = Math.sqrt(movedX * movedX + movedY * movedY);
           if(this.threshold > moved){
@@ -284,6 +296,10 @@
   Kinetic.prototype._calculateVelocities = function (){
     this.velocity = this._capVelocity(this.prevXPos - this.xpos, this.settings.maxvelocity);
     this.velocityY = this._capVelocity(this.prevYPos - this.ypos, this.settings.maxvelocity);
+    if (this.settings.invert) {
+      this.velocity *= -1;
+      this.velocityY *= -1;
+    }
   };
 
   Kinetic.prototype._end = function (){
@@ -375,8 +391,8 @@
 
   // do the actual kinetic movement
   Kinetic.prototype._move = function (){
-    var $scroller = this.$el;
-    var scroller = this.el;
+    var $scroller = this._getScroller();
+    var scroller = $scroller[0];
     var self = this;
     var settings = self.settings;
 
@@ -470,7 +486,7 @@
     $this
       .click(settings.events.inputClick)
       .scroll(settings.events.scroll)
-      .bind('selectstart', selectStart) // prevent selection when dragging
+      .bind('selectstart', settings.events.selectStart)
       .bind('dragstart', settings.events.dragStart);
   };
 
@@ -492,7 +508,7 @@
     $this
       .unbind('click', settings.events.inputClick)
       .unbind('scroll', settings.events.scroll)
-      .unbind('selectstart', selectStart) // prevent selection when dragging
+      .unbind('selectstart', settings.events.selectStart)
       .unbind('dragstart', settings.events.dragStart);
   };
 

@@ -71,6 +71,7 @@ $('#wrapper').kinetic({
                                                 performance when scrolling
     triggerHardware {boolean} false             This adds css to the wrapper which
                                                 will trigger iOS to use hardware acceleration
+    invert          {boolean}   default: false  Invert movement direction
 
     filterTarget    {function(target)}          Return false from this function to
                                                 prevent capturing the scroll
@@ -93,6 +94,8 @@ $('#wrapper').kinetic({
     moved       {function()}           A function which is called on every move
     stopped     {function()}           A function which is called once all
                                                movement has stopped
+    selectStart {function()}           A function which is called on user try to drag (select text),
+                                               return false to prevent selection when dragging
 
     Methods:    You can call methods by running the kinetic plugin
                 on an element which has already been activated.
