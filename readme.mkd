@@ -184,6 +184,10 @@ version number.
 
 Changes
 -------
+### 2.2.1
+ - Added `selectStart` option and allow selection when `_useTarget` returns false (@tsaikd) https://github.com/davetayls/jquery.kinetic/pull/84
+ - Added `invert` option (@tsaikd) https://github.com/davetayls/jquery.kinetic/pull/84
+ 
 ### 2.1.0
  - Added `threshold` option (@UziTech) https://github.com/davetayls/jquery.kinetic/pull/84
  

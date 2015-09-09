@@ -1,5 +1,5 @@
 /**
- jQuery.kinetic v2.2.0
+ jQuery.kinetic v2.2.1
  Dave Taylor http://davetayls.me
 
  @license The MIT License (MIT)
@@ -230,8 +230,6 @@
         if ($.isFunction(self.settings.selectStart)){
           return self.settings.selectStart.apply(self, arguments);
         } else if (self._useTarget(e.target, e)) {
-          return false;
-        } else {
           return false;
         }
       }
