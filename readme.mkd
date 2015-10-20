@@ -3,7 +3,7 @@ jQuery.kinetic
 Dave Taylor <http://davetayls.me>
 The MIT License (MIT)
 
-> This code has been pretty stable for a while (with it's few restrictions) and so am not actively making changes. If you want to improve it in any way feel free to submit a pull request (with tests) and I will merge in any that make sense and don't add bloat to what is a simple plugin.
+> This code has been pretty stable for a while (with it's few restrictions) and so am not actively making changes. If you want to improve it in any way feel free to submit a pull request (with tests) and we will merge in any that make sense and don't add bloat to what is a simple plugin.
 
 Master: [![Build Status](https://secure.travis-ci.org/davetayls/jquery.kinetic.png?branch=master)](http://travis-ci.org/davetayls/jquery.kinetic)
 
