@@ -107,6 +107,7 @@
       .css('cursor', '');
   };
 
+
   Kinetic.prototype.attach = function (){
     if (this.$el.hasClass(ACTIVE_CLASS)) {
       return;
@@ -115,6 +116,14 @@
     this.$el
       .addClass(ACTIVE_CLASS)
       .css('cursor', this.settings.cursor);
+  };
+
+
+  Kinetic.prototype.destroy = function (){
+    this.detach();
+    this.$el=null;
+    this.el=null;
+    this.settings=null;
   };
 
 
