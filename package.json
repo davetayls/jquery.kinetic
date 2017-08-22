@@ -6,6 +6,7 @@
   "author": {
     "name": "Dave Taylor"
   },
+  "main": "jquery.kinetic.min.js",
   "license": "MIT",
   "devDependencies": {
     "grunt": "0.4.x",
