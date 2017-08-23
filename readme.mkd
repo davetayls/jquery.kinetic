@@ -20,7 +20,12 @@ NB. [@dzek69](https://github.com/dzek69) has created a version of this plugin wi
 
 	$ bower install jquery.kinetic --save
 
+### npm
+
+	$ npm install jquery.kinetic
+
 ### Script tag
+
 You can add the script to the page.
 
 	<script src="jquery.kinetic.js"></script>
@@ -186,6 +191,9 @@ version number.
 
 Changes
 -------
+### 2.2.2
+ - Added main property to package.json (@michaelsouellette) https://github.com/davetayls/jquery.kinetic/pull/105
+
 ### 2.2.1
  - Added `selectStart` option and allow selection when `_useTarget` returns false (@tsaikd) https://github.com/davetayls/jquery.kinetic/pull/84
  - Added `invert` option (@tsaikd) https://github.com/davetayls/jquery.kinetic/pull/84
