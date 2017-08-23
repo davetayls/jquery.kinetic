@@ -4,5 +4,6 @@ node_modules
 demos
 lib
 test
+Gruntfile.js
 demo.html
 bower.json
