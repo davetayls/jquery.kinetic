@@ -2,9 +2,9 @@
   "name": "jquery.kinetic",
   "main": "jquery.kinetic.js",
   "version": "2.2.1",
-  "homepage": "http://davetayls.me/jquery.kinetic",
+  "homepage": "https://davetayls.me/jquery.kinetic",
   "authors": [
-    "davetayls <dave@the-taylors.org>"
+    "Dave Taylor (https://davetayls.me)"
   ],
   "description": "smooth drag scrolling with gradual deceleration to containers",
   "keywords": [
