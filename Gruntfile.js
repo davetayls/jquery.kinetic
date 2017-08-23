@@ -35,9 +35,11 @@ module.exports = function(grunt) {
       }
     },
     jshint: {
-      files: ['grunt.js', 'jquery.kinetic.js'],
-      options: {
-        jshintrc: '.jshintrc'
+      all: {
+        options: {
+          jshintrc: '.jshintrc'
+        },
+        src: ['grunt.js', 'jquery.kinetic.js']
       }
     },
     vows: {
