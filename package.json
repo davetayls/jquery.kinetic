@@ -1,6 +1,6 @@
 {
   "name": "jquery.kinetic",
-  "version": "2.2.2",
+  "version": "2.2.3",
   "description": "adds smooth drag scrolling with gradual deceleration to containers",
   "homepage": "https://davetayls.me/jquery.kinetic",
   "author": {
