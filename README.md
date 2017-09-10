@@ -14,6 +14,8 @@ gradual deceleration to containers.
 
 NB. [@dzek69](https://github.com/dzek69) has created a version of this plugin without the dependency on jQuery: <https://github.com/dzek69/vanilla.kinetic>
 
+<iframe src="demo.html" width="100%" height="600" scrolling="no" frameborder="0"></iframe>
+
 ## Installation
 
 ### Bower
