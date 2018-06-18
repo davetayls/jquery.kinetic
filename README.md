@@ -25,6 +25,10 @@ NB. [@dzek69](https://github.com/dzek69) has created a version of this plugin wi
 ### npm
 
 	$ npm install jquery.kinetic
+	
+### CDN
+
+	<script src="https://cdn.jsdelivr.net/npm/jquery.kinetic/jquery.kinetic.js"></script>
 
 ### Script tag
 
